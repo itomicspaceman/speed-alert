@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed/Limit - Know Your Limit. Drive Safer.</title>
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --text: #e0e0e0;
+            --accent-blue: #007BFF;
+            --accent-red: #FF3B3B;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 123, 255, 0.3);
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        h1 span {
+            color: var(--accent-blue);
+        }
+        .tagline {
+            font-size: 1.3rem;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+        .features {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+        .feature-icon {
+            font-size: 1.5rem;
+        }
+        .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--accent-blue), #0056b3);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.4);
+        }
+        .cta img {
+            height: 24px;
+        }
+        .links {
+            margin-top: 3rem;
+            display: flex;
+            gap: 2rem;
+        }
+        .links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .links a:hover {
+            color: var(--accent-blue);
+        }
+        footer {
+            margin-top: 3rem;
+            color: #444;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <img src="icon.png" alt="Speed/Limit" class="logo" onerror="this.style.display='none'">
+    
+    <h1>Speed<span>/</span>Limit</h1>
+    <p class="tagline">Know your limit. Drive safer.</p>
+    
+    <div class="features">
+        <div class="feature">
+            <span class="feature-icon">🚗</span>
+            <span>Real-time speed alerts</span>
+        </div>
+        <div class="feature">
+            <span class="feature-icon">🌍</span>
+            <span>Works worldwide</span>
+        </div>
+        <div class="feature">
+            <span class="feature-icon">🔒</span>
+            <span>Privacy-focused</span>
+        </div>
+        <div class="feature">
+            <span class="feature-icon">⚡</span>
+            <span>Battery efficient</span>
+        </div>
+    </div>
+    
+    <a href="https://play.google.com/store/apps/details?id=com.speedlimit" class="cta">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
+        </svg>
+        Get it on Google Play
+    </a>
+    
+    <div class="links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="https://github.com/itomicspaceman/speed-alert">GitHub</a>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Itomic Web Specialist. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+
