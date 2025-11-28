@@ -16,7 +16,6 @@ import android.os.Build
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -72,17 +71,8 @@ class SpeedMonitorService : Service() {
                 
                 Log.w(TAG, "Rate limit alert received: $limitType, backoff: ${backoffSeconds}s")
                 
-                // Show notification
+                // Log to Firebase for developer monitoring (no user-facing toast needed)
                 showRateLimitNotification(limitType, backoffSeconds)
-                
-                // Show toast on main thread
-                serviceScope.launch(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@SpeedMonitorService,
-                        "⚠️ API limit reached - using cached data for ${backoffSeconds}s",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
             }
         }
     }

@@ -17,7 +17,6 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -76,32 +75,16 @@ class MainActivity : AppCompatActivity() {
     private val backgroundLocationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
-        if (granted) {
-            checkNotificationPermissionAndStart()
-        } else {
-            Toast.makeText(
-                this,
-                "Background location denied - app may not work when minimized",
-                Toast.LENGTH_LONG
-            ).show()
-            checkNotificationPermissionAndStart()
-        }
+        // Proceed regardless - app will work with reduced functionality if denied
+        checkNotificationPermissionAndStart()
     }
 
     // Permission launcher for notifications (Android 13+)
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (granted) {
-            startSpeedMonitoring()
-        } else {
-            Toast.makeText(
-                this,
-                "Notification permission denied - service notification won't show",
-                Toast.LENGTH_SHORT
-            ).show()
-            startSpeedMonitoring()
-        }
+    ) {
+        // Proceed regardless - notification just won't show if denied
+        startSpeedMonitoring()
     }
     
     // Permission launcher for overlay (floating window)
@@ -110,9 +93,8 @@ class MainActivity : AppCompatActivity() {
     ) {
         if (Settings.canDrawOverlays(this)) {
             startFloatingMode()
-        } else {
-            Toast.makeText(this, "Overlay permission denied", Toast.LENGTH_SHORT).show()
         }
+        // If denied, user will understand - no toast needed
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -196,9 +178,6 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun startFloatingMode() {
-        // Show hint about returning
-        Toast.makeText(this, getString(R.string.floating_mode_hint), Toast.LENGTH_LONG).show()
-        
         // Start the floating service as foreground
         ContextCompat.startForegroundService(this, Intent(this, FloatingSpeedService::class.java))
         
@@ -272,17 +251,19 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Called when user taps a speed limit to contribute.
+     * TODO: Implement crowdsourcing - send to backend/OSM
      */
     private fun onSpeedLimitSelected(limit: Int) {
-        val unit = SpeedUnitHelper.getUnitLabel(currentCountryCode)
-        Toast.makeText(
-            this,
-            "Speed limit $limit $unit selected - crowdsourcing coming soon!",
-            Toast.LENGTH_SHORT
-        ).show()
-        
-        // TODO: Implement crowdsourcing - send to backend/OSM
-        // This would save: currentLocation, selectedLimit, timestamp
+        // Visual feedback - brief flash of the selected button
+        speedLimitButtons.forEachIndexed { index, button ->
+            val limitValue = currentDisplayLimits.getOrNull(index) ?: 0
+            if (limitValue == limit) {
+                // Flash green briefly to confirm selection
+                button.setTextColor(Color.GREEN)
+                button.postDelayed({ button.setTextColor(Color.WHITE) }, 300)
+            }
+        }
+        // TODO: Send to backend/OSM - currentLocation, selectedLimit, timestamp
     }
 
     private fun dpToPx(dp: Int): Int {
