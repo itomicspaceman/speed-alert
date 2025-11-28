@@ -23,5 +23,10 @@
     <string name="disclaimer_safety">🚗 SAFETY FIRST\n\nNEVER interact with this app while driving. Set up before you start your journey and pull over safely if you need to make any changes.\n\nYour safety and the safety of others is your responsibility.</string>
     <string name="disclaimer_accept">I Understand &amp; Accept</string>
     <string name="disclaimer_reject">Decline</string>
+    
+    <!-- Floating Mode -->
+    <string name="floating_mode">Floating Mode</string>
+    <string name="floating_mode_hint">Double-tap to return to app</string>
+    <string name="overlay_permission_required">Overlay permission is required for floating mode</string>
 </resources>
 

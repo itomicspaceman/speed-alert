@@ -24,6 +24,9 @@
     
     <!-- Vibration for alerts -->
     <uses-permission android:name="android.permission.VIBRATE" />
+    
+    <!-- Overlay permission for floating window -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -57,6 +60,12 @@
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="location" />
+        
+        <!-- Floating overlay service -->
+        <service
+            android:name=".FloatingSpeedService"
+            android:enabled="true"
+            android:exported="false" />
             
     </application>
 

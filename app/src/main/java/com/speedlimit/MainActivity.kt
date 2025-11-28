@@ -102,6 +102,17 @@ class MainActivity : AppCompatActivity() {
             startSpeedMonitoring()
         }
     }
+    
+    // Permission launcher for overlay (floating window)
+    private val overlayPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (Settings.canDrawOverlays(this)) {
+            startFloatingMode()
+        } else {
+            Toast.makeText(this, "Overlay permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -116,6 +127,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        
+        // Stop floating service if running (user returned to app)
+        if (FloatingSpeedService.isRunning) {
+            stopService(Intent(this, FloatingSpeedService::class.java))
+        }
+        
         val filter = IntentFilter(SpeedMonitorService.ACTION_SPEED_UPDATE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(speedUpdateReceiver, filter, RECEIVER_NOT_EXPORTED)
@@ -142,6 +159,45 @@ class MainActivity : AppCompatActivity() {
                 checkPermissionsAndStart()
             }
         }
+        
+        binding.floatingModeButton.setOnClickListener {
+            if (isMonitoring) {
+                checkOverlayPermissionAndStartFloating()
+            } else {
+                Toast.makeText(this, "Start monitoring first", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    
+    private fun checkOverlayPermissionAndStartFloating() {
+        if (Settings.canDrawOverlays(this)) {
+            startFloatingMode()
+        } else {
+            // Request overlay permission
+            AlertDialog.Builder(this)
+                .setTitle("Overlay Permission Required")
+                .setMessage("To display speed over other apps, please grant the 'Display over other apps' permission.")
+                .setPositiveButton("Grant") { _, _ ->
+                    val intent = Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:$packageName")
+                    )
+                    overlayPermissionLauncher.launch(intent)
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+    }
+    
+    private fun startFloatingMode() {
+        // Show hint about returning
+        Toast.makeText(this, getString(R.string.floating_mode_hint), Toast.LENGTH_LONG).show()
+        
+        // Start the floating service
+        startService(Intent(this, FloatingSpeedService::class.java))
+        
+        // Minimize the app (go to home screen)
+        moveTaskToBack(true)
     }
 
     /**

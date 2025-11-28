@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/floatingContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/floating_background"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Current Speed -->
+        <TextView
+            android:id="@+id/floatingSpeedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@android:color/white"
+            android:textSize="64sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed"
+            android:includeFontPadding="false" />
+
+        <!-- Unit label -->
+        <TextView
+            android:id="@+id/floatingUnitText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mph"
+            android:textColor="#AAAAAA"
+            android:textSize="14sp"
+            android:layout_marginTop="-8dp" />
+
+    </LinearLayout>
+
+</FrameLayout>
+
