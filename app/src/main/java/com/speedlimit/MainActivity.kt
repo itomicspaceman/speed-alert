@@ -175,16 +175,26 @@ class MainActivity : AppCompatActivity() {
         val button = TextView(this).apply {
             text = limit.toString()
             setTextColor(Color.WHITE)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 56f)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 72f)
             typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
             gravity = Gravity.CENTER
             
             // Large touch targets for easy tapping while driving
-            val size = dpToPx(100)
-            val margin = dpToPx(6)
-            layoutParams = FlexboxLayout.LayoutParams(size, size).apply {
-                setMargins(margin, margin, margin, margin)
+            // Use WRAP_CONTENT width to let text breathe, fixed height
+            val height = dpToPx(90)
+            val marginH = dpToPx(12)  // Horizontal margin
+            val marginV = dpToPx(8)   // Vertical margin
+            layoutParams = FlexboxLayout.LayoutParams(
+                FlexboxLayout.LayoutParams.WRAP_CONTENT,
+                height
+            ).apply {
+                setMargins(marginH, marginV, marginH, marginV)
+                // Ensure minimum width for tap target
+                minWidth = dpToPx(90)
             }
+            
+            // Add horizontal padding for better tap area
+            setPadding(dpToPx(8), 0, dpToPx(8), 0)
             
             // Make it clickable for crowdsourcing
             setBackgroundResource(android.R.drawable.list_selector_background)
