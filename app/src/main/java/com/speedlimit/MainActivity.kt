@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private var isMonitoring = false
     private var isFlashing = false
     private var flashAnimator: ValueAnimator? = null
+    private var pendingFloatingMode = false  // Flag to launch floating mode after monitoring starts
 
     // Dynamically created speed limit buttons
     private val speedLimitButtons = mutableListOf<TextView>()
@@ -164,7 +165,9 @@ class MainActivity : AppCompatActivity() {
             if (isMonitoring) {
                 checkOverlayPermissionAndStartFloating()
             } else {
-                Toast.makeText(this, "Start monitoring first", Toast.LENGTH_SHORT).show()
+                // Start monitoring first, then go to floating mode
+                pendingFloatingMode = true
+                checkPermissionsAndStart()
             }
         }
     }
@@ -402,6 +405,12 @@ class MainActivity : AppCompatActivity() {
         ContextCompat.startForegroundService(this, serviceIntent)
         isMonitoring = true
         updateButtonIcon()
+        
+        // If user tapped floating button, proceed to floating mode now
+        if (pendingFloatingMode) {
+            pendingFloatingMode = false
+            checkOverlayPermissionAndStartFloating()
+        }
     }
 
     private fun stopSpeedMonitoring() {
