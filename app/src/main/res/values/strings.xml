@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Speed/Limit</string>
+    <string name="app_name">Speed Limit</string>
     <string name="start_monitoring">Start Monitoring</string>
     <string name="stop_monitoring">Stop Monitoring</string>
     <string name="status_idle">Tap to start speed monitoring</string>
@@ -12,7 +12,7 @@
     <string name="mph">mph</string>
     <string name="notification_channel_name">Speed Monitoring</string>
     <string name="notification_channel_description">Shows when speed monitoring is active</string>
-    <string name="notification_title">Speed Alert Active</string>
+    <string name="notification_title">Speed Limit Active</string>
     <string name="notification_text">Monitoring your speed</string>
     <string name="permission_required">Location permission is required for speed monitoring</string>
     <string name="grant_permission">Grant Permission</string>

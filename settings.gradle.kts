@@ -14,6 +14,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SpeedAlert"
+rootProject.name = "SpeedLimit"
 include(":app")
 

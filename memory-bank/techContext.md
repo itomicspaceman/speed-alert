@@ -47,7 +47,7 @@ com.google.android.gms:play-services-location:21.0.1
 .\gradlew.bat assembleDebug
 
 # Output location
-app\build\outputs\apk\debug\SpeedAlert-{version}.apk
+app\build\outputs\apk\debug\SpeedLimit-{version}.apk
 ```
 
 ### Project Structure
@@ -57,7 +57,7 @@ speed/
 │   ├── build.gradle.kts          # Module config
 │   └── src/main/
 │       ├── AndroidManifest.xml   # Permissions, service
-│       ├── java/com/speedalert/
+│       ├── java/com/speedlimit/
 │       │   ├── MainActivity.kt
 │       │   ├── SpeedMonitorService.kt
 │       │   ├── SpeedLimitProvider.kt

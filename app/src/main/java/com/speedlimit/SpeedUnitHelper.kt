@@ -1,4 +1,4 @@
-package com.speedalert
+package com.speedlimit
 
 import android.content.Context
 import android.location.Geocoder

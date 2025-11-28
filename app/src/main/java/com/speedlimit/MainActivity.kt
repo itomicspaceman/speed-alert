@@ -1,4 +1,4 @@
-package com.speedalert
+package com.speedlimit
 
 import android.Manifest
 import android.animation.ValueAnimator
@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.android.flexbox.FlexboxLayout
-import com.speedalert.databinding.ActivityMainBinding
+import com.speedlimit.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -426,3 +426,4 @@ class MainActivity : AppCompatActivity() {
         speedLimitButtons.forEach { it.setTextColor(Color.WHITE) }
     }
 }
+

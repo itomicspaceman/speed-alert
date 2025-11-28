@@ -1,4 +1,4 @@
-package com.speedalert
+package com.speedlimit
 
 import android.Manifest
 import android.app.Notification
@@ -24,7 +24,7 @@ class SpeedMonitorService : Service() {
         const val NOTIFICATION_ID = 1
         const val CHANNEL_ID = "speed_monitor_channel"
         
-        const val ACTION_SPEED_UPDATE = "com.speedalert.SPEED_UPDATE"
+        const val ACTION_SPEED_UPDATE = "com.speedlimit.SPEED_UPDATE"
         const val EXTRA_SPEED = "speed"
         const val EXTRA_SPEED_LIMIT = "speed_limit"
         const val EXTRA_IS_OVER_LIMIT = "is_over_limit"
@@ -256,3 +256,4 @@ class SpeedMonitorService : Service() {
         sendBroadcast(intent)
     }
 }
+

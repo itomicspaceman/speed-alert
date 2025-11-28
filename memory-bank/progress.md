@@ -27,7 +27,7 @@
 
 ### Build & Deploy ✅
 - [x] Gradle build configuration
-- [x] Custom APK naming (SpeedAlert-{version}.apk)
+- [x] Custom APK naming (SpeedLimit-{version}.apk)
 - [x] GitHub repository (itomicspaceman/speed-alert)
 - [x] Launcher icon (adaptive icon)
 

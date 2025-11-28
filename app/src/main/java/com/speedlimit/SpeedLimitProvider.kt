@@ -1,4 +1,4 @@
-package com.speedalert
+package com.speedlimit
 
 import android.content.Context
 import android.util.Log
@@ -115,7 +115,7 @@ class SpeedLimitProvider(private val context: Context) {
 
         val request = Request.Builder()
             .url(url)
-            .header("User-Agent", "SpeedAlert/1.0 (Android App)")
+            .header("User-Agent", "SpeedLimit/1.0 (Android App)")
             .build()
 
         val response = httpClient.newCall(request).execute()
@@ -168,3 +168,4 @@ class SpeedLimitProvider(private val context: Context) {
         }
     }
 }
+

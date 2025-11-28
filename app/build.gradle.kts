@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.speedalert"
+    namespace = "com.speedlimit"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.speedalert"
+        applicationId = "com.speedlimit"
         minSdk = 26
         targetSdk = 35
         versionCode = 2
@@ -41,7 +41,7 @@ android {
     applicationVariants.all {
         outputs.all {
             val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
-            outputImpl.outputFileName = "SpeedAlert-${versionName}.apk"
+            outputImpl.outputFileName = "SpeedLimit-${versionName}.apk"
         }
     }
 }
