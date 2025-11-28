@@ -28,6 +28,7 @@ class SpeedMonitorService : Service() {
         const val EXTRA_SPEED = "speed"
         const val EXTRA_SPEED_LIMIT = "speed_limit"
         const val EXTRA_IS_OVER_LIMIT = "is_over_limit"
+        const val EXTRA_COUNTRY_CODE = "country_code"
         
         // Speed threshold before checking limits (20 mph)
         const val SPEED_CHECK_THRESHOLD_MPH = 20f
@@ -121,10 +122,19 @@ class SpeedMonitorService : Service() {
     }
 
     private fun updateNotification(speedMph: Int, limitMph: Int?) {
-        val text = if (limitMph != null) {
-            "Speed: $speedMph mph | Limit: $limitMph mph"
+        val countryCode = speedLimitProvider.currentCountryCode
+        val usesMph = SpeedUnitHelper.usesMph(countryCode)
+        val unit = SpeedUnitHelper.getUnitLabel(countryCode)
+        
+        val displaySpeed = if (usesMph) speedMph else SpeedUnitHelper.mphToKmh(speedMph)
+        val displayLimit = if (limitMph != null) {
+            if (usesMph) limitMph else SpeedUnitHelper.mphToKmh(limitMph)
+        } else null
+        
+        val text = if (displayLimit != null) {
+            "Speed: $displaySpeed $unit | Limit: $displayLimit $unit"
         } else {
-            "Speed: $speedMph mph | Checking limit..."
+            "Speed: $displaySpeed $unit | Checking limit..."
         }
         
         val notification = createNotification(text)
@@ -235,10 +245,12 @@ class SpeedMonitorService : Service() {
     }
 
     private fun broadcastSpeedUpdate(speedMph: Float, speedLimit: Int, isOverLimit: Boolean) {
+        val countryCode = speedLimitProvider.currentCountryCode
         val intent = Intent(ACTION_SPEED_UPDATE).apply {
             putExtra(EXTRA_SPEED, speedMph)
             putExtra(EXTRA_SPEED_LIMIT, speedLimit)
             putExtra(EXTRA_IS_OVER_LIMIT, isOverLimit)
+            putExtra(EXTRA_COUNTRY_CODE, countryCode)
             setPackage(packageName)
         }
         sendBroadcast(intent)

@@ -32,25 +32,35 @@ class MainActivity : AppCompatActivity() {
     private var flashAnimator: ValueAnimator? = null
     private val handler = Handler(Looper.getMainLooper())
 
-    private val speedLimitViews by lazy {
-        mapOf(
-            20 to binding.speedLimit20,
-            30 to binding.speedLimit30,
-            40 to binding.speedLimit40,
-            50 to binding.speedLimit50,
-            60 to binding.speedLimit60,
-            70 to binding.speedLimit70
+    // Speed limit grid views (mapped to their TextView)
+    private val speedLimitGridViews by lazy {
+        listOf(
+            binding.speedLimit20,
+            binding.speedLimit30,
+            binding.speedLimit40,
+            binding.speedLimit50,
+            binding.speedLimit60,
+            binding.speedLimit70
         )
     }
+    
+    // Common speed limits by unit system
+    private val mphLimits = listOf(20, 30, 40, 50, 60, 70)
+    private val kmhLimits = listOf(30, 50, 60, 80, 100, 110)
+    
+    // Current display limits (updated when country changes)
+    private var currentDisplayLimits = mphLimits
+    private var currentCountryCode = "GB"
 
     // Broadcast receiver for speed updates from the service
     private val speedUpdateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
-                val speed = it.getFloatExtra(SpeedMonitorService.EXTRA_SPEED, 0f)
-                val speedLimit = it.getIntExtra(SpeedMonitorService.EXTRA_SPEED_LIMIT, -1)
+                val speedMph = it.getFloatExtra(SpeedMonitorService.EXTRA_SPEED, 0f)
+                val speedLimitMph = it.getIntExtra(SpeedMonitorService.EXTRA_SPEED_LIMIT, -1)
                 val isOverLimit = it.getBooleanExtra(SpeedMonitorService.EXTRA_IS_OVER_LIMIT, false)
-                updateSpeedDisplay(speed, speedLimit, isOverLimit)
+                val countryCode = it.getStringExtra(SpeedMonitorService.EXTRA_COUNTRY_CODE) ?: "GB"
+                updateSpeedDisplay(speedMph, speedLimitMph, isOverLimit, countryCode)
             }
         }
     }
@@ -278,13 +288,36 @@ class MainActivity : AppCompatActivity() {
         binding.toggleButton.setImageResource(icon)
     }
 
-    private fun updateSpeedDisplay(speed: Float, speedLimit: Int, isOverLimit: Boolean) {
-        val speedMph = speed.toInt()
-        binding.currentSpeedText.text = speedMph.toString()
+    private fun updateSpeedDisplay(speedMph: Float, speedLimitMph: Int, isOverLimit: Boolean, countryCode: String) {
+        val usesMph = SpeedUnitHelper.usesMph(countryCode)
         
-        // Update speed limit grid
-        speedLimitViews.values.forEach { it.setTextColor(Color.WHITE) }
-        speedLimitViews[speedLimit]?.setTextColor(ContextCompat.getColor(this, R.color.info_blue))
+        // Update grid if country changed
+        if (countryCode != currentCountryCode) {
+            currentCountryCode = countryCode
+            updateSpeedLimitGrid(usesMph)
+        }
+        
+        // Convert to display units
+        val displaySpeed = if (usesMph) speedMph.toInt() else SpeedUnitHelper.mphToKmh(speedMph.toInt())
+        val displayLimit = if (speedLimitMph > 0) {
+            if (usesMph) speedLimitMph else SpeedUnitHelper.mphToKmh(speedLimitMph)
+        } else -1
+        
+        // Update speed display
+        binding.currentSpeedText.text = displaySpeed.toString()
+        
+        // Update unit label
+        binding.currentSpeedUnit.text = SpeedUnitHelper.getUnitLabel(countryCode)
+        
+        // Update speed limit grid highlighting
+        speedLimitGridViews.forEachIndexed { index, textView ->
+            val limitValue = currentDisplayLimits.getOrNull(index) ?: 0
+            if (limitValue == displayLimit) {
+                textView.setTextColor(ContextCompat.getColor(this, R.color.info_blue))
+            } else {
+                textView.setTextColor(Color.WHITE)
+            }
+        }
         
         // Handle flashing animation when over limit
         if (isOverLimit) {
@@ -296,6 +329,15 @@ class MainActivity : AppCompatActivity() {
                 stopFlashing()
             }
             binding.currentSpeedText.setTextColor(Color.WHITE)
+        }
+    }
+    
+    private fun updateSpeedLimitGrid(usesMph: Boolean) {
+        currentDisplayLimits = if (usesMph) mphLimits else kmhLimits
+        
+        speedLimitGridViews.forEachIndexed { index, textView ->
+            val limitValue = currentDisplayLimits.getOrNull(index) ?: 0
+            textView.text = limitValue.toString()
         }
     }
 
@@ -328,6 +370,6 @@ class MainActivity : AppCompatActivity() {
     private fun resetSpeedDisplay() {
         binding.currentSpeedText.text = "0"
         binding.currentSpeedText.setTextColor(Color.WHITE)
-        speedLimitViews.values.forEach { it.setTextColor(Color.WHITE) }
+        speedLimitGridViews.forEach { it.setTextColor(Color.WHITE) }
     }
 }
