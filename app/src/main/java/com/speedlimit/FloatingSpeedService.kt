@@ -173,9 +173,8 @@ class FloatingSpeedService : Service() {
         // Add touch listener for dragging (with tap detection)
         setupDragListener(layoutParams)
         
-        // Close button handler
+        // Close button - just dismiss floating overlay, keep monitoring in background
         closeButton.setOnClickListener {
-            openMainApp()
             stopSelf()
         }
 
