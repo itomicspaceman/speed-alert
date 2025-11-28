@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Chinese (Simplified) translations - Disclaimer -->
+    <string name="disclaimer_title">重要提示</string>
+    <string name="disclaimer_text">本应用程序使用来自OpenStreetMap的众包数据显示速度限制。这些数据可能不完整、不准确或已过时。\n\n我们不对所显示的速度限制信息的准确性、可靠性或完整性作任何保证。\n\n您应自行负责遵守所有交通法规和公示的速度限制。请始终以官方道路标志为准。\n\n使用本应用程序即表示您承认，开发者、贡献者和数据提供者对因依赖所显示信息而产生的任何后果不承担任何责任，包括但不限于交通违规、事故、伤害或任何形式的损害。</string>
+    <string name="disclaimer_safety">🚗 安全第一\n\n驾驶时切勿操作本应用程序。请在出发前完成设置，如需更改请安全停车后进行。\n\n您和他人的安全是您的责任。</string>
+    <string name="disclaimer_accept">我理解并接受</string>
+    <string name="disclaimer_reject">拒绝</string>
+</resources>
+

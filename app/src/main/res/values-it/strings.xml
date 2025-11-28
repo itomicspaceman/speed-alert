@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Italian translations - Disclaimer -->
+    <string name="disclaimer_title">Avviso Importante</string>
+    <string name="disclaimer_text">Questa app utilizza dati collaborativi di OpenStreetMap per visualizzare i limiti di velocità. Questi dati potrebbero essere incompleti, imprecisi o obsoleti.\n\nNON FORNIAMO ALCUNA GARANZIA riguardo l\'accuratezza, l\'affidabilità o la completezza delle informazioni sui limiti di velocità visualizzate.\n\nSEI L\'UNICO RESPONSABILE del rispetto di tutte le leggi sul traffico e dei limiti di velocità segnalati. Fai sempre riferimento ai segnali stradali ufficiali come fonte autorevole.\n\nUtilizzando questa app, riconosci che gli sviluppatori, i contributori e i fornitori di dati NON ACCETTANO ALCUNA RESPONSABILITÀ per qualsiasi conseguenza derivante dall\'affidamento sulle informazioni visualizzate, incluse ma non limitate a violazioni del codice della strada, incidenti, lesioni o danni di qualsiasi tipo.</string>
+    <string name="disclaimer_safety">🚗 LA SICUREZZA PRIMA DI TUTTO\n\nNON interagire MAI con questa app mentre guidi. Configura prima di iniziare il viaggio e fermati in sicurezza se devi apportare modifiche.\n\nLa tua sicurezza e quella degli altri è una tua responsabilità.</string>
+    <string name="disclaimer_accept">Capisco e Accetto</string>
+    <string name="disclaimer_reject">Rifiuta</string>
+</resources>
+

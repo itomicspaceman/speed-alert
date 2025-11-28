@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Japanese translations - Disclaimer -->
+    <string name="disclaimer_title">重要なお知らせ</string>
+    <string name="disclaimer_text">このアプリはOpenStreetMapのクラウドソースデータを使用して制限速度を表示します。このデータは不完全、不正確、または古い可能性があります。\n\n表示される制限速度情報の正確性、信頼性、完全性について、いかなる保証も行いません。\n\nすべての交通法規および掲示された制限速度を遵守する責任は、お客様のみにあります。常に公式の道路標識を正式な情報源としてご参照ください。\n\nこのアプリを使用することにより、開発者、貢献者、データ提供者は、表示された情報への依存から生じるいかなる結果についても責任を負わないことを承認するものとします。これには交通違反、事故、怪我、またはあらゆる種類の損害が含まれますが、これらに限定されません。</string>
+    <string name="disclaimer_safety">🚗 安全第一\n\n運転中にこのアプリを操作しないでください。出発前に設定を行い、変更が必要な場合は安全に停車してください。\n\nあなたと他の人の安全はあなたの責任です。</string>
+    <string name="disclaimer_accept">理解し、同意します</string>
+    <string name="disclaimer_reject">拒否</string>
+</resources>
+
