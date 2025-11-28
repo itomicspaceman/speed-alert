@@ -52,8 +52,8 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     
-    // GridLayout for speed limit grid
-    implementation("androidx.gridlayout:gridlayout:1.0.0")
+    // FlexboxLayout for dynamic speed limit grid
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
     
     // Splash screen
     implementation("androidx.core:core-splashscreen:1.0.1")

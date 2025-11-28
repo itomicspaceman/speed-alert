@@ -8,12 +8,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
 import android.widget.Toast
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.google.android.flexbox.FlexboxLayout
 import com.speedalert.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -30,26 +32,12 @@ class MainActivity : AppCompatActivity() {
     private var isMonitoring = false
     private var isFlashing = false
     private var flashAnimator: ValueAnimator? = null
-    private val handler = Handler(Looper.getMainLooper())
 
-    // Speed limit grid views (mapped to their TextView)
-    private val speedLimitGridViews by lazy {
-        listOf(
-            binding.speedLimit20,
-            binding.speedLimit30,
-            binding.speedLimit40,
-            binding.speedLimit50,
-            binding.speedLimit60,
-            binding.speedLimit70
-        )
-    }
+    // Dynamically created speed limit buttons
+    private val speedLimitButtons = mutableListOf<TextView>()
     
-    // Common speed limits by unit system
-    private val mphLimits = listOf(20, 30, 40, 50, 60, 70)
-    private val kmhLimits = listOf(30, 50, 60, 80, 100, 110)
-    
-    // Current display limits (updated when country changes)
-    private var currentDisplayLimits = mphLimits
+    // Current display limits and country
+    private var currentDisplayLimits = listOf<Int>()
     private var currentCountryCode = "GB"
 
     // Broadcast receiver for speed updates from the service
@@ -116,14 +104,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Handle the splash screen transition.
         installSplashScreen()
-
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupUI()
+        setupSpeedLimitGrid(currentCountryCode)
         checkIfServiceRunning()
     }
 
@@ -155,6 +142,83 @@ class MainActivity : AppCompatActivity() {
                 checkPermissionsAndStart()
             }
         }
+    }
+
+    /**
+     * Dynamically creates speed limit buttons based on country.
+     */
+    private fun setupSpeedLimitGrid(countryCode: String) {
+        val limits = SpeedUnitHelper.getCommonSpeedLimits(countryCode)
+        
+        // Only rebuild if limits changed
+        if (limits == currentDisplayLimits) return
+        
+        currentDisplayLimits = limits
+        currentCountryCode = countryCode
+        
+        // Clear existing buttons
+        binding.speedLimitContainer.removeAllViews()
+        speedLimitButtons.clear()
+        
+        // Create button for each limit
+        limits.forEach { limit ->
+            val button = createSpeedLimitButton(limit)
+            binding.speedLimitContainer.addView(button)
+            speedLimitButtons.add(button)
+        }
+    }
+
+    /**
+     * Creates a styled TextView button for a speed limit value.
+     */
+    private fun createSpeedLimitButton(limit: Int): TextView {
+        val button = TextView(this).apply {
+            text = limit.toString()
+            setTextColor(Color.WHITE)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 48f)
+            typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
+            gravity = Gravity.CENTER
+            
+            // Set size and margins
+            val size = dpToPx(80)
+            val margin = dpToPx(8)
+            layoutParams = FlexboxLayout.LayoutParams(size, size).apply {
+                setMargins(margin, margin, margin, margin)
+            }
+            
+            // Make it clickable for crowdsourcing
+            setBackgroundResource(android.R.drawable.list_selector_background)
+            isClickable = true
+            isFocusable = true
+            
+            setOnClickListener {
+                onSpeedLimitSelected(limit)
+            }
+        }
+        return button
+    }
+
+    /**
+     * Called when user taps a speed limit to contribute.
+     */
+    private fun onSpeedLimitSelected(limit: Int) {
+        val unit = SpeedUnitHelper.getUnitLabel(currentCountryCode)
+        Toast.makeText(
+            this,
+            "Speed limit $limit $unit selected - crowdsourcing coming soon!",
+            Toast.LENGTH_SHORT
+        ).show()
+        
+        // TODO: Implement crowdsourcing - send to backend/OSM
+        // This would save: currentLocation, selectedLimit, timestamp
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp.toFloat(),
+            resources.displayMetrics
+        ).toInt()
     }
 
     private fun checkIfServiceRunning() {
@@ -293,8 +357,7 @@ class MainActivity : AppCompatActivity() {
         
         // Update grid if country changed
         if (countryCode != currentCountryCode) {
-            currentCountryCode = countryCode
-            updateSpeedLimitGrid(usesMph)
+            setupSpeedLimitGrid(countryCode)
         }
         
         // Convert to display units
@@ -309,13 +372,13 @@ class MainActivity : AppCompatActivity() {
         // Update unit label
         binding.currentSpeedUnit.text = SpeedUnitHelper.getUnitLabel(countryCode)
         
-        // Update speed limit grid highlighting
-        speedLimitGridViews.forEachIndexed { index, textView ->
+        // Highlight matching speed limit button
+        speedLimitButtons.forEachIndexed { index, button ->
             val limitValue = currentDisplayLimits.getOrNull(index) ?: 0
             if (limitValue == displayLimit) {
-                textView.setTextColor(ContextCompat.getColor(this, R.color.info_blue))
+                button.setTextColor(ContextCompat.getColor(this, R.color.info_blue))
             } else {
-                textView.setTextColor(Color.WHITE)
+                button.setTextColor(Color.WHITE)
             }
         }
         
@@ -331,15 +394,6 @@ class MainActivity : AppCompatActivity() {
             binding.currentSpeedText.setTextColor(Color.WHITE)
         }
     }
-    
-    private fun updateSpeedLimitGrid(usesMph: Boolean) {
-        currentDisplayLimits = if (usesMph) mphLimits else kmhLimits
-        
-        speedLimitGridViews.forEachIndexed { index, textView ->
-            val limitValue = currentDisplayLimits.getOrNull(index) ?: 0
-            textView.text = limitValue.toString()
-        }
-    }
 
     private fun startFlashing() {
         isFlashing = true
@@ -352,7 +406,6 @@ class MainActivity : AppCompatActivity() {
             
             addUpdateListener { animator ->
                 val fraction = animator.animatedValue as Float
-                // Alternate between white and red
                 val color = if (fraction < 0.5f) Color.WHITE else Color.parseColor("#FF0000")
                 binding.currentSpeedText.setTextColor(color)
             }
@@ -370,6 +423,6 @@ class MainActivity : AppCompatActivity() {
     private fun resetSpeedDisplay() {
         binding.currentSpeedText.text = "0"
         binding.currentSpeedText.setTextColor(Color.WHITE)
-        speedLimitGridViews.forEach { it.setTextColor(Color.WHITE) }
+        speedLimitButtons.forEach { it.setTextColor(Color.WHITE) }
     }
 }

@@ -241,5 +241,89 @@ object SpeedUnitHelper {
     fun getUnitLabel(countryCode: String): String {
         return if (usesMph(countryCode)) "mph" else "km/h"
     }
+    
+    /**
+     * Common speed limits by country (in local units).
+     * Used for the speed limit selection grid.
+     */
+    private val COMMON_SPEED_LIMITS = mapOf(
+        // MPH countries
+        "GB" to listOf(20, 30, 40, 50, 60, 70),
+        "US" to listOf(25, 35, 45, 55, 65, 75),
+        
+        // Europe (km/h)
+        "DE" to listOf(30, 50, 70, 100, 120, 130),  // Germany
+        "FR" to listOf(30, 50, 80, 110, 130),       // France
+        "ES" to listOf(30, 50, 80, 90, 100, 120),   // Spain
+        "IT" to listOf(30, 50, 70, 90, 110, 130),   // Italy
+        "NL" to listOf(30, 50, 80, 100, 120, 130),  // Netherlands
+        "BE" to listOf(30, 50, 70, 90, 120),        // Belgium
+        "AT" to listOf(30, 50, 70, 100, 130),       // Austria
+        "CH" to listOf(30, 50, 80, 100, 120),       // Switzerland
+        "PL" to listOf(30, 50, 70, 90, 120, 140),   // Poland
+        "CZ" to listOf(30, 50, 70, 90, 110, 130),   // Czech Republic
+        "PT" to listOf(30, 50, 80, 100, 120),       // Portugal
+        "SE" to listOf(30, 50, 70, 90, 110, 120),   // Sweden
+        "NO" to listOf(30, 50, 70, 80, 90, 100),    // Norway
+        "DK" to listOf(30, 50, 80, 110, 130),       // Denmark
+        "FI" to listOf(30, 50, 80, 100, 120),       // Finland
+        "IE" to listOf(30, 50, 60, 80, 100, 120),   // Ireland
+        "GR" to listOf(30, 50, 70, 90, 110, 130),   // Greece
+        
+        // Asia-Pacific (km/h)
+        "AU" to listOf(40, 50, 60, 80, 100, 110),   // Australia
+        "NZ" to listOf(30, 50, 60, 80, 100),        // New Zealand
+        "JP" to listOf(30, 40, 50, 60, 80, 100),    // Japan
+        "KR" to listOf(30, 50, 60, 80, 100, 110),   // South Korea
+        "CN" to listOf(30, 40, 60, 80, 100, 120),   // China
+        "IN" to listOf(30, 40, 50, 60, 80, 100),    // India
+        "SG" to listOf(40, 50, 60, 70, 80, 90),     // Singapore
+        "MY" to listOf(30, 60, 80, 90, 110),        // Malaysia
+        "TH" to listOf(30, 45, 60, 80, 90, 120),    // Thailand
+        
+        // Americas (km/h except US)
+        "CA" to listOf(30, 50, 60, 80, 100, 110),   // Canada
+        "MX" to listOf(30, 40, 60, 80, 100, 110),   // Mexico
+        "BR" to listOf(30, 40, 60, 80, 100, 110),   // Brazil
+        "AR" to listOf(40, 60, 80, 100, 110, 120),  // Argentina
+        
+        // Middle East & Africa (km/h)
+        "ZA" to listOf(40, 60, 80, 100, 120),       // South Africa
+        "AE" to listOf(40, 60, 80, 100, 120, 140),  // UAE
+        "SA" to listOf(40, 50, 80, 100, 120),       // Saudi Arabia
+        "IL" to listOf(30, 50, 60, 80, 90, 110),    // Israel
+        "EG" to listOf(30, 45, 60, 90, 100),        // Egypt
+    )
+    
+    // Default limits when country not in database
+    private val DEFAULT_MPH_LIMITS = listOf(20, 30, 40, 50, 60, 70)
+    private val DEFAULT_KMH_LIMITS = listOf(30, 50, 60, 80, 100, 120)
+    
+    /**
+     * Get the common speed limits for a country (in local units).
+     * Returns country-specific limits if known, otherwise defaults based on unit system.
+     */
+    fun getCommonSpeedLimits(countryCode: String): List<Int> {
+        val code = countryCode.uppercase()
+        return COMMON_SPEED_LIMITS[code] ?: if (usesMph(code)) DEFAULT_MPH_LIMITS else DEFAULT_KMH_LIMITS
+    }
+    
+    /**
+     * Merge discovered limits with known limits for a country.
+     * Returns a sorted, deduplicated list of reasonable speed limits.
+     */
+    fun mergeSpeedLimits(countryCode: String, discoveredLimits: List<Int>): List<Int> {
+        val knownLimits = getCommonSpeedLimits(countryCode)
+        val usesMph = usesMph(countryCode)
+        
+        // Combine known and discovered, filter out unreasonable values
+        val maxReasonable = if (usesMph) 85 else 150
+        val minReasonable = if (usesMph) 5 else 10
+        
+        return (knownLimits + discoveredLimits)
+            .filter { it in minReasonable..maxReasonable }
+            .distinct()
+            .sorted()
+    }
 }
 

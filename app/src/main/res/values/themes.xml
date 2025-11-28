@@ -14,17 +14,4 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/anim_splash_icon</item>
         <item name="postSplashScreenTheme">@style/Theme.SpeedAlert</item>
     </style>
-
-    <!-- Speed Limit Grid Number Style -->
-    <style name="SpeedLimitGridNumber">
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:gravity">center</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMinTextSize">12sp</item>
-        <item name="autoSizeMaxTextSize">150sp</item>
-        <item name="autoSizeStepGranularity">2sp</item>
-        <item name="android:layout_margin">4dp</item>
-    </style>
 </resources>
