@@ -1,6 +1,10 @@
 package com.speedlimit
 
 import android.animation.ValueAnimator
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -18,6 +22,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
 
 /**
  * Service that displays a floating speed overlay on top of other apps.
@@ -27,6 +32,8 @@ class FloatingSpeedService : Service() {
 
     companion object {
         const val TAG = "FloatingSpeedService"
+        const val NOTIFICATION_ID = 2
+        const val CHANNEL_ID = "floating_speed_channel"
         
         var isRunning = false
             private set
@@ -58,6 +65,7 @@ class FloatingSpeedService : Service() {
         Log.d(TAG, "FloatingSpeedService created")
         isRunning = true
         
+        createNotificationChannel()
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         createFloatingView()
         registerSpeedReceiver()
@@ -65,7 +73,40 @@ class FloatingSpeedService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "FloatingSpeedService started")
+        startForeground(NOTIFICATION_ID, createNotification())
         return START_STICKY
+    }
+    
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            "Floating Speed Display",
+            NotificationManager.IMPORTANCE_LOW
+        ).apply {
+            description = "Shows when floating speed display is active"
+            setShowBadge(false)
+        }
+        
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun createNotification(): Notification {
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, MainActivity::class.java),
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Speed/Limit")
+            .setContentText("Floating display active • Tap to return")
+            .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+            .setContentIntent(pendingIntent)
+            .setOngoing(true)
+            .setSilent(true)
+            .build()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

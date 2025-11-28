@@ -193,8 +193,8 @@ class MainActivity : AppCompatActivity() {
         // Show hint about returning
         Toast.makeText(this, getString(R.string.floating_mode_hint), Toast.LENGTH_LONG).show()
         
-        // Start the floating service
-        startService(Intent(this, FloatingSpeedService::class.java))
+        // Start the floating service as foreground
+        ContextCompat.startForegroundService(this, Intent(this, FloatingSpeedService::class.java))
         
         // Minimize the app (go to home screen)
         moveTaskToBack(true)
