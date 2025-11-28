@@ -1,13 +1,22 @@
-# System Patterns: Speed Alert
+# System Patterns: Speed/Limit
 
 ## Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────┐
+│                 DisclaimerActivity                       │
+│  - Shows every launch (legal protection)                │
+│  - 85 language translations                             │
+│  - Accept → MainActivity, Decline → Exit                │
+└─────────────────────┬───────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────┐
 │                    MainActivity                          │
 │  - UI display (speed, limit, grid)                      │
 │  - Permission handling                                   │
 │  - Start/stop service control                           │
+│  - Floating mode toggle                                 │
 └─────────────────────┬───────────────────────────────────┘
                       │ BroadcastReceiver
                       ▼
@@ -16,6 +25,7 @@
 │  - Foreground service (survives app minimize)           │
 │  - GPS location listener                                │
 │  - Coordinates speed checking                           │
+│  - Auto-triggers FloatingSpeedService on alert          │
 └──────┬──────────────────┬───────────────────┬───────────┘
        │                  │                   │
        ▼                  ▼                   ▼
@@ -26,20 +36,30 @@
 │- Caching     │  │  detection    │  │- Vibration    │
 │              │  │- Unit convert │  │               │
 └──────────────┘  └───────────────┘  └───────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│              FloatingSpeedService                        │
+│  - Foreground service (SPECIAL_USE type)                │
+│  - WindowManager overlay                                │
+│  - Draggable floating widget                            │
+│  - Receives speed broadcasts                            │
+│  - Flashes red/white when over limit                    │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ## Key Design Patterns
 
 ### Foreground Service Pattern
-- `SpeedMonitorService` runs as Android foreground service
-- Required for continuous GPS access when app minimized
+- `SpeedMonitorService` and `FloatingSpeedService` run as foreground services
+- Required for continuous GPS access and overlay display
 - Shows persistent notification while active
 - Uses `START_STICKY` to restart if killed
 
 ### Broadcast Communication
-- Service broadcasts speed updates to Activity
+- Services broadcast speed updates
+- Activities/Services register receivers
 - Decouples UI from background logic
-- Activity registers/unregisters receiver on resume/pause
 - Intent extras: speed, limit, isOverLimit, countryCode
 
 ### Caching Strategy
@@ -54,21 +74,42 @@
 - Converts to display units only at UI layer
 - OSM parsing adapts to country's implicit units
 
+### Floating Overlay Pattern
+- Uses `SYSTEM_ALERT_WINDOW` permission
+- `WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY`
+- Touch listener distinguishes taps from drags
+- Auto-show on alert via static flag
+
 ## Component Responsibilities
 
+### DisclaimerActivity.kt
+- Entry point (launcher activity)
+- Shows legal disclaimer every launch
+- Accept proceeds to MainActivity
+- Decline closes app
+
 ### MainActivity.kt
-- Lifecycle management
-- Permission request flows (location, background, notification)
-- Dynamic UI generation (FlexboxLayout for speed grid)
+- Main UI with speed display
+- Permission request flows
+- Dynamic speed limit grid (FlexboxLayout)
+- Floating mode toggle button
 - Receives broadcasts, updates display
-- Handles start/stop button
 
 ### SpeedMonitorService.kt
 - Foreground service management
 - GPS location updates (1 second interval)
 - Coordinates speed limit lookups
 - Triggers alerts when over limit
+- Auto-starts FloatingSpeedService on alert
 - Broadcasts updates to UI
+
+### FloatingSpeedService.kt
+- Foreground service (SPECIAL_USE type)
+- Creates WindowManager overlay
+- Draggable floating widget
+- Close button and double-tap handling
+- Receives speed broadcasts
+- Flashes when over limit
 
 ### SpeedLimitProvider.kt
 - Overpass API queries
@@ -112,4 +153,4 @@ out tags;
 - Geocoding failure: Fall back to device locale
 - No speed limit found: No alert (fail safe)
 - Permission denied: Show rationale dialogs
-
+- Overlay layout: No theme attributes (crashes in Service)

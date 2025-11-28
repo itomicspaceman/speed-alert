@@ -1,4 +1,4 @@
-# Technical Context: Speed Alert
+# Technical Context: Speed/Limit
 
 ## Technology Stack
 
@@ -40,6 +40,7 @@ com.google.android.gms:play-services-location:21.0.1
 - JDK 17 (bundled with Android Studio)
 - Android SDK 35
 - Windows 11 with Laravel Herd (project location)
+- Node.js (for translation script)
 
 ### Build Commands
 ```powershell
@@ -56,21 +57,26 @@ speed/
 ├── app/
 │   ├── build.gradle.kts          # Module config
 │   └── src/main/
-│       ├── AndroidManifest.xml   # Permissions, service
+│       ├── AndroidManifest.xml   # Permissions, services
 │       ├── java/com/speedlimit/
 │       │   ├── MainActivity.kt
+│       │   ├── DisclaimerActivity.kt
 │       │   ├── SpeedMonitorService.kt
+│       │   ├── FloatingSpeedService.kt
 │       │   ├── SpeedLimitProvider.kt
 │       │   ├── SpeedUnitHelper.kt
 │       │   └── AlertPlayer.kt
 │       └── res/
-│           ├── layout/           # activity_main.xml
+│           ├── layout/           # XML layouts
 │           ├── drawable/         # Icons, vectors
-│           ├── values/           # colors, strings, themes
+│           ├── values/           # Default strings, colors, themes
+│           ├── values-XX/        # 85 language translations
 │           └── mipmap-anydpi-v26/ # Adaptive icons
+├── scripts/
+│   └── translate-strings.js      # Google Translate API script
+├── memory-bank/                  # Project documentation
 ├── build.gradle.kts              # Project config
 ├── settings.gradle.kts
-├── gradle.properties
 └── local.properties              # SDK path
 ```
 
@@ -81,6 +87,8 @@ ACCESS_COARSE_LOCATION    <!-- Backup location -->
 ACCESS_BACKGROUND_LOCATION <!-- Background GPS -->
 FOREGROUND_SERVICE        <!-- Background service -->
 FOREGROUND_SERVICE_LOCATION <!-- Location in service -->
+FOREGROUND_SERVICE_SPECIAL_USE <!-- Floating overlay service -->
+SYSTEM_ALERT_WINDOW       <!-- Floating window overlay -->
 INTERNET                  <!-- OSM API -->
 POST_NOTIFICATIONS        <!-- Service notification -->
 WAKE_LOCK                 <!-- Keep CPU active -->
@@ -100,12 +108,17 @@ VIBRATE                   <!-- Alert vibration -->
 - Used for country detection
 - Requires internet connection
 
+### Google Translate API
+- Used one-time for generating translations
+- Script at `scripts/translate-strings.js`
+- Requires API key (not stored in repo)
+
 ## Technical Constraints
 
 ### Battery Considerations
 - GPS is battery-intensive
 - Caching reduces API calls
-- Foreground service required for reliability
+- Foreground services required for reliability
 
 ### OSM Data Quality
 - Coverage varies by region
@@ -115,5 +128,12 @@ VIBRATE                   <!-- Alert vibration -->
 ### Android Restrictions
 - Background location needs "Allow all the time"
 - Android 13+ requires notification permission
-- Foreground service must show notification
+- Android 14+ requires foreground service types
+- Overlay permission requires manual grant in Settings
+- Service layouts can't use theme attributes (?attr/...)
 
+## Localization
+- 85 language translations
+- Android auto-selects based on device locale
+- Falls back to English if no translation exists
+- Translations generated via Google Translate API
