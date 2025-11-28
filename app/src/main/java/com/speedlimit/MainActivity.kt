@@ -121,6 +121,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Initialize Firebase Analytics and Crashlytics
+        AnalyticsHelper.initialize(this)
+
         setupUI()
         setupSpeedLimitGrid(currentCountryCode)
         checkIfServiceRunning()

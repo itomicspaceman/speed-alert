@@ -170,9 +170,18 @@ class SpeedLimitProvider(private val context: Context) {
         rateLimitEndTime = System.currentTimeMillis() + currentBackoffMs
         
         val backoffSeconds = (currentBackoffMs / 1000).toInt()
+        val errorType = when (responseCode) {
+            429 -> "Too Many Requests"
+            503 -> "Service Unavailable"
+            504 -> "Gateway Timeout"
+            else -> "Connection Error"
+        }
         
         Log.w(TAG, "⚠️ RATE LIMITED! Code: $responseCode, Backing off for ${backoffSeconds}s " +
                 "(events this session: $rateLimitEventsThisSession)")
+        
+        // Log to Firebase Analytics for developer monitoring
+        AnalyticsHelper.logRateLimitHit(responseCode, errorType, backoffSeconds, currentCountryCode)
         
         // Broadcast alert for UI notification
         broadcastRateLimitAlert(responseCode, backoffSeconds)

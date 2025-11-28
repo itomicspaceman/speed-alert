@@ -1,6 +1,10 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
+    // Add the Crashlytics Gradle plugin
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -11,8 +15,8 @@ android {
         applicationId = "com.speedlimit"
         minSdk = 26
         targetSdk = 35
-        versionCode = 17
-        versionName = "2.6"
+        versionCode = 18
+        versionName = "2.7"
     }
 
     buildTypes {
@@ -69,5 +73,14 @@ dependencies {
     
     // Location services
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    
+    // Firebase - Import the BoM for version management
+    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+    
+    // Firebase Analytics - for event tracking and monitoring
+    implementation("com.google.firebase:firebase-analytics")
+    
+    // Firebase Crashlytics - for crash and error reporting
+    implementation("com.google.firebase:firebase-crashlytics")
 }
 
