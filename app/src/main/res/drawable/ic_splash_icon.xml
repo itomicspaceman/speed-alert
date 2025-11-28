@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="192dp"
+    android:height="192dp"
+    android:viewportWidth="192"
+    android:viewportHeight="192">
+    <path
+        android:pathData="M42,150 A66,66 0 1,1 150,150"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="8"/>
+    <group
+        android:name="needle"
+        android:pivotX="96"
+        android:pivotY="150"
+        android:rotation="-45">
+        <path
+            android:pathData="M96,150 L96,42"
+            android:strokeLineCap="round"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="8"/>
+    </group>
+</vector>

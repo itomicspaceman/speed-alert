@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".MainActivity">
+
+    <!-- Current Speed -->
+    <LinearLayout
+        android:id="@+id/currentSpeedContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/speedLimitGrid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/currentSpeedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:includeFontPadding="false"
+            android:text="0"
+            android:textColor="#FFFFFF"
+            android:textSize="220sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/currentSpeedUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mph"
+            android:textColor="#666666"
+            android:textSize="32sp" />
+
+    </LinearLayout>
+
+    <!-- Speed Limit Grid -->
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/speedLimitGrid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/currentSpeedContainer"
+        app:layout_constraintBottom_toTopOf="@+id/toggleButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:columnCount="3"
+        app:rowCount="2">
+
+        <TextView
+            android:id="@+id/speedLimit20"
+            style="@style/SpeedLimitGridNumber"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_column="0"
+            app:layout_row="0"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:text="20" />
+        <TextView
+            android:id="@+id/speedLimit30"
+            style="@style/SpeedLimitGridNumber"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_column="1"
+            app:layout_row="0"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:text="30" />
+        <TextView
+            android:id="@+id/speedLimit40"
+            style="@style/SpeedLimitGridNumber"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_column="2"
+            app:layout_row="0"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:text="40" />
+        <TextView
+            android:id="@+id/speedLimit50"
+            style="@style/SpeedLimitGridNumber"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_column="0"
+            app:layout_row="1"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:text="50" />
+        <TextView
+            android:id="@+id/speedLimit60"
+            style="@style/SpeedLimitGridNumber"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_column="1"
+            app:layout_row="1"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:text="60" />
+        <TextView
+            android:id="@+id/speedLimit70"
+            style="@style/SpeedLimitGridNumber"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_column="2"
+            app:layout_row="1"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:text="70" />
+
+    </androidx.gridlayout.widget.GridLayout>
+
+    <!-- Start/Stop Button -->
+    <ImageButton
+        android:id="@+id/toggleButton"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_play"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

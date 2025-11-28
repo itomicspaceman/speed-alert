@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#1A1A2E</color>
+    <color name="primary_variant">#16213E</color>
+    <color name="secondary">#E94560</color>
+    <color name="secondary_variant">#FF6B6B</color>
+    <color name="background">#0F0F1A</color>
+    <color name="surface">#1A1A2E</color>
+    <color name="error">#FF4444</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="on_background">#EAEAEA</color>
+    <color name="on_surface">#EAEAEA</color>
+    <color name="on_error">#FFFFFF</color>
+    
+    <color name="speed_safe">#00FF88</color>
+    <color name="speed_warning">#FFD93D</color>
+    <color name="speed_danger">#FF4757</color>
+    <color name="text_muted">#888899</color>
+    
+    <color name="info_blue">#007BFF</color>
+</resources>
+

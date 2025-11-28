@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Speedometer icon -->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:translateX="0"
+        android:translateY="0">
+        
+        <!-- Outer circle -->
+        <path
+            android:fillColor="#E94560"
+            android:pathData="M54,24
+                A30,30 0 1,1 54,84
+                A30,30 0 1,1 54,24
+                M54,30
+                A24,24 0 1,0 54,78
+                A24,24 0 1,0 54,30Z"/>
+        
+        <!-- Speed needle -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M54,54 L72,42 L54,48 Z"/>
+        
+        <!-- Center dot -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M54,54 m-4,0 a4,4 0 1,1 8,0 a4,4 0 1,1 -8,0"/>
+        
+        <!-- Speed marks -->
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="2"
+            android:pathData="M54,28 L54,34"/>
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="2"
+            android:pathData="M72,36 L68,40"/>
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="2"
+            android:pathData="M80,54 L74,54"/>
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="2"
+            android:pathData="M36,36 L40,40"/>
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="2"
+            android:pathData="M28,54 L34,54"/>
+    </group>
+</vector>
+
