@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Latin translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Notitia Magni Momenti</string>
+    <string name="disclaimer_text">Haec applicatio utitur datis a multitudine collectis ex OpenStreetMap ad limites celeritatis ostendendos. Haec data fortasse incompleta, inaccurata, vel obsoleta sunt.\n\nNULLAS GARANTIAS FACIMUS de accuratione, fide, vel integritate ullius informationis de limitibus celeritatis monstratis.\n\nTU SOLUS RESPONSABILIS ES pro oboediendo omnibus legibus vialibus et limitibus celeritatis impositis. Semper ad signa viaria officialia ut fontem auctoritativum refer.\n\nUtendo hac applicatione, agnoscis fabricatores, contributores, et provisores datorum NULLAM RESPONSABILITATEM accipere pro ullis consequentiis ortis ex fiducia in informatione monstrata, inter quas sed non limitatas ad violationes viales, accidentia, iniurias, vel damna cuiuslibet generis.</string>
+    <string name="disclaimer_safety">🚗 SALUS PRIMUM\n\nNUNQUAM cum hac applicatione interagas dum vehis. Antequam iter incipias, eam constitue et, si mutationes quaslibet facere debes, tuto ad latus viae siste.\n\nTua salus et aliorum tua est responsabilitas.</string>
+    <string name="disclaimer_accept">Intellego et Accipio</string>
+    <string name="disclaimer_reject">Declinatio</string>
+</resources>

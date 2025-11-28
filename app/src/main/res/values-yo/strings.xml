@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Yoruba translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Akiyesi Pataki</string>
+    <string name="disclaimer_text">Ìfilọlẹ yii nlo data orisun lati OpenStreetMap lati ṣafihan awọn opin iyara. Data yii le jẹ pe, aipe, tabi ti igba atijọ.\n\nA KO SI awọn ATILẸYIN ỌJA nipa išedede, igbẹkẹle, tabi pipe eyikeyi alaye opin iyara ti o han.\n\nIWO NI NIKAN LOJUJU fun gbogbo awọn ofin ijabọ ati awọn opin iyara ti a fiweranṣẹ. Nigbagbogbo tọka si awọn ami opopona osise bi orisun alaṣẹ.\n\nNípa lílo ìṣàfilọ́lẹ̀ yìí, o jẹ́wọ́ pé àwọn olùgbékalẹ̀, àwọn olùkópa, àti àwọn olùpèsè dátà kò gba ONÍṢẸ̀YỌ̀WỌ́ fún èyíkéyìí àbájáde tí ó ṣẹlẹ̀ láti ìgbẹ́kẹ̀lé ìwífún tí a ṣàfihàn, pẹ̀lú ṣùgbọ́n tí kò ní ààlà sí àwọn ìrúfin ìrìnnà, ìjàǹbá, àwọn ìfarapa, tàbí àwọn ìpalára èyíkéyìí.</string>
+    <string name="disclaimer_safety">🚗 AABO LAKỌKỌ\n\nMaṣe ṣe ajọṣepọ pẹlu ohun elo yii lakoko iwakọ. Ṣeto ṣaaju ki o to bẹrẹ irin-ajo rẹ ki o fa kuro lailewu ti o ba nilo lati ṣe awọn ayipada eyikeyi.\n\nAabo rẹ ati aabo awọn elomiran jẹ ojuṣe rẹ.</string>
+    <string name="disclaimer_accept">Mo Loye &amp; Gba</string>
+    <string name="disclaimer_reject">Kọ silẹ</string>
+</resources>

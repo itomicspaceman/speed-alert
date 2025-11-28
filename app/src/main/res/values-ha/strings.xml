@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Hausa translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Muhimmiyar Sanarwa</string>
+    <string name="disclaimer_text">Wannan app ɗin yana amfani da bayanan da aka tattara daga OpenStreetMap don nuna iyakoki na sauri. Wannan bayanan na iya zama mara cikakke, mara kyau, ko kuma na baya.\n\nBA MU YI GARANTI game da daidaito, amintacce, ko cikar kowane bayanin iyakar saurin da aka nuna.\n\nKAI KAWAI NE KE DA alhakin yin biyayya ga duk dokokin hanya da iyakokin saurin da aka saka. Koyaushe koma zuwa alamun hanya na hukuma azaman tushen tushe.\n\nTa amfani da wannan ƙa\'idar, kun yarda cewa masu haɓakawa, masu ba da gudummawa, da masu samar da bayanai sun karɓi BABU ALHAKI ga duk wani sakamako da ya taso daga dogaro ga bayanan da aka nuna, gami da amma ba\'a iyakance ga cin zarafi, hatsarori, raunuka, ko lahani kowane iri ba.</string>
+    <string name="disclaimer_safety">🚗 TSIRA FARKO\n\nKADA KA YI MU\'amala da wannan app yayin tuƙi. Saita kafin ku fara tafiya kuma ku haye lafiya idan kuna buƙatar yin wasu canje-canje.\n\nAmincin ku da amincin wasu alhaki ne na ku.</string>
+    <string name="disclaimer_accept">Na Fahimta &amp; Karɓa</string>
+    <string name="disclaimer_reject">Karya</string>
+</resources>

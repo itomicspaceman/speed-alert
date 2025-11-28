@@ -38,8 +38,9 @@ Your safety and the safety of others is your responsibility.`,
     disclaimer_reject: "Decline"
 };
 
-// Target languages (ISO 639-1 codes) - comprehensive list
+// Target languages (ISO 639-1 codes) - ALL Android-supported languages
 const targetLanguages = [
+    // === ALREADY TRANSLATED (will be skipped if folder exists) ===
     { code: 'ar', folder: 'values-ar', name: 'Arabic' },
     { code: 'bg', folder: 'values-bg', name: 'Bulgarian' },
     { code: 'bn', folder: 'values-bn', name: 'Bengali' },
@@ -53,11 +54,11 @@ const targetLanguages = [
     { code: 'fa', folder: 'values-fa', name: 'Persian' },
     { code: 'fi', folder: 'values-fi', name: 'Finnish' },
     { code: 'fr', folder: 'values-fr', name: 'French' },
-    { code: 'he', folder: 'values-iw', name: 'Hebrew' },  // Android uses 'iw' for Hebrew
+    { code: 'he', folder: 'values-iw', name: 'Hebrew' },
     { code: 'hi', folder: 'values-hi', name: 'Hindi' },
     { code: 'hr', folder: 'values-hr', name: 'Croatian' },
     { code: 'hu', folder: 'values-hu', name: 'Hungarian' },
-    { code: 'id', folder: 'values-in', name: 'Indonesian' },  // Android uses 'in'
+    { code: 'id', folder: 'values-in', name: 'Indonesian' },
     { code: 'it', folder: 'values-it', name: 'Italian' },
     { code: 'ja', folder: 'values-ja', name: 'Japanese' },
     { code: 'ko', folder: 'values-ko', name: 'Korean' },
@@ -80,6 +81,68 @@ const targetLanguages = [
     { code: 'vi', folder: 'values-vi', name: 'Vietnamese' },
     { code: 'zh-CN', folder: 'values-zh-rCN', name: 'Chinese (Simplified)' },
     { code: 'zh-TW', folder: 'values-zh-rTW', name: 'Chinese (Traditional)' },
+    
+    // === NEW LANGUAGES TO ADD ===
+    // Celtic & British Isles
+    { code: 'cy', folder: 'values-cy', name: 'Welsh' },
+    { code: 'ga', folder: 'values-ga', name: 'Irish' },
+    { code: 'gd', folder: 'values-gd', name: 'Scottish Gaelic' },
+    
+    // Nordic & Baltic
+    { code: 'is', folder: 'values-is', name: 'Icelandic' },
+    { code: 'fo', folder: 'values-fo', name: 'Faroese' },
+    
+    // African
+    { code: 'sw', folder: 'values-sw', name: 'Swahili' },
+    { code: 'af', folder: 'values-af', name: 'Afrikaans' },
+    { code: 'zu', folder: 'values-zu', name: 'Zulu' },
+    { code: 'xh', folder: 'values-xh', name: 'Xhosa' },
+    { code: 'am', folder: 'values-am', name: 'Amharic' },
+    { code: 'ha', folder: 'values-ha', name: 'Hausa' },
+    { code: 'yo', folder: 'values-yo', name: 'Yoruba' },
+    { code: 'ig', folder: 'values-ig', name: 'Igbo' },
+    { code: 'so', folder: 'values-so', name: 'Somali' },
+    
+    // South Asian
+    { code: 'ta', folder: 'values-ta', name: 'Tamil' },
+    { code: 'te', folder: 'values-te', name: 'Telugu' },
+    { code: 'ml', folder: 'values-ml', name: 'Malayalam' },
+    { code: 'kn', folder: 'values-kn', name: 'Kannada' },
+    { code: 'mr', folder: 'values-mr', name: 'Marathi' },
+    { code: 'gu', folder: 'values-gu', name: 'Gujarati' },
+    { code: 'pa', folder: 'values-pa', name: 'Punjabi' },
+    { code: 'ur', folder: 'values-ur', name: 'Urdu' },
+    { code: 'ne', folder: 'values-ne', name: 'Nepali' },
+    { code: 'si', folder: 'values-si', name: 'Sinhala' },
+    
+    // Southeast Asian
+    { code: 'tl', folder: 'values-tl', name: 'Filipino/Tagalog' },
+    { code: 'km', folder: 'values-km', name: 'Khmer' },
+    { code: 'lo', folder: 'values-lo', name: 'Lao' },
+    { code: 'my', folder: 'values-my', name: 'Burmese' },
+    
+    // Central Asian & Caucasus
+    { code: 'ka', folder: 'values-ka', name: 'Georgian' },
+    { code: 'hy', folder: 'values-hy', name: 'Armenian' },
+    { code: 'az', folder: 'values-az', name: 'Azerbaijani' },
+    { code: 'kk', folder: 'values-kk', name: 'Kazakh' },
+    { code: 'uz', folder: 'values-uz', name: 'Uzbek' },
+    { code: 'ky', folder: 'values-ky', name: 'Kyrgyz' },
+    { code: 'mn', folder: 'values-mn', name: 'Mongolian' },
+    
+    // European (additional)
+    { code: 'sq', folder: 'values-sq', name: 'Albanian' },
+    { code: 'mk', folder: 'values-mk', name: 'Macedonian' },
+    { code: 'bs', folder: 'values-bs', name: 'Bosnian' },
+    { code: 'be', folder: 'values-be', name: 'Belarusian' },
+    { code: 'eu', folder: 'values-eu', name: 'Basque' },
+    { code: 'gl', folder: 'values-gl', name: 'Galician' },
+    { code: 'mt', folder: 'values-mt', name: 'Maltese' },
+    { code: 'lb', folder: 'values-lb', name: 'Luxembourgish' },
+    
+    // Other
+    { code: 'eo', folder: 'values-eo', name: 'Esperanto' },
+    { code: 'la', folder: 'values-la', name: 'Latin' },
 ];
 
 // Google Translate API call
@@ -159,7 +222,20 @@ async function translateAllLanguages() {
     console.log('Starting translation process...\n');
     console.log(`Translating to ${targetLanguages.length} languages\n`);
 
+    let translated = 0;
+    let skipped = 0;
+    
     for (const lang of targetLanguages) {
+        const folderPath = path.join(resPath, lang.folder);
+        const filePath = path.join(folderPath, 'strings.xml');
+        
+        // Skip if already translated
+        if (fs.existsSync(filePath)) {
+            console.log(`  ⏭ ${lang.name} - already exists, skipping`);
+            skipped++;
+            continue;
+        }
+        
         console.log(`Translating to ${lang.name} (${lang.code})...`);
         
         try {
@@ -172,7 +248,6 @@ async function translateAllLanguages() {
             }
             
             // Create directory if it doesn't exist
-            const folderPath = path.join(resPath, lang.folder);
             if (!fs.existsSync(folderPath)) {
                 fs.mkdirSync(folderPath, { recursive: true });
             }
@@ -182,11 +257,14 @@ async function translateAllLanguages() {
             fs.writeFileSync(path.join(folderPath, 'strings.xml'), xmlContent, 'utf8');
             
             console.log(`  ✓ ${lang.name} complete`);
+            translated++;
             
         } catch (error) {
             console.error(`  ✗ ${lang.name} failed: ${error.message}`);
         }
     }
+    
+    console.log(`\nSummary: ${translated} translated, ${skipped} skipped (already exist)`);
     
     console.log('\nTranslation complete!');
     console.log(`Files written to: ${resPath}`);

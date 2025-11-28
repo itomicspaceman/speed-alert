@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Maltese translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Avviż Importanti</string>
+    <string name="disclaimer_text">Din l-app tuża dejta miġbura minn crowdsourcing minn OpenStreetMap biex turi l-limiti tal-veloċità. Din id-dejta tista\' tkun mhux kompluta, mhux preċiża, jew skaduta.\n\nMA NAGĦMLU L-EBDA GARANZIJA rigward l-eżattezza, l-affidabbiltà, jew il-kompletezza ta\' kwalunkwe informazzjoni dwar il-limiti tal-veloċità murija.\n\nINTI UNIKA RESPONSABBLI biex tobdi l-liġijiet tat-traffiku kollha u l-limiti tal-veloċità stazzjonati. Dejjem irreferi għas-sinjali tat-triq uffiċjali bħala s-sors awtorevoli.\n\nBilli tuża din l-app, inti tirrikonoxxi li l-iżviluppaturi, il-kontributuri, u l-fornituri tad-dejta MA JAĊĊETTAW L-EBDA RESPONSABBILTÀ għal kwalunkwe konsegwenza li tirriżulta mid-dipendenza fuq l-informazzjoni murija, inklużi iżda mhux limitati għal ksur tar-regoli tat-traffiku, inċidenti, korrimenti, jew danni ta\' kwalunkwe tip.</string>
+    <string name="disclaimer_safety">🚗 IS-SIGURTÀ L-EWWEL\n\nQATT tinteraġixxi ma\' din l-app waqt is-sewqan. Issettjaha qabel tibda l-vjaġġ tiegħek u waqqafha b\'mod sikur jekk ikollok bżonn tagħmel xi bidliet.\n\nIs-sigurtà tiegħek u s-sigurtà ta\' ħaddieħor hija r-responsabbiltà tiegħek.</string>
+    <string name="disclaimer_accept">Nifhem u Naċċetta</string>
+    <string name="disclaimer_reject">Tnaqqis</string>
+</resources>

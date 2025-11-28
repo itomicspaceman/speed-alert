@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Basque translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Ohar garrantzitsua</string>
+    <string name="disclaimer_text">Aplikazio honek OpenStreetMap-eko crowdsourcing datuak erabiltzen ditu abiadura mugak bistaratzeko. Datu hauek osatu gabeak, zehaztugabeak edo zaharkituak izan daitezke.\n\nEZ DUGU BERMERIK EMATEN bistaratutako abiadura mugaren informazioaren zehaztasunari, fidagarritasunari edo osotasunari dagokionez.\n\nZU ZARA BAKARRA trafiko lege eta abiadura muga guztiak betetzearen arduraduna. Beti jo errepideko seinale ofizialetara iturri ofizial gisa.\n\nAplikazio hau erabiliz, onartzen duzu garatzaileek, kolaboratzaileek eta datu hornitzaileek EZ DUTELA ERAGINKI ONARTZEN bistaratutako informazioan oinarritzearen ondoriozko ondorioengatik, besteak beste, trafiko arau-hausteak, istripuak, lesioak edo edozein motatako kalteak barne.</string>
+    <string name="disclaimer_safety">🚗 SEGURTASUNA LEHENENGOA\n\nINOIZ EZ elkarreragin aplikazio honekin gidatzen ari zaren bitartean. Konfiguratu bidaia hasi aurretik eta gelditu segurtasunez aldaketaren bat egin behar baduzu.\n\nZure segurtasuna eta besteena zure ardura da.</string>
+    <string name="disclaimer_accept">Ulertzen eta Onartzen dut</string>
+    <string name="disclaimer_reject">Ukatu</string>
+</resources>

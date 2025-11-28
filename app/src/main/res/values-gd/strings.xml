@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Scottish Gaelic translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Brath Cudromach</string>
+    <string name="disclaimer_text">Bidh an aplacaid seo a’ cleachdadh dàta a chaidh a thoirt bho OpenStreetMap gus crìochan astair a thaisbeanadh. Dh’ fhaodadh an dàta seo a bhith neo-iomlan, mì-cheart no seann-fhasanta.\n\nCHAN EIL SINN A’ TOIRT GEALLTANAS SAM BITH a thaobh cruinneas, earbsachd no iomlanachd fiosrachadh sam bith mu chrìochan astair a tha air a thaisbeanadh.\n\nTHA UALLACH AIR SIBH A-MHÀIN airson a bhith ag ùmhlachd do laghan trafaic agus crìochan astair a tha air an cur suas. Thoir iomradh an-còmhnaidh air soidhnichean rathaid oifigeil mar an stòr ùghdarrasach.\n\nLe bhith a’ cleachdadh an aplacaid seo, tha sibh ag aideachadh nach gabh na luchd-leasachaidh, na luchd-tabhartais agus na solaraichean dàta uallach sam bith airson builean sam bith a thig bho bhith an urra ri fiosrachadh a tha air a thaisbeanadh, a’ gabhail a-steach ach gun a bhith cuibhrichte ri briseadh riaghailtean trafaic, tubaistean, leòntan no milleadh de sheòrsa sam bith.</string>
+    <string name="disclaimer_safety">🚗 SÀBHAILTEACHD AN TOISEACH\n\nNA cleachd an aplacaid seo gu bràth fhad ’s a tha thu a’ dràibheadh. Suidhich e mus tòisich thu air do thuras agus stad gu sàbhailte ma dh’fheumas tu atharrachaidhean sam bith a dhèanamh.\n\n’S ann ortsa a tha do shàbhailteachd fhèin agus sàbhailteachd chàich.</string>
+    <string name="disclaimer_accept">Tha mi a\' tuigsinn &amp; a\' gabhail ris</string>
+    <string name="disclaimer_reject">Crìonadh</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Albanian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Njoftim i Rëndësishëm</string>
+    <string name="disclaimer_text">Ky aplikacion përdor të dhëna të mbledhura nga OpenStreetMap për të shfaqur kufijtë e shpejtësisë. Këto të dhëna mund të jenë të paplota, të pasakta ose të vjetruara.\n\nNE NUK JAPIM ASNJË GARANCI në lidhje me saktësinë, besueshmërinë ose plotësinë e çdo informacioni të shfaqur mbi kufirin e shpejtësisë.\n\nJU JENI VETËM PËRGJEGJËS për respektimin e të gjitha ligjeve të trafikut dhe kufijve të shpejtësisë të postuar. Gjithmonë referojuni shenjave zyrtare rrugore si burimi autoritar.\n\nDuke përdorur këtë aplikacion, ju pranoni që zhvilluesit, kontribuesit dhe ofruesit e të dhënave NUK pranojnë ASNJË PËRGJEGJËSI për çdo pasojë që rrjedh nga mbështetja në informacionin e shfaqur, duke përfshirë, por pa u kufizuar në shkeljet e trafikut, aksidentet, lëndimet ose dëmet e çdo lloji.</string>
+    <string name="disclaimer_safety">🚗 SIGURIA NË PARA TË GJITHA\n\nASKURRË mos ndërveproni me këtë aplikacion gjatë drejtimit të automjetit. Konfigurojeni përpara se të filloni udhëtimin dhe ndaloni në mënyrë të sigurt nëse keni nevojë të bëni ndonjë ndryshim.\n\nSiguria juaj dhe siguria e të tjerëve është përgjegjësia juaj.</string>
+    <string name="disclaimer_accept">Unë e kuptoj dhe e pranoj</string>
+    <string name="disclaimer_reject">Refuzim</string>
+</resources>

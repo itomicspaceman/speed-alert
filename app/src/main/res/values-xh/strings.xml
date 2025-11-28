@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Xhosa translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Isaziso esibalulekileyo</string>
+    <string name="disclaimer_text">Le app isebenzisa idata ephuma kwi-OpenStreetMap ukubonisa imida yesantya. Le datha isenokuba ayiphelelanga, ayichanekanga, okanye iphelelwe lixesha.\n\nASENZI IZIQINISEKISO malunga nokuchaneka, ukuthembeka, okanye ukugqibelela kwalo naluphi na ulwazi lomlinganiselo wesantya obonisiweyo.\n\nNGUWE KUPHELA UXANDUVA lokuthobela yonke imithetho yendlela kunye nemiqathango yesantya exhonyiweyo. Soloko ubhekisa kwiimpawu zendlela ezisemthethweni njengomthombo ogunyazisiweyo.\n\nNgokusebenzisa le app, uyavuma ukuba abaphuhlisi, abaxhasi, kunye nabanikezeli bedatha abamkela AKUKHO LIABILITY naziphi na iziphumo ezivela ekuthembekeni kulwazi olubonisiweyo, kubandakanywa kodwa kungaphelelanga kukwaphulwa kwemithetho yendlela, iingozi, ukwenzakala, okanye ukonakala kwalo naluphi na uhlobo.</string>
+    <string name="disclaimer_safety">🚗 UKHUSELEKO KUQALA\n\nUNGAZE unxibelelane nale app ngelixa uqhuba. Cwangcisa ngaphambi kokuba uqale uhambo lwakho kwaye uhambe ngokukhuselekileyo ukuba ufuna ukwenza naluphi na utshintsho.\n\nUkhuseleko lwakho kunye nokhuseleko lwabanye luxanduva lwakho.</string>
+    <string name="disclaimer_accept">Ndiyayiqonda kwaye ndiyamnkela</string>
+    <string name="disclaimer_reject">Yala</string>
+</resources>

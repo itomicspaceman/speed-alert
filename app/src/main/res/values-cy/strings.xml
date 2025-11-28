@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Welsh translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Hysbysiad Pwysig</string>
+    <string name="disclaimer_text">Mae\'r ap hwn yn defnyddio data torfol o OpenStreetMap i arddangos terfynau cyflymder. Gall y data hwn fod yn anghyflawn, yn anghywir, neu\'n hen ffasiwn.\n\nNID YDYM YN GWNEUD UNRHYW WARANTAU ynghylch cywirdeb, dibynadwyedd, na chyflawnder unrhyw wybodaeth am derfynau cyflymder a ddangosir.\n\nCHI SY\'N GYFRIFOL YN UNIG am ufuddhau i bob cyfraith traffig a therfynau cyflymder a bostiwyd. Cyfeiriwch bob amser at arwyddion ffyrdd swyddogol fel y ffynhonnell awdurdodol.\n\nDrwy ddefnyddio\'r ap hwn, rydych yn cydnabod nad yw\'r datblygwyr, y cyfranwyr, a\'r darparwyr data yn derbyn UNRHYW ATEBOLRWYDD am unrhyw ganlyniadau sy\'n deillio o ddibynnu ar wybodaeth a ddangosir, gan gynnwys ond heb fod yn gyfyngedig i droseddau traffig, damweiniau, anafiadau, neu ddifrod o unrhyw fath.</string>
+    <string name="disclaimer_safety">🚗 DIOGELWCH YN GYNTAF\n\nPEIDIWCH BYTH â rhyngweithio â\'r ap hwn wrth yrru. Gosodwch ef cyn i chi ddechrau eich taith a thynnwch i\'r ochr yn ddiogel os oes angen i chi wneud unrhyw newidiadau.\n\nEich diogelwch chi a diogelwch eraill yw eich cyfrifoldeb chi.</string>
+    <string name="disclaimer_accept">Rwy\'n Deall a Derbyn</string>
+    <string name="disclaimer_reject">Dirywiad</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Icelandic translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Mikilvæg tilkynning</string>
+    <string name="disclaimer_text">Þetta app notar gögn sem safnað er af hópum frá OpenStreetMap til að birta hraðatakmarkanir. Þessi gögn geta verið ófullkomin, ónákvæm eða úrelt.\n\nVIÐ ÁBYRGÐUM EKKI Á nákvæmni, áreiðanleika eða heilleika upplýsinga um hraðatakmarkanir sem birtast.\n\nÞÚ BERÐUR EINGÖNGU ÁBYRGÐ Á að fylgja öllum umferðarlögum og birtum hraðatakmörkunum. Vísaðu alltaf til opinberra umferðarskilta sem áreiðanlegrar heimildar.\n\nMeð því að nota þetta app viðurkennir þú að forritarar, þátttakendur og gagnaveitendur bera EKKI ÁBYRGÐ á neinum afleiðingum sem kunna að hljótast af því að treysta á birtar upplýsingar, þar á meðal en ekki takmarkað við umferðarlagabrot, slys, meiðsli eða tjón af neinu tagi.</string>
+    <string name="disclaimer_safety">🚗 ÖRYGGI Í FYRSTA LAGI\n\nALDREI nota þetta forrit á meðan þú ekur. Settu það upp áður en þú leggur af stað og stoppaðu á öruggan hátt ef þú þarft að gera einhverjar breytingar.\n\nÖryggi þitt og annarra er á þína ábyrgð.</string>
+    <string name="disclaimer_accept">Ég skil og samþykki</string>
+    <string name="disclaimer_reject">Hafna</string>
+</resources>

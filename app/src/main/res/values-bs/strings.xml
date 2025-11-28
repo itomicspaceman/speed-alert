@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bosnian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Važno obavještenje</string>
+    <string name="disclaimer_text">Ova aplikacija koristi podatke prikupljene putem OpenStreetMapa za prikaz ograničenja brzine. Ovi podaci mogu biti nepotpuni, netačni ili zastarjeli.\n\nNE DAJEMO NIKAKVE GARANCIJE u vezi sa tačnošću, pouzdanošću ili potpunošću bilo koje prikazane informacije o ograničenju brzine.\n\nVI STE ISKLJUČIVO ODGOVORNI za poštivanje svih saobraćajnih zakona i istaknutih ograničenja brzine. Uvijek se pozivajte na službene saobraćajne znakove kao mjerodavni izvor.\n\nKorištenjem ove aplikacije potvrđujete da programeri, saradnici i pružaoci podataka NE PRIHVATAJU NIKAKVU ODGOVORNOST za bilo kakve posljedice koje proizlaze iz oslanjanja na prikazane informacije, uključujući, ali ne ograničavajući se na saobraćajne prekršaje, nesreće, povrede ili štete bilo koje vrste.</string>
+    <string name="disclaimer_safety">🚗 SIGURNOST NA PRVOM MJESTU\n\nNIKADA ne koristite ovu aplikaciju dok vozite. Podesite je prije nego što započnete putovanje i sigurno se zaustavite ako trebate napraviti bilo kakve promjene.\n\nVaša sigurnost i sigurnost drugih je vaša odgovornost.</string>
+    <string name="disclaimer_accept">Razumijem i prihvatam</string>
+    <string name="disclaimer_reject">Odbij</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Somali translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Ogeysiis Muhiim ah</string>
+    <string name="disclaimer_text">Abkan waxa uu isticmaalaa xogta laga soo ururiyey OpenStreetMap si uu u muujiyo xadka xawaaraha. Xogtani waxay noqon kartaa mid aan dhamaystirnayn, khaldan tahay, ama duugowday.\n\nMA SAMEYNO DAMANTIYO KU SAABSAN saxnaanta, isku halaynta, ama dhamaystirka xogta xadka xawaaraha ee la soo bandhigay.\n\nKALIYA ayaad mas\'uul ka tahay addeecida dhammaan sharciyada waddooyinka iyo xaddidaadaha xawaaraha ee la dhejiyay. Had iyo jeer tixraac calamadaha rasmiga ah ee wadooyinka sida isha awooda leh.\n\nAdigoo isticmaalaya abkan, waxaad qiraysaa in horumariyayasha, wax ku biiriyaasha, iyo xog bixiyayaasha ay aqbaleen MAYA MAS\'\'UULIYADnimo cawaaqib kasta oo ka dhasha ku tiirsanaanta macluumaadka la soo bandhigay, oo ay ku jiraan laakiin aan ku xaddidnayn xadgudubyada waddooyinka, shilalka, dhaawacyada, ama waxyeelada nooc kasta ah.</string>
+    <string name="disclaimer_safety">🚗 BADBAADADA MARKA HORE\n\nWaligaa ha la falgalin abkan markaad baabuur wadid Diyaarso ka hor intaadan bilaabin safarkaaga oo si badbaado leh u soo dhaqaaq haddii aad u baahan tahay inaad wax isbedel ah samayso.\n\nBadbaadadaada iyo badbaadada dadka kale waa masuuliyadaada.</string>
+    <string name="disclaimer_accept">Waan fahmay oo aqbalay</string>
+    <string name="disclaimer_reject">Diid</string>
+</resources>

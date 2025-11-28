@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Filipino/Tagalog translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Mahalagang Paunawa</string>
+    <string name="disclaimer_text">Gumagamit ang app na ito ng crowdsourced na data mula sa OpenStreetMap upang ipakita ang mga limitasyon ng bilis. Maaaring hindi kumpleto, hindi tumpak, o luma na ang data na ito.\n\nHINDI KAMI GUMAGAWA NG MGA WARRANTY patungkol sa katumpakan, pagiging maaasahan, o pagkakumpleto ng anumang impormasyon sa limitasyon ng bilis na ipinapakita.\n\nIKAW LANG ANG RESPONSABLE sa pagsunod sa lahat ng batas trapiko at naka-post na mga limitasyon sa bilis. Palaging sumangguni sa mga opisyal na karatula sa kalsada bilang awtoritatibong pinagmulan.\n\nSa paggamit ng app na ito, kinikilala mo na WALANG PANANAGUTAN ang mga developer, contributor, at data provider para sa anumang kahihinatnan na magmumula sa pag-asa sa impormasyong ipinapakita, kabilang ngunit hindi limitado sa mga paglabag sa trapiko, aksidente, pinsala, o anumang uri ng pinsala.</string>
+    <string name="disclaimer_safety">🚗 UNA ANG KALIGTASAN\n\nHUWAG makipag-ugnayan sa app na ito habang nagmamaneho. Mag-set up bago ka magsimula sa iyong paglalakbay at huminto nang ligtas kung kailangan mong gumawa ng anumang mga pagbabago.\n\nAng iyong kaligtasan at ang kaligtasan ng iba ay responsibilidad mo.</string>
+    <string name="disclaimer_accept">Naiintindihan Ko at Tinatanggap Ko</string>
+    <string name="disclaimer_reject">Tanggihan</string>
+</resources>

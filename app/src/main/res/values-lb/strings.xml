@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Luxembourgish translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Wichteg Notiz</string>
+    <string name="disclaimer_text">Dës App benotzt Crowdsourcing-Donnéeën vun OpenStreetMap fir Geschwindegkeetslimiten unzeweisen. Dës Donnéeë kënnen onvollstänneg, ongenau oder veraltet sinn.\n\nMIR GINN KENG GARANTIEN iwwer d\'Genauegkeet, Zouverlässegkeet oder Vollständegkeet vun den ugewisenen Informatiounen iwwer Geschwindegkeetslimiten.\n\nDIR SIDD ELENG VERANTWORTLECH fir all Verkéiersgesetzer an ugewisen Geschwindegkeetslimiten ze respektéieren. Benotzt ëmmer offiziell Stroosseschëlter als déi autoriséiert Quell.\n\nAndeems Dir dës App benotzt, erkennt Dir un, datt d\'Entwéckler, d\'Mataarbechter an d\'Datenubidder KENG HAFTUNG fir Konsequenzen iwwerhuelen, déi aus dem Vertrauen op ugewisen Informatiounen entstinn, dorënner awer net limitéiert op Verkéiersverstéiss, Accidenter, Verletzungen oder Schued vun iergendenger Aart.</string>
+    <string name="disclaimer_safety">🚗 SÉCHERHEET ÉISCHT\n\nInteragéiert NI mat dëser App beim Fueren. Installéiert se ier Dir Är Rees ufänkt a stoppt sécher wann Dir Ännerunge maache musst.\n\nÄr Sécherheet an d\'Sécherheet vun aneren ass Är Verantwortung.</string>
+    <string name="disclaimer_accept">Ech verstinn &amp; akzeptéieren</string>
+    <string name="disclaimer_reject">Oflehnen</string>
+</resources>

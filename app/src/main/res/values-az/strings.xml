@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Azerbaijani translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Vacib Qeyd</string>
+    <string name="disclaimer_text">Bu proqram sürət limitlərini göstərmək üçün OpenStreetMap-dan toplanmış məlumatlardan istifadə edir. Bu məlumatlar natamam, qeyri-dəqiq və ya köhnəlmiş ola bilər.\n\nGöstərilən sürət həddi ilə bağlı hər hansı məlumatın dəqiqliyi, etibarlılığı və ya tamlığı ilə bağlı BİZ HEÇ BİR ZƏMANƏT VERMİRİK.\n\nBütün yol hərəkəti qanunlarına və qeyd olunmuş sürət hədlərinə əməl etmək üçün SİZ MƏSULİYYƏTDİRSİNİZ. Həmişə səlahiyyətli mənbə kimi rəsmi yol nişanlarına istinad edin.\n\nBu proqramdan istifadə etməklə siz təsdiq edirsiniz ki, tərtibatçılar, töhfə verənlər və məlumat təminatçıları yol hərəkəti qaydalarının pozulması, qəzalar, xəsarətlər və ya hər hansı növ zədələr daxil olmaqla, lakin bununla məhdudlaşmayaraq, göstərilən məlumatlara etibardan irəli gələn hər hansı nəticələrə görə MƏSULİYYƏT VERMİR.</string>
+    <string name="disclaimer_safety">🚗 İLK ƏVVƏL TƏHLÜKƏSİZLİK\n\nAvtomobil sürərkən bu proqramla heç vaxt əlaqə saxlamayın. Səyahətinizə başlamazdan əvvəl quraşdırın və hər hansı dəyişiklik etmək lazımdırsa, təhlükəsiz şəkildə kənara çəkin.\n\nSizin və başqalarının təhlükəsizliyi sizin məsuliyyətinizdir.</string>
+    <string name="disclaimer_accept">Anlayıram və Qəbul edirəm</string>
+    <string name="disclaimer_reject">Rədd olun</string>
+</resources>

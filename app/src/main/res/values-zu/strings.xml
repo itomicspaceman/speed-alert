@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Zulu translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Isaziso Esibalulekile</string>
+    <string name="disclaimer_text">Lolu hlelo lokusebenza lusebenzisa idatha ye-crowdsourced evela ku-OpenStreetMap ukubonisa imikhawulo yesivinini. Le datha ingase ingaphelele, inganembile, noma iphelelwe yisikhathi.\n\nASENZI IZIQINISEKISO mayelana nokunemba, ukwethembeka, noma ukuphelela kwanoma yiluphi ulwazi lomkhawulo wesivinini olubonisiwe.\n\nUWUPHENDULE WEDWA UBOPHEZELO lokuthobela yonke imithetho yethrafikhi kanye nemikhawulo yesivinini ethunyelwe. Ngaso sonke isikhathi bheka izimpawu zomgwaqo ezisemthethweni njengomthombo ogunyaziwe.\n\nNgokusebenzisa lolu hlelo lokusebenza, uyavuma ukuthi onjiniyela, abanikeli, nabahlinzeki bedatha abamukeli ISIBOPHO sanoma yimiphi imiphumela evela ngenxa yokuthembela kulwazi olubonisiwe, okuhlanganisa kodwa kungagcini nje ngokuphulwa kwethrafikhi, izingozi, ukulimala, noma ukulimala kwanoma yiluphi uhlobo.</string>
+    <string name="disclaimer_safety">🚗 UKUPHEPHA KUQALA\n\nUNGALOKOTHI uhlanganyele nalolu hlelo lokusebenza ngenkathi ushayela. Misa ngaphambi kokuthi uqale uhambo lwakho futhi uhambe ngokuphepha uma udinga ukwenza izinguquko.\n\nUkuphepha kwakho nokuphepha kwabanye kuwumthwalo wakho.</string>
+    <string name="disclaimer_accept">Ngiyaqonda Futhi Ngiyakwamukela</string>
+    <string name="disclaimer_reject">Yenqaba</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Galician translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Aviso importante</string>
+    <string name="disclaimer_text">Esta aplicación usa datos colaborativos de OpenStreetMap para mostrar os límites de velocidade. Estes datos poden estar incompletos, inexactos ou desactualizados.\n\nNON OFRECEMOS GARANTÍAS en canto á precisión, fiabilidade ou integridade de calquera información sobre os límites de velocidade que se mostre.\n\nVOSTEDE É O ÚNICO RESPONSABLE de cumprir todas as leis de tráfico e os límites de velocidade publicados. Consulte sempre as sinais de tráfico oficiais como fonte autorizada.\n\nAo usar esta aplicación, recoñece que os desenvolvedores, colaboradores e provedores de datos NON ACEPTAN NINGUNHA RESPONSABILIDADE por ningunha consecuencia derivada da confianza na información que se mostra, incluíndo, entre outras, infraccións de tráfico, accidentes, lesións ou danos de calquera tipo.</string>
+    <string name="disclaimer_safety">🚗 SEGURIDADE PRIMEIRO\n\nNUNCA interactúes con esta aplicación mentres conduces. Configúraa antes de comezar a viaxe e para con seguridade se necesitas facer algún cambio.\n\nA túa seguridade e a dos demais é a túa responsabilidade.</string>
+    <string name="disclaimer_accept">Entendo e acepto</string>
+    <string name="disclaimer_reject">Rexeitar</string>
+</resources>

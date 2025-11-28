@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Uzbek translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Muhim eslatma</string>
+    <string name="disclaimer_text">Bu ilova tezlik chegaralarini ko‘rsatish uchun OpenStreetMap’dagi kraudsorsing ma’lumotlaridan foydalanadi. Bu maʼlumotlar toʻliq, notoʻgʻri yoki eskirgan boʻlishi mumkin.\n\nKo\'rsatilgan tezlik chegarasi haqidagi har qanday ma\'lumotning aniqligi, ishonchliligi yoki to\'liqligi bo\'yicha BIZ HECH KAFOLAT BERMAYMIZ.\n\nSIZ barcha yo\'l harakati qoidalariga va e\'lon qilingan tezlik chegaralariga rioya qilish uchun JA\'BUL. Vakolatli manba sifatida har doim rasmiy yo\'l belgilariga murojaat qiling.\n\nUshbu ilovadan foydalanish orqali siz ishlab chiquvchilar, hissa qo\'shuvchilar va ma\'lumotlar provayderlari ko\'rsatilgan ma\'lumotlarga tayanishdan kelib chiqadigan har qanday oqibatlar, shu jumladan, lekin ular bilan cheklanmagan holda, yo\'l harakati qoidalarini buzish, baxtsiz hodisalar, jarohatlar yoki har qanday turdagi zararlar uchun MAS\'uliyatni o\'z zimmangizga olmasligini tan olasiz.</string>
+    <string name="disclaimer_safety">🚗 BIRINCHI XAVFSIZLIK\n\nHaydash paytida HECH QACHON bu ilova bilan muloqot qilmang. Sayohatni boshlashdan oldin sozlang va agar biron bir o\'zgartirish kiritishingiz kerak bo\'lsa, xavfsiz torting.\n\nSizning va boshqalarning xavfsizligi sizning javobgarligingizdir.</string>
+    <string name="disclaimer_accept">Men tushunaman va qabul qilaman</string>
+    <string name="disclaimer_reject">Rad etish</string>
+</resources>

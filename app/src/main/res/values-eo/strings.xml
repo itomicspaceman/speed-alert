@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Esperanto translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Grava Avizo</string>
+    <string name="disclaimer_text">Ĉi tiu aplikaĵo uzas amasfontajn datumojn de OpenStreetMap por montri rapidlimojn. Ĉi tiuj datumoj povas esti nekompletaj, malprecizaj aŭ malaktualaj.\n\nNI NE GARANTIAS pri la precizeco, fidindeco aŭ kompleteco de iuj ajn montrataj informoj pri rapidlimoj.\n\nVI ESTAS LA SOLA RESPONSABLA pri la obeo de ĉiuj trafikleĝoj kaj afiŝitaj rapidlimoj. Ĉiam konsultu oficialajn trafiksignojn kiel la aŭtoritatan fonton.\n\nUzante ĉi tiun aplikaĵon, vi agnoskas, ke la programistoj, kontribuantoj kaj datenprovizantoj akceptas NENIUN RESPONSECOn pri iuj ajn konsekvencoj rezultantaj el fido al montrataj informoj, inkluzive de, sed ne limigite al, trafikmalobservoj, akcidentoj, vundoj aŭ damaĝoj de ia ajn speco.</string>
+    <string name="disclaimer_safety">🚗 SEKURECO UNUE\n\nNENIAM interagu kun ĉi tiu aplikaĵo dum veturado. Agordu ĝin antaŭ ol vi komencas vian vojaĝon kaj haltu sekure se vi bezonas fari ŝanĝojn.\n\nVia sekureco kaj la sekureco de aliaj estas via respondeco.</string>
+    <string name="disclaimer_accept">Mi Komprenas kaj Akceptas</string>
+    <string name="disclaimer_reject">Malkresko</string>
+</resources>

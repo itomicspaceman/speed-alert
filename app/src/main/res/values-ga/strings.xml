@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Irish translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Fógra Tábhachtach</string>
+    <string name="disclaimer_text">Úsáideann an aip seo sonraí sluafhoinsithe ó OpenStreetMap chun teorainneacha luais a thaispeáint. D’fhéadfadh na sonraí seo a bheith neamhiomlán, míchruinn nó as dáta.\n\nNÍ THUGAIMID AON BHARÁNTAÍ maidir le cruinneas, iontaofacht ná iomláine aon fhaisnéise faoi theorainn luais a thaispeántar.\n\nIS TUSA AMHÁIN FREAGRACH as cloí le gach dlí tráchta agus teorainneacha luais atá postáilte. Tagair i gcónaí do chomharthaí bóthair oifigiúla mar an fhoinse údarásach.\n\nTríd an aip seo a úsáid, aithníonn tú nach nglacann na forbróirí, na rannpháirtithe agus na soláthraithe sonraí AON DHLEATHACHT as aon iarmhairtí a eascraíonn as brath ar fhaisnéis a thaispeántar, lena n-áirítear ach gan a bheith teoranta dóibh sáruithe tráchta, timpistí, gortuithe nó damáistí d’aon chineál.</string>
+    <string name="disclaimer_safety">🚗 SLÁNDÁIL AR DTÚS\n\nNÁ hidirghníomhaigh leis an aip seo agus tú ag tiomáint. Socraigh sula dtosaíonn tú ar do thuras agus tarraing an taobh go sábháilte más gá duit aon athruithe a dhéanamh.\n\nIs ortsa atá an fhreagracht as do shábháilteacht agus sábháilteacht daoine eile.</string>
+    <string name="disclaimer_accept">Tuigim &amp; Glacaim</string>
+    <string name="disclaimer_reject">Diúltú</string>
+</resources>

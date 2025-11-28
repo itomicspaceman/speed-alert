@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Swahili translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Ilani Muhimu</string>
+    <string name="disclaimer_text">Programu hii hutumia data kutoka kwa OpenStreetMap ili kuonyesha vikomo vya kasi. Data hii inaweza kuwa haijakamilika, si sahihi au imepitwa na wakati.\n\nHATUTOI DHAMANA kuhusu usahihi, kutegemewa au utimilifu wa maelezo yoyote ya kikomo cha kasi yanayoonyeshwa.\n\nUNAWAJIBIKA PEKEE kwa kutii sheria zote za trafiki na kuweka vikomo vya mwendo kasi. Daima rejelea ishara rasmi za barabarani kama chanzo kinachoidhinishwa.\n\nKwa kutumia programu hii, unakubali kwamba wasanidi programu, wachangiaji na watoa huduma za data HAWAKUBALI DHIMA KWA madhara yoyote yanayotokana na kutegemea maelezo yanayoonyeshwa, ikijumuisha, lakini si tu, ukiukaji wa trafiki, ajali, majeraha au uharibifu wa aina yoyote.</string>
+    <string name="disclaimer_safety">🚗 USALAMA KWANZA\n\nKAMWE usiingiliane na programu hii unapoendesha gari. Sanidi kabla ya kuanza safari yako na uondoke kwa usalama ikiwa unahitaji kufanya mabadiliko yoyote.\n\nUsalama wako na usalama wa wengine ni jukumu lako.</string>
+    <string name="disclaimer_accept">Naelewa &amp; Nakubali</string>
+    <string name="disclaimer_reject">Kataa</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Faroese translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Týdningarmikil fráboðan</string>
+    <string name="disclaimer_text">Hendan appin brúkar fjølment dátur frá OpenStreetMap til at vísa ferðamark. Hesi dátu kunnu vera ófullfíggjað, ónákvæm ella útgingin.\n\nVIT GEVA ONGAR ÁBYGDIR viðvíkjandi neyvleika, álítandi ella fullkomileika av nøkrum ferðamarksupplýsingum, sum verða vístar.\n\nTÚ HEVUR EINANS ÁBYRGD av at halda allar ferðslulógir og uppsløgd ferðamark. Vís altíð til almenn vegamerki sum myndugleikakelduna.\n\nVið at brúka hesa appina, viðurkennir tú, at forritararnir, stuðlarnir og dátuveitararnir ONGA ÁBYRGD fyri nøkrum avleiðingum, sum standast av áliti á upplýsingum, sum verða vístar, herundir men ikki avmarkað til ferðslubrot, vanlukkur, skaðar ella skaðar av nøkrum slag.</string>
+    <string name="disclaimer_safety">🚗 TRYGDIN FYRST\n\nSamskifta ONGANTÍÐ við hesa appina, meðan tú koyrir. Set upp áðrenn tú byrjar ferðina og drag trygt yvir, um tú skalt gera nakrar broytingar.\n\nTín trygd og trygdin hjá øðrum er tín ábyrgd.</string>
+    <string name="disclaimer_accept">Eg skilji og góðtaki</string>
+    <string name="disclaimer_reject">Afturgongd</string>
+</resources>

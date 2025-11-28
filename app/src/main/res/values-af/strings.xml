@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Afrikaans translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Belangrike kennisgewing</string>
+    <string name="disclaimer_text">Hierdie toepassing gebruik data van OpenStreetMap wat deur die publiek verkry is om spoedbeperkings te vertoon. Hierdie data mag onvolledig, onakkuraat of verouderd wees.\n\nONS GEE GEEN GARANTIES rakende die akkuraatheid, betroubaarheid of volledigheid van enige spoedbeperkingsinligting wat vertoon word nie.\n\nJY IS ALLEEN VERANTWOORDELIK vir die nakoming van alle verkeerswette en geplaasde spoedbeperkings. Verwys altyd na amptelike padtekens as die gesaghebbende bron.\n\nDeur hierdie toepassing te gebruik, erken jy dat die ontwikkelaars, bydraers en dataverskaffers GEEN AANSPREEKLIKHEID aanvaar vir enige gevolge wat voortspruit uit die vertroue op inligting wat vertoon word nie, insluitend maar nie beperk tot verkeersoortredings, ongelukke, beserings of skade van enige aard nie.</string>
+    <string name="disclaimer_safety">🚗 VEILIGHEID EERSTE\n\nMOET NOOIT met hierdie toepassing interaksie hê terwyl jy bestuur nie. Stel dit op voordat jy jou reis begin en stop veilig as jy enige veranderinge moet maak.\n\nJou veiligheid en die veiligheid van ander is jou verantwoordelikheid.</string>
+    <string name="disclaimer_accept">Ek Verstaan &amp; Aanvaar</string>
+    <string name="disclaimer_reject">Weier</string>
+</resources>

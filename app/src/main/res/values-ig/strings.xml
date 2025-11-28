@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Igbo translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Ozi dị mkpa</string>
+    <string name="disclaimer_text">Ngwa a na-eji data igwe mmadụ sitere na OpenStreetMap gosipụta oke ọsọ. Data a nwere ike ịbụ nke ezughi oke, ezighi ezi, ma ọ bụ emechiela ya.\n\nANYỊ emeghị akwụkwọ ikike gbasara izi ezi, ntụkwasị obi, ma ọ bụ izu oke nke ozi oke ọsọ ọ bụla egosiri.\n\nỌ BỤ naanị gị dịịrị maka irube isi n\'iwu okporo ụzọ yana oke ọsọ ezigara. Na-ezo aka mgbe niile na akara ngosi okporo ụzọ dị ka isi mmalite.\n\nSite na iji ngwa a, ị na-ekweta na ndị nrụpụta, ndị ntinye aka na ndị na-eweta data na-anabata Ọ BỤGHỊ KWESỊRỊ maka nsonaazụ ọ bụla na-esite na ịdabere na ozi egosiri, gụnyere mana ọnweghị oke na mmebi okporo ụzọ, ihe mberede, mmerụ ahụ, ma ọ bụ mmebi nke ụdị ọ bụla.</string>
+    <string name="disclaimer_safety">🚗 SAFETY mbụ\n\nEjikwala ngwa emekọrịta ihe mgbe ị na-anya ụgbọ ala. Hazie tupu ịmalite njem gị wee banye n\'udo ma ọ bụrụ na ịchọrọ ịme mgbanwe ọ bụla.\n\nNchekwa gị na nchekwa nke ndị ọzọ bụ ọrụ gị.</string>
+    <string name="disclaimer_accept">Aghọtara m &amp; nabata</string>
+    <string name="disclaimer_reject">Ajụ</string>
+</resources>
