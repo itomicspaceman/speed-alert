@@ -14,6 +14,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
 import kotlinx.coroutines.*
 
@@ -226,6 +227,15 @@ class SpeedMonitorService : Service() {
                 if (isOverLimit && canPlayAlert()) {
                     alertPlayer.playAlert()
                     lastAlertTime = System.currentTimeMillis()
+                    
+                    // Auto-show floating display if user dismissed it
+                    if (FloatingSpeedService.autoShowOnAlert && !FloatingSpeedService.isRunning) {
+                        FloatingSpeedService.autoShowOnAlert = false  // Reset flag
+                        if (android.provider.Settings.canDrawOverlays(this@SpeedMonitorService)) {
+                            val floatingIntent = Intent(this@SpeedMonitorService, FloatingSpeedService::class.java)
+                            ContextCompat.startForegroundService(this@SpeedMonitorService, floatingIntent)
+                        }
+                    }
                 }
                 
                 // Broadcast update to UI

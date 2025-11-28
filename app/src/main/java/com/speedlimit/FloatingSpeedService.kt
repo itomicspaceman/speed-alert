@@ -39,6 +39,9 @@ class FloatingSpeedService : Service() {
         
         var isRunning = false
             private set
+        
+        // When true, floating display will auto-show when speed limit is exceeded
+        var autoShowOnAlert = false
     }
 
     private lateinit var windowManager: WindowManager
@@ -173,8 +176,9 @@ class FloatingSpeedService : Service() {
         // Add touch listener for dragging (with tap detection)
         setupDragListener(layoutParams)
         
-        // Close button - just dismiss floating overlay, keep monitoring in background
+        // Close button - dismiss floating overlay, but auto-show again if speeding
         closeButton.setOnClickListener {
+            autoShowOnAlert = true  // Enable auto-show when over limit
             stopSelf()
         }
 
