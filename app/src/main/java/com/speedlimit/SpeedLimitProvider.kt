@@ -1,6 +1,7 @@
 package com.speedlimit
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,6 +19,11 @@ import java.util.concurrent.TimeUnit
  * - 500m safety net to catch limit changes on same logical road
  * - 2-minute maximum cache age
  * - ~70-80% reduction in API calls vs naive approach
+ * 
+ * Rate Limit Protection:
+ * - Detects 429/503/504 responses
+ * - Automatic exponential backoff
+ * - Broadcasts alert for user notification
  */
 class SpeedLimitProvider(private val context: Context) {
 
@@ -34,11 +40,21 @@ class SpeedLimitProvider(private val context: Context) {
         const val CACHE_DURATION_MS = 120_000L      // 2 minutes max cache age
         const val SAFETY_DISTANCE_METERS = 500.0    // Re-query after 500m as safety net
         const val SAME_WAY_DISTANCE_METERS = 2000.0 // Trust way ID for up to 2km
+        
+        // Rate limit handling
+        const val INITIAL_BACKOFF_MS = 30_000L      // 30 seconds initial backoff
+        const val MAX_BACKOFF_MS = 300_000L         // 5 minutes max backoff
+        const val BACKOFF_MULTIPLIER = 2.0
+        
+        // Broadcast action for rate limit alerts
+        const val ACTION_RATE_LIMIT_ALERT = "com.speedlimit.RATE_LIMIT_ALERT"
+        const val EXTRA_RATE_LIMIT_TYPE = "rate_limit_type"
+        const val EXTRA_BACKOFF_SECONDS = "backoff_seconds"
     }
 
     private val httpClient = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
+        .connectTimeout(15, TimeUnit.SECONDS)
+        .readTimeout(15, TimeUnit.SECONDS)
         .build()
 
     // Enhanced cache with way ID tracking
@@ -49,6 +65,13 @@ class SpeedLimitProvider(private val context: Context) {
     private var cacheTimestamp: Long = 0
     private var totalQueriesThisSession: Int = 0
     private var cacheHitsThisSession: Int = 0
+    
+    // Rate limit state
+    private var isRateLimited: Boolean = false
+    private var rateLimitEndTime: Long = 0
+    private var currentBackoffMs: Long = INITIAL_BACKOFF_MS
+    private var rateLimitEventsThisSession: Int = 0
+    private var consecutiveErrors: Int = 0
     
     // Current country (for display purposes)
     var currentCountryCode: String = "GB"
@@ -61,6 +84,12 @@ class SpeedLimitProvider(private val context: Context) {
     suspend fun getSpeedLimit(lat: Double, lon: Double): Int? = withContext(Dispatchers.IO) {
         // Detect country for this location
         currentCountryCode = SpeedUnitHelper.detectCountry(context, lat, lon)
+        
+        // Check if we're in backoff period
+        if (isInBackoffPeriod()) {
+            Log.w(TAG, "In backoff period, using cache (${getRemainingBackoffSeconds()}s remaining)")
+            return@withContext cachedSpeedLimit
+        }
         
         // Smart cache check
         val cacheResult = checkCache(lat, lon)
@@ -75,12 +104,22 @@ class SpeedLimitProvider(private val context: Context) {
             totalQueriesThisSession++
             val result = queryOverpassApi(lat, lon, currentCountryCode)
             
+            // Reset error state on success
+            consecutiveErrors = 0
+            if (isRateLimited && System.currentTimeMillis() > rateLimitEndTime) {
+                isRateLimited = false
+                currentBackoffMs = INITIAL_BACKOFF_MS
+                Log.i(TAG, "Rate limit cleared - API responding normally")
+            }
+            
             // Update cache with way ID
-            cachedSpeedLimit = result?.speedLimit
-            cachedWayId = result?.wayId
-            cachedLat = lat
-            cachedLon = lon
-            cacheTimestamp = System.currentTimeMillis()
+            if (result != null) {
+                cachedSpeedLimit = result.speedLimit
+                cachedWayId = result.wayId
+                cachedLat = lat
+                cachedLon = lon
+                cacheTimestamp = System.currentTimeMillis()
+            }
             
             val hitRate = if (totalQueriesThisSession > 0) 
                 (cacheHitsThisSession * 100) / (cacheHitsThisSession + totalQueriesThisSession) else 0
@@ -90,10 +129,74 @@ class SpeedLimitProvider(private val context: Context) {
             
             return@withContext result?.speedLimit
             
+        } catch (e: RateLimitException) {
+            handleRateLimit(e.responseCode)
+            return@withContext cachedSpeedLimit
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching speed limit", e)
+            consecutiveErrors++
+            Log.e(TAG, "Error fetching speed limit (consecutive: $consecutiveErrors)", e)
+            
+            // If we're getting repeated errors, might be soft rate limiting
+            if (consecutiveErrors >= 3) {
+                handleRateLimit(0) // Treat as rate limit
+            }
+            
             return@withContext cachedSpeedLimit // Return last known value if available
         }
+    }
+
+    /**
+     * Check if we're currently in a backoff period.
+     */
+    private fun isInBackoffPeriod(): Boolean {
+        return isRateLimited && System.currentTimeMillis() < rateLimitEndTime
+    }
+    
+    /**
+     * Get remaining seconds in backoff period.
+     */
+    private fun getRemainingBackoffSeconds(): Int {
+        return if (isRateLimited) {
+            ((rateLimitEndTime - System.currentTimeMillis()) / 1000).toInt().coerceAtLeast(0)
+        } else 0
+    }
+    
+    /**
+     * Handle rate limit response with exponential backoff.
+     */
+    private fun handleRateLimit(responseCode: Int) {
+        rateLimitEventsThisSession++
+        isRateLimited = true
+        rateLimitEndTime = System.currentTimeMillis() + currentBackoffMs
+        
+        val backoffSeconds = (currentBackoffMs / 1000).toInt()
+        
+        Log.w(TAG, "⚠️ RATE LIMITED! Code: $responseCode, Backing off for ${backoffSeconds}s " +
+                "(events this session: $rateLimitEventsThisSession)")
+        
+        // Broadcast alert for UI notification
+        broadcastRateLimitAlert(responseCode, backoffSeconds)
+        
+        // Increase backoff for next time (exponential)
+        currentBackoffMs = (currentBackoffMs * BACKOFF_MULTIPLIER).toLong()
+            .coerceAtMost(MAX_BACKOFF_MS)
+    }
+    
+    /**
+     * Broadcast rate limit alert for UI notification.
+     */
+    private fun broadcastRateLimitAlert(responseCode: Int, backoffSeconds: Int) {
+        val intent = Intent(ACTION_RATE_LIMIT_ALERT).apply {
+            putExtra(EXTRA_RATE_LIMIT_TYPE, when (responseCode) {
+                429 -> "Too Many Requests"
+                503 -> "Service Unavailable"
+                504 -> "Gateway Timeout"
+                else -> "Connection Error"
+            })
+            putExtra(EXTRA_BACKOFF_SECONDS, backoffSeconds)
+            setPackage(context.packageName)
+        }
+        context.sendBroadcast(intent)
     }
 
     /**
@@ -153,6 +256,11 @@ class SpeedLimitProvider(private val context: Context) {
     }
 
     /**
+     * Custom exception for rate limit responses.
+     */
+    private class RateLimitException(val responseCode: Int) : Exception("Rate limited: $responseCode")
+
+    /**
      * Result from Overpass query including way ID for smart caching.
      */
     private data class OverpassResult(
@@ -174,10 +282,18 @@ class SpeedLimitProvider(private val context: Context) {
 
         val request = Request.Builder()
             .url(url)
-            .header("User-Agent", "SpeedLimit/2.4 (Android App; https://github.com/itomicspaceman/speed-alert)")
+            .header("User-Agent", "SpeedLimit/2.5 (Android App; https://github.com/itomicspaceman/speed-alert)")
             .build()
 
         val response = httpClient.newCall(request).execute()
+        
+        // Check for rate limit responses
+        when (response.code) {
+            429, 503, 504 -> {
+                Log.e(TAG, "Overpass API rate limit/error: ${response.code}")
+                throw RateLimitException(response.code)
+            }
+        }
         
         if (!response.isSuccessful) {
             Log.e(TAG, "Overpass API error: ${response.code}")
@@ -240,6 +356,20 @@ class SpeedLimitProvider(private val context: Context) {
     fun getCacheStats(): String {
         val total = cacheHitsThisSession + totalQueriesThisSession
         val hitRate = if (total > 0) (cacheHitsThisSession * 100) / total else 0
-        return "Hits: $cacheHitsThisSession, Queries: $totalQueriesThisSession, Hit Rate: $hitRate%"
+        return "Hits: $cacheHitsThisSession, Queries: $totalQueriesThisSession, Hit Rate: $hitRate%, Rate Limits: $rateLimitEventsThisSession"
+    }
+    
+    /**
+     * Check if currently rate limited.
+     */
+    fun isCurrentlyRateLimited(): Boolean = isInBackoffPeriod()
+    
+    /**
+     * Get rate limit status for display.
+     */
+    fun getRateLimitStatus(): String? {
+        return if (isInBackoffPeriod()) {
+            "API paused (${getRemainingBackoffSeconds()}s)"
+        } else null
     }
 }

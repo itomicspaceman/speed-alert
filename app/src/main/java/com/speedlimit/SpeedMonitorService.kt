@@ -6,12 +6,17 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -23,6 +28,7 @@ class SpeedMonitorService : Service() {
     companion object {
         const val TAG = "SpeedMonitorService"
         const val NOTIFICATION_ID = 1
+        const val RATE_LIMIT_NOTIFICATION_ID = 2
         const val CHANNEL_ID = "speed_monitor_channel"
         
         const val ACTION_SPEED_UPDATE = "com.speedlimit.SPEED_UPDATE"
@@ -56,6 +62,30 @@ class SpeedMonitorService : Service() {
     
     private var lastAlertTime = 0L
     private val alertCooldownMs = 5000L // 5 seconds between alerts
+    
+    // Rate limit alert receiver
+    private val rateLimitReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == SpeedLimitProvider.ACTION_RATE_LIMIT_ALERT) {
+                val limitType = intent.getStringExtra(SpeedLimitProvider.EXTRA_RATE_LIMIT_TYPE) ?: "Unknown"
+                val backoffSeconds = intent.getIntExtra(SpeedLimitProvider.EXTRA_BACKOFF_SECONDS, 30)
+                
+                Log.w(TAG, "Rate limit alert received: $limitType, backoff: ${backoffSeconds}s")
+                
+                // Show notification
+                showRateLimitNotification(limitType, backoffSeconds)
+                
+                // Show toast on main thread
+                serviceScope.launch(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@SpeedMonitorService,
+                        "⚠️ API limit reached - using cached data for ${backoffSeconds}s",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -67,6 +97,14 @@ class SpeedMonitorService : Service() {
         
         createNotificationChannel()
         setupLocationCallback()
+        
+        // Register rate limit receiver
+        val filter = IntentFilter(SpeedLimitProvider.ACTION_RATE_LIMIT_ALERT)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(rateLimitReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(rateLimitReceiver, filter)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -87,6 +125,14 @@ class SpeedMonitorService : Service() {
         stopLocationUpdates()
         alertPlayer.release()
         serviceScope.cancel()
+        
+        // Unregister rate limit receiver
+        try {
+            unregisterReceiver(rateLimitReceiver)
+        } catch (e: Exception) {
+            Log.w(TAG, "Receiver already unregistered")
+        }
+        
         super.onDestroy()
     }
 
@@ -120,6 +166,27 @@ class SpeedMonitorService : Service() {
             .setOngoing(true)
             .setSilent(true)
             .build()
+    }
+    
+    private fun showRateLimitNotification(limitType: String, backoffSeconds: Int) {
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, MainActivity::class.java),
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("⚠️ API Limit Reached")
+            .setContentText("$limitType - Using cached data for ${backoffSeconds}s")
+            .setSmallIcon(android.R.drawable.ic_dialog_alert)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .build()
+        
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.notify(RATE_LIMIT_NOTIFICATION_ID, notification)
     }
 
     private fun updateNotification(speedMph: Int, limitMph: Int?) {
