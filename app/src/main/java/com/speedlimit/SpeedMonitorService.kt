@@ -36,8 +36,9 @@ class SpeedMonitorService : Service() {
         const val EXTRA_IS_OVER_LIMIT = "is_over_limit"
         const val EXTRA_COUNTRY_CODE = "country_code"
         
-        // Speed threshold before checking limits (20 mph)
-        const val SPEED_CHECK_THRESHOLD_MPH = 20f
+        // Speed threshold before checking limits (country-aware)
+        const val SPEED_CHECK_THRESHOLD_MPH = 20f      // For mph countries
+        const val SPEED_CHECK_THRESHOLD_KMH_AS_MPH = 12.5f  // 20 km/h ≈ 12.5 mph for km/h countries
         
         // Tolerance percentage (5% over limit)
         const val SPEED_TOLERANCE_PERCENT = 0.05f
@@ -253,8 +254,16 @@ class SpeedMonitorService : Service() {
         
         Log.d(TAG, "Current speed: $speedMph mph at ${location.latitude}, ${location.longitude}")
         
+        // Get country-aware threshold (lower for km/h countries to catch 20 km/h zones)
+        val countryCode = speedLimitProvider.currentCountryCode
+        val threshold = if (SpeedUnitHelper.usesMph(countryCode)) {
+            SPEED_CHECK_THRESHOLD_MPH
+        } else {
+            SPEED_CHECK_THRESHOLD_KMH_AS_MPH  // 20 km/h = 12.5 mph
+        }
+        
         // Only check speed limits if above threshold
-        if (speedMph >= SPEED_CHECK_THRESHOLD_MPH) {
+        if (speedMph >= threshold) {
             checkSpeedLimit(location.latitude, location.longitude, speedMph)
         } else {
             // Below threshold, just update display
