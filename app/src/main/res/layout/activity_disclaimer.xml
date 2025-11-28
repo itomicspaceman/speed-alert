@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
+    android:fitsSystemWindows="true"
     android:padding="24dp">
 
     <ScrollView
@@ -97,10 +98,13 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/acceptButton"
             android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:layout_weight="1.5"
             android:text="@string/disclaimer_accept"
-            android:textSize="16sp"
+            android:textSize="14sp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             style="@style/Widget.Material3.Button"
             app:backgroundTint="#4CAF50"
             android:layout_marginStart="8dp" />
