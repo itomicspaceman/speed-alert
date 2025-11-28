@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dutch translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Belangrijke mededeling</string>
+    <string name="disclaimer_text">Deze app maakt gebruik van crowdsourced data van OpenStreetMap om snelheidslimieten weer te geven. Deze data kan onvolledig, onjuist of verouderd zijn.\n\nWIJ GEVEN GEEN GARANTIES met betrekking tot de nauwkeurigheid, betrouwbaarheid of volledigheid van de weergegeven snelheidslimietinformatie.\n\nU BENT ZELF VERANTWOORDELIJK voor het naleven van alle verkeersregels en aangegeven snelheidslimieten. Raadpleeg altijd de officiële verkeersborden als betrouwbare bron.\n\nDoor deze app te gebruiken, erkent u dat de ontwikkelaars, bijdragers en dataleveranciers GEEN AANSPRAKELIJKHEID aanvaarden voor eventuele gevolgen die voortvloeien uit het vertrouwen op de weergegeven informatie, inclusief maar niet beperkt tot verkeersovertredingen, ongevallen, letsel of schade van welke aard dan ook.</string>
+    <string name="disclaimer_safety">🚗 VEILIGHEID VOOROP\n\nGebruik deze app NOOIT tijdens het rijden. Stel de app in voordat u vertrekt en stop veilig als u wijzigingen moet aanbrengen.\n\nUw veiligheid en die van anderen is uw verantwoordelijkheid.</string>
+    <string name="disclaimer_accept">Ik begrijp en accepteer</string>
+    <string name="disclaimer_reject">Afwijzen</string>
+</resources>

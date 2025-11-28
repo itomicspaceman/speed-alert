@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Malay translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Notis Penting</string>
+    <string name="disclaimer_text">Apl ini menggunakan data sumber ramai daripada OpenStreetMap untuk memaparkan had laju. Data ini mungkin tidak lengkap, tidak tepat atau ketinggalan zaman.\n\nKAMI TIDAK MEMBUAT JAMINAN mengenai ketepatan, kebolehpercayaan atau kesempurnaan sebarang maklumat had laju yang dipaparkan.\n\nANDA BERTANGGUNGJAWAB SENDIRI untuk mematuhi semua undang-undang jalan raya dan had laju yang ditetapkan. Sentiasa merujuk kepada papan tanda jalan rasmi sebagai sumber yang berwibawa.\n\nDengan menggunakan apl ini, anda memperakui bahawa pembangun, penyumbang dan penyedia data TIADA LIABILITI untuk sebarang akibat yang timbul daripada pergantungan pada maklumat yang dipaparkan, termasuk tetapi tidak terhad kepada pelanggaran lalu lintas, kemalangan, kecederaan atau apa-apa jenis kerosakan.</string>
+    <string name="disclaimer_safety">🚗 KESELAMATAN DIUTAMAKAN\n\nJANGAN sesekali berinteraksi dengan aplikasi ini semasa memandu. Sediakan sebelum anda memulakan perjalanan anda dan berhenti dengan selamat jika anda perlu membuat sebarang perubahan.\n\nKeselamatan anda dan orang lain adalah tanggungjawab anda.</string>
+    <string name="disclaimer_accept">Saya Faham &amp; Terima</string>
+    <string name="disclaimer_reject">Tolak</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Czech translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Důležité upozornění</string>
+    <string name="disclaimer_text">Tato aplikace využívá k zobrazení rychlostních limitů data získaná z OpenStreetMap. Tato data mohou být neúplná, nepřesná nebo zastaralá.\n\nNEPOSKYTUJEME ŽÁDNÉ ZÁRUKY ohledně přesnosti, spolehlivosti nebo úplnosti zobrazených informací o rychlostních limitech.\n\nJSTE VÝHRADNĚ ZODPOVĚDNÍ za dodržování všech dopravních předpisů a vyznačených rychlostních limitů. Vždy se řiďte oficiálními dopravními značkami jako autoritativním zdrojem.\n\nPoužíváním této aplikace berete na vědomí, že vývojáři, přispěvatelé a poskytovatelé dat NEPŘIJÍMAJÍ ŽÁDNOU ODPOVĚDNOST za jakékoli důsledky vyplývající ze spoléhání se na zobrazené informace, včetně, ale nikoli výhradně, dopravních přestupků, nehod, zranění nebo škod jakéhokoli druhu.</string>
+    <string name="disclaimer_safety">🚗 BEZPEČNOST NA PRVNÍM MÍSTĚ\n\nNIKDY neinteragujte s touto aplikací během řízení. Před zahájením cesty si ji nastavte a v případě potřeby bezpečně zastavte.\n\nVaše bezpečnost a bezpečnost ostatních je vaší odpovědností.</string>
+    <string name="disclaimer_accept">Rozumím a souhlasím</string>
+    <string name="disclaimer_reject">Pokles</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Indonesian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Pemberitahuan Penting</string>
+    <string name="disclaimer_text">Aplikasi ini menggunakan data crowdsourced dari OpenStreetMap untuk menampilkan batas kecepatan. Data ini mungkin tidak lengkap, tidak akurat, atau kedaluwarsa.\n\nKAMI TIDAK MEMBERIKAN JAMINAN apa pun terkait keakuratan, keandalan, atau kelengkapan informasi batas kecepatan yang ditampilkan.\n\nANDA SEPENUHNYA BERTANGGUNG JAWAB untuk mematuhi semua peraturan lalu lintas dan batas kecepatan yang tertera. Selalu rujuk rambu-rambu jalan resmi sebagai sumber resmi.\n\nDengan menggunakan aplikasi ini, Anda mengakui bahwa pengembang, kontributor, dan penyedia data TIDAK BERTANGGUNG JAWAB atas segala konsekuensi yang timbul dari penggunaan informasi yang ditampilkan, termasuk namun tidak terbatas pada pelanggaran lalu lintas, kecelakaan, cedera, atau kerusakan apa pun.</string>
+    <string name="disclaimer_safety">🚗 UTAMAKAN KESELAMATAN\n\nJANGAN PERNAH berinteraksi dengan aplikasi ini saat mengemudi. Atur aplikasi sebelum memulai perjalanan dan menepilah dengan aman jika Anda perlu melakukan perubahan.\n\nKeselamatan Anda dan orang lain adalah tanggung jawab Anda.</string>
+    <string name="disclaimer_accept">Saya Mengerti dan Menerima</string>
+    <string name="disclaimer_reject">Menolak</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Estonian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Oluline teade</string>
+    <string name="disclaimer_text">See rakendus kasutab kiirusepiirangute kuvamiseks OpenStreetMapi rahvahulga abil kogutud andmeid. Need andmed võivad olla mittetäielikud, ebatäpsed või aegunud.\n\nME EI ANNA MINGIT GARANTIID kuvatava kiirusepiirangu teabe täpsuse, usaldusväärsuse ega täielikkuse osas.\n\nTEIE VASTUTATE AINUISIKULISELT kõigi liikluseeskirjade ja kiirusepiirangute järgimise eest. Viidake alati ametlikele liiklusmärkidele kui autoriteetsele allikale.\n\nSelle rakenduse kasutamisega kinnitate, et arendajad, kaastöötajad ja andmepakkujad EI VASTUTA kuvatava teabe kasutamisest tulenevate tagajärgede eest, sealhulgas, kuid mitte ainult, liiklusrikkumiste, õnnetuste, vigastuste või igasuguste kahjustuste eest.</string>
+    <string name="disclaimer_safety">🚗 OHUTUS ESIMENE\n\nÄRGE KUNAGI kasutage seda rakendust sõidu ajal. Seadistage see enne reisi alustamist ja peatuge ohutult tee äärde, kui teil on vaja muudatusi teha.\n\nTeie ja teiste turvalisus on teie enda vastutusel.</string>
+    <string name="disclaimer_accept">Ma saan aru ja nõustun</string>
+    <string name="disclaimer_reject">Keeldumine</string>
+</resources>

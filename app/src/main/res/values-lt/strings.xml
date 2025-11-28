@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lithuanian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Svarbus pranešimas</string>
+    <string name="disclaimer_text">Ši programėlė naudoja iš „OpenStreetMap“ surinktus duomenis, kad rodytų greičio apribojimus. Šie duomenys gali būti neišsamūs, netikslūs arba pasenę.\n\nMES NETEIKIAME JOKIŲ GARANTIJŲ dėl rodomos greičio apribojimų informacijos tikslumo, patikimumo ar išsamumo.\n\nJŪS ESATE IŠSKIRTINIAI ATSAKINGI už visų kelių eismo taisyklių ir paskelbtų greičio apribojimų laikymąsi. Visada vadovaukitės oficialiais kelio ženklais kaip autoritetingu šaltiniu.\n\nNaudodamiesi šia programėle, jūs pripažįstate, kad kūrėjai, bendraautoriai ir duomenų teikėjai NEPRISIIMA JOKIOS ATSAKOMYBĖS už jokias pasekmes, kylančias dėl rodomos informacijos naudojimo, įskaitant, bet neapsiribojant, kelių eismo taisyklių pažeidimus, avarijas, sužalojimus ar bet kokią žalą.</string>
+    <string name="disclaimer_safety">🚗 SAUGUMAS PIRMIAUSIA\n\nNIEKADA nenaudokite šios programėlės vairuodami. Nustatykite ją prieš pradėdami kelionę ir saugiai sustokite, jei reikia atlikti pakeitimų.\n\nJūsų ir kitų saugumas yra jūsų atsakomybė.</string>
+    <string name="disclaimer_accept">Suprantu ir priimu</string>
+    <string name="disclaimer_reject">Atmesti</string>
+</resources>

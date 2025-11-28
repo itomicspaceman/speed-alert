@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- French translations - Disclaimer -->
-    <string name="disclaimer_title">Avis Important</string>
-    <string name="disclaimer_text">Cette application utilise des données collaboratives d\'OpenStreetMap pour afficher les limites de vitesse. Ces données peuvent être incomplètes, inexactes ou obsolètes.\n\nNOUS N\'OFFRONS AUCUNE GARANTIE concernant l\'exactitude, la fiabilité ou l\'exhaustivité des informations de limite de vitesse affichées.\n\nVOUS ÊTES SEUL RESPONSABLE du respect de toutes les lois de circulation et des limites de vitesse affichées. Référez-vous toujours aux panneaux routiers officiels comme source faisant autorité.\n\nEn utilisant cette application, vous reconnaissez que les développeurs, contributeurs et fournisseurs de données N\'ACCEPTENT AUCUNE RESPONSABILITÉ pour toute conséquence résultant de la confiance accordée aux informations affichées, y compris mais sans s\'y limiter les infractions au code de la route, accidents, blessures ou dommages de toute nature.</string>
-    <string name="disclaimer_safety">🚗 LA SÉCURITÉ D\'ABORD\n\nN\'interagissez JAMAIS avec cette application en conduisant. Configurez avant de commencer votre trajet et arrêtez-vous en sécurité si vous devez faire des modifications.\n\nVotre sécurité et celle des autres est votre responsabilité.</string>
-    <string name="disclaimer_accept">Je Comprends et J\'Accepte</string>
-    <string name="disclaimer_reject">Refuser</string>
+    <!-- French translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Avis important</string>
+    <string name="disclaimer_text">Cette application utilise les données collaboratives d\'OpenStreetMap pour afficher les limitations de vitesse. Ces données peuvent être incomplètes, inexactes ou obsolètes.\n\nNous ne garantissons en aucun cas l\'exactitude, la fiabilité ni l\'exhaustivité des informations affichées concernant les limitations de vitesse.\n\nIl vous incombe de respecter le code de la route et les limitations de vitesse en vigueur. Veuillez toujours vous référer à la signalisation routière officielle.\n\nEn utilisant cette application, vous reconnaissez que les développeurs, les contributeurs et les fournisseurs de données déclinent toute responsabilité quant aux conséquences résultant de l\'utilisation des informations affichées, notamment les infractions au code de la route, les accidents, les blessures ou tout autre dommage.</string>
+    <string name="disclaimer_safety">🚗 LA SÉCURITÉ AVANT TOUT\n\nN\'utilisez JAMAIS cette application au volant. Configurez-la avant de prendre la route et arrêtez-vous en toute sécurité si vous devez effectuer des modifications.\n\nVotre sécurité et celle des autres sont de votre responsabilité.</string>
+    <string name="disclaimer_accept">Je comprends et j\'accepte</string>
+    <string name="disclaimer_reject">Déclin</string>
 </resources>
-

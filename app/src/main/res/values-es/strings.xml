@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Spanish translations - Disclaimer -->
-    <string name="disclaimer_title">Aviso Importante</string>
-    <string name="disclaimer_text">Esta aplicación utiliza datos colaborativos de OpenStreetMap para mostrar límites de velocidad. Estos datos pueden estar incompletos, ser inexactos o estar desactualizados.\n\nNO OFRECEMOS GARANTÍAS sobre la precisión, fiabilidad o integridad de la información de límites de velocidad mostrada.\n\nUSTED ES EL ÚNICO RESPONSABLE de obedecer todas las leyes de tráfico y los límites de velocidad señalizados. Siempre consulte las señales de tráfico oficiales como fuente autorizada.\n\nAl usar esta aplicación, reconoce que los desarrolladores, colaboradores y proveedores de datos NO ACEPTAN RESPONSABILIDAD por cualquier consecuencia derivada de confiar en la información mostrada, incluyendo pero no limitado a infracciones de tráfico, accidentes, lesiones o daños de cualquier tipo.</string>
-    <string name="disclaimer_safety">🚗 LA SEGURIDAD PRIMERO\n\nNUNCA interactúe con esta aplicación mientras conduce. Configure antes de comenzar su viaje y deténgase de forma segura si necesita hacer algún cambio.\n\nSu seguridad y la de los demás es su responsabilidad.</string>
-    <string name="disclaimer_accept">Entiendo y Acepto</string>
+    <!-- Spanish translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Aviso importante</string>
+    <string name="disclaimer_text">Esta aplicación utiliza datos de colaboración abierta de OpenStreetMap para mostrar los límites de velocidad. Estos datos pueden estar incompletos, ser inexactos o estar desactualizados.\n\nNO GARANTIZAMOS la exactitud, fiabilidad ni integridad de la información sobre límites de velocidad mostrada.\n\nUSTED ES EL ÚNICO RESPONSABLE de obedecer todas las leyes de tránsito y los límites de velocidad indicados. Consulte siempre las señales de tráfico oficiales como fuente fidedigna.\n\nAl usar esta aplicación, usted reconoce que los desarrolladores, colaboradores y proveedores de datos NO ACEPTAN RESPONSABILIDAD alguna por las consecuencias derivadas de la confianza depositada en la información mostrada, incluyendo, entre otras, infracciones de tránsito, accidentes, lesiones o daños de cualquier tipo.</string>
+    <string name="disclaimer_safety">🚗 SEGURIDAD PRIMERO\n\nNUNCA interactúes con esta aplicación mientras conduces. Configúrala antes de iniciar tu viaje y detente en un lugar seguro si necesitas hacer algún cambio.\n\nTu seguridad y la de los demás son tu responsabilidad.</string>
+    <string name="disclaimer_accept">Entiendo y acepto</string>
     <string name="disclaimer_reject">Rechazar</string>
 </resources>
-

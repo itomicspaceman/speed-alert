@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Latvian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Svarīgs paziņojums</string>
+    <string name="disclaimer_text">Šī lietotne ātruma ierobežojumu attēlošanai izmanto no OpenStreetMap iegūtus datus no kolektīvā avota. Šie dati var būt nepilnīgi, neprecīzi vai novecojuši.\n\nMĒS NESNIEDZAM NEKĀDAS GARANTIJAS attiecībā uz jebkādas attēlotās ātruma ierobežojumu informācijas precizitāti, uzticamību vai pilnīgumu.\n\nJŪS ESAT VIENĪGI ATBILDĪGS par visu ceļu satiksmes noteikumu un noteikto ātruma ierobežojumu ievērošanu. Vienmēr atsaucieties uz oficiālajām ceļa zīmēm kā uz autoritatīvu avotu.\n\nIzmantojot šo lietotni, jūs apliecināt, ka izstrādātāji, līdzstrādnieki un datu sniedzēji NEUZŅEMAS NEKĀDU ATBILDĪBU par jebkādām sekām, kas rodas, paļaujoties uz attēloto informāciju, tostarp, bet ne tikai, ceļu satiksmes noteikumu pārkāpumiem, negadījumiem, traumām vai jebkāda veida bojājumiem.</string>
+    <string name="disclaimer_safety">🚗 DROŠĪBA PIRMĀ VIETĀ\n\nNEKAD nelietojiet šo lietotni braukšanas laikā. Iestatiet to pirms ceļojuma uzsākšanas un droši apstājieties, ja nepieciešams veikt izmaiņas.\n\nJūsu un citu cilvēku drošība ir jūsu atbildība.</string>
+    <string name="disclaimer_accept">Es saprotu un pieņemu</string>
+    <string name="disclaimer_reject">Noraidīt</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Vietnamese translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Thông báo quan trọng</string>
+    <string name="disclaimer_text">Ứng dụng này sử dụng dữ liệu cộng đồng từ OpenStreetMap để hiển thị giới hạn tốc độ. Dữ liệu này có thể không đầy đủ, không chính xác hoặc đã lỗi thời.\n\nCHÚNG TÔI KHÔNG BẢO ĐẢM về tính chính xác, độ tin cậy hoặc tính đầy đủ của bất kỳ thông tin giới hạn tốc độ nào được hiển thị.\n\nBẠN CHỊU TRÁCH NHIỆM HOÀN TOÀN trong việc tuân thủ tất cả luật giao thông và giới hạn tốc độ được đăng tải. Luôn tham khảo các biển báo đường bộ chính thức là nguồn đáng tin cậy.\n\nBằng việc sử dụng ứng dụng này, bạn thừa nhận rằng các nhà phát triển, người đóng góp và nhà cung cấp dữ liệu KHÔNG CHỊU TRÁCH NHIỆM PHÁP LÝ đối với bất kỳ hậu quả nào phát sinh từ việc dựa vào thông tin được hiển thị, bao gồm nhưng không giới hạn ở vi phạm giao thông, tai nạn, thương tích hoặc thiệt hại dưới bất kỳ hình thức nào.</string>
+    <string name="disclaimer_safety">🚗 AN TOÀN LÀ TRÊN HẾT\n\nKHÔNG BAO GIỜ tương tác với ứng dụng này khi đang lái xe. Hãy thiết lập trước khi bắt đầu hành trình và dừng xe an toàn nếu cần thay đổi.\n\nAn toàn của bạn và của người khác là trách nhiệm của bạn.</string>
+    <string name="disclaimer_accept">Tôi hiểu và chấp nhận</string>
+    <string name="disclaimer_reject">Sự suy sụp</string>
+</resources>

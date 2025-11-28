@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Chinese (Traditional) translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">重要通知</string>
+    <string name="disclaimer_text">本應用程式使用來自 OpenStreetMap 的眾包資料來顯示限速資訊。這些數據可能不完整、不準確或過時。\n\n我們對所顯示的任何限速資訊的準確性、可靠性或完整性不做任何保證。\n\n您須自行負責遵守所有交通法規和已張貼的限速標誌。請務必以官方道路標誌為準。\n\n使用本應用程式即表示您承認，開發者、貢獻者和資料提供者對因依賴所顯示資訊而導致的任何後果不承擔任何責任，包括但不限於交通違規、事故、人身傷害或任何類型的損失。</string>
+    <string name="disclaimer_safety">🚗 安全第一\n\n切勿在駕駛時使用此應用程式。請在出發前完成設置，如有任何更改，請安全靠邊停車。\n\n保障您自身及他人的安全是您的責任。</string>
+    <string name="disclaimer_accept">我理解並接受</string>
+    <string name="disclaimer_reject">衰退</string>
+</resources>

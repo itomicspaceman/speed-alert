@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Romanian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Notificare importantă</string>
+    <string name="disclaimer_text">Această aplicație folosește date colectate de la OpenStreetMap pentru a afișa limitele de viteză. Aceste date pot fi incomplete, inexacte sau învechite.\n\nNU OFERIM NICIO GARANȚIE cu privire la acuratețea, fiabilitatea sau caracterul complet al oricăror informații afișate privind limitele de viteză.\n\nSUNĂ SINGURUL RESPONSABIL pentru respectarea tuturor legilor de circulație și a limitelor de viteză afișate. Consultați întotdeauna indicatoarele rutiere oficiale ca sursă autorizată.\n\nPrin utilizarea acestei aplicații, recunoașteți că dezvoltatorii, contribuitorii și furnizorii de date nu își asumă NICIO RĂSPUNDERE pentru nicio consecință care decurge din utilizarea informațiilor afișate, inclusiv, dar fără a se limita la, încălcări ale regulilor de circulație, accidente, vătămări corporale sau daune de orice fel.</string>
+    <string name="disclaimer_safety">🚗 SIGURANȚA PE PRIMUL LOC\n\nNU interacționați NICIODATĂ cu această aplicație în timp ce conduceți. Configurați-o înainte de a începe călătoria și trageți în siguranță dacă trebuie să faceți modificări.\n\nSiguranța dumneavoastră și a celorlalți este responsabilitatea dumneavoastră.</string>
+    <string name="disclaimer_accept">Înțeleg și accept</string>
+    <string name="disclaimer_reject">Declin</string>
+</resources>

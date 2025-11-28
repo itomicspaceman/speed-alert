@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Hungarian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Fontos közlemény</string>
+    <string name="disclaimer_text">Ez az alkalmazás az OpenStreetMap közösségi gyűjtéséből származó adatokat használ a sebességkorlátozások megjelenítéséhez. Ezek az adatok hiányosak, pontatlanok vagy elavultak lehetnek.\n\nNEM VÁLLALUNK GARANCIÁT a megjelenített sebességkorlátozási információk pontosságára, megbízhatóságára vagy teljességére vonatkozóan.\n\nKIZÁRÓLAG ÖN FELELŐS a közlekedési szabályok és a kihelyezett sebességkorlátozások betartásáért. Mindig a hivatalos közlekedési táblákat tekintse hiteles forrásnak.\n\nAz alkalmazás használatával Ön tudomásul veszi, hogy a fejlesztők, közreműködők és adatszolgáltatók NEM VÁLLALNAK FELELŐSSÉGET a megjelenített információkra való támaszkodásból eredő következményekért, beleértve, de nem kizárólagosan a közlekedési szabálysértéseket, baleseteket, sérüléseket vagy bármilyen k��rt.</string>
+    <string name="disclaimer_safety">🚗 ELSŐ A BIZTONSÁG\n\nSOHA ne használja ezt az alkalmazást vezetés közben. Állítsa be az alkalmazást utazás előtt, és álljon meg biztonságosan, ha bármilyen változtatást kell végeznie.\n\nA saját és mások biztonsága a te felelősséged.</string>
+    <string name="disclaimer_accept">Megértem és elfogadom</string>
+    <string name="disclaimer_reject">Hanyatlás</string>
+</resources>

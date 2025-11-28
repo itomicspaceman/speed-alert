@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Finnish translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Tärkeä ilmoitus</string>
+    <string name="disclaimer_text">Tämä sovellus käyttää OpenStreetMapin joukkoistamaa dataa nopeusrajoitusten näyttämiseen. Nämä tiedot voivat olla puutteellisia, epätarkkoja tai vanhentuneita.\n\nEMME ANNA MITÄÄN TAKUITA näytettyjen nopeusrajoitustietojen tarkkuudesta, luotettavuudesta tai täydellisyydestä.\n\nOLET YKSIN VASTUUSSA kaikkien liikennesääntöjen ja nopeusrajoitusten noudattamisesta. Käytä aina virallisia liikennemerkkejä luotettavana lähteenä.\n\nKäyttämällä tätä sovellusta hyväksyt, että kehittäjät, avustajat ja tiedon tarjoajat EIVÄT OTA VASTUUTA mistään seurauksista, jotka johtuvat näytettyjen tietojen käyttämisestä, mukaan lukien, mutta ei rajoittuen, liikennerikkomukset, onnettomuudet, loukkaantumiset tai minkäänlaiset vahingot.</string>
+    <string name="disclaimer_safety">🚗 TURVALLISUUS ENSIN\n\nÄLÄ KOSKAAN käytä tätä sovellusta ajon aikana. Määritä asetukset ennen matkan alkua ja pysähdy turvallisesti, jos sinun on tehtävä muutoksia.\n\nOma ja muiden turvallisuus on sinun vastuullasi.</string>
+    <string name="disclaimer_accept">Ymmärrän ja hyväksyn</string>
+    <string name="disclaimer_reject">Hylkää</string>
+</resources>

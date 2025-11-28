@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Norwegian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Viktig merknad</string>
+    <string name="disclaimer_text">Denne appen bruker crowdsourced data fra OpenStreetMap for å vise fartsgrenser. Disse dataene kan være ufullstendige, unøyaktige eller utdaterte.\n\nVI GIR INGEN GARANTI for nøyaktigheten, påliteligheten eller fullstendigheten av informasjon om fartsgrenser som vises.\n\nDU ER ALENE ANSVARLIG for å overholde alle trafikklover og oppgitte fartsgrenser. Referer alltid til offisielle veiskilt som den autoritative kilden.\n\nVed å bruke denne appen erkjenner du at utviklerne, bidragsyterne og dataleverandørene IKKE påtar seg ANSVAR for konsekvenser som følge av å stole på informasjon som vises, inkludert, men ikke begrenset til, trafikkbrudd, ulykker, skader eller skader av noe slag.</string>
+    <string name="disclaimer_safety">🚗 SIKKERHET FØRST\n\nALDRI bruk denne appen mens du kjører. Konfigurer den før du starter reisen, og kjør trygt inn til siden hvis du trenger å gjøre endringer.\n\nDin og andres sikkerhet er ditt ansvar.</string>
+    <string name="disclaimer_accept">Jeg forstår og aksepterer</string>
+    <string name="disclaimer_reject">Avslå</string>
+</resources>

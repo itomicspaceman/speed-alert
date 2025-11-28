@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Turkish translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Önemli Uyarı</string>
+    <string name="disclaimer_text">Bu uygulama, hız sınırlarını görüntülemek için OpenStreetMap\'ten kitle kaynaklı veriler kullanır. Bu veriler eksik, hatalı veya güncelliğini yitirmiş olabilir.\n\nGörüntülenen herhangi bir hız sınırı bilgisinin doğruluğu, güvenilirliği veya eksiksizliği konusunda HİÇBİR GARANTİ VERMİYORUZ.\n\nTüm trafik kurallarına ve belirlenen hız sınırlarına uymaktan yalnızca SİZ SORUMLUSUNUZ. Yetkili kaynak olarak her zaman resmi yol işaretlerine başvurun.\n\nBu uygulamayı kullanarak, geliştiricilerin, katkıda bulunanların ve veri sağlayıcılarının, trafik ihlalleri, kazalar, yaralanmalar veya her türlü hasar dahil ancak bunlarla sınırlı olmamak üzere, görüntülenen bilgilere güvenilmesinden kaynaklanan hiçbir sonuçtan HİÇBİR SORUMLULUK KABUL ETMEDİĞİNİ kabul etmiş olursunuz.</string>
+    <string name="disclaimer_safety">🚗 ÖNCE GÜVENLİK\n\nSürüş sırasında bu uygulamayla ASLA etkileşime girmeyin. Yolculuğunuza başlamadan önce kurulum yapın ve herhangi bir değişiklik yapmanız gerekirse güvenli bir şekilde kenara çekin.\n\nKendi güvenliğiniz ve başkalarının güvenliği sizin sorumluluğunuzdadır.</string>
+    <string name="disclaimer_accept">Anlıyorum ve Kabul Ediyorum</string>
+    <string name="disclaimer_reject">Reddetmek</string>
+</resources>

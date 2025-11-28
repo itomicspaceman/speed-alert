@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Croatian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Važna obavijest</string>
+    <string name="disclaimer_text">Ova aplikacija koristi podatke prikupljene od mnoštva korisnika s OpenStreetMapa za prikaz ograničenja brzine. Ti podaci mogu biti nepotpuni, netočni ili zastarjeli.\n\nNE DAJEMO NIKAKVA JAMSTVA u vezi s točnošću, pouzdanošću ili potpunošću bilo koje prikazane informacije o ograničenju brzine.\n\nVI STE ISKLJUČIVO ODGOVORNI za poštivanje svih prometnih zakona i objavljenih ograničenja brzine. Uvijek se pozivajte na službene prometne znakove kao mjerodavni izvor.\n\nKorištenjem ove aplikacije prihvaćate da programeri, suradnici i pružatelji podataka NE PRIHVATAJU NIKAKVU ODGOVORNOST za bilo kakve posljedice koje proizlaze iz oslanjanja na prikazane informacije, uključujući, ali ne ograničavajući se na prometne prekršaje, nesreće, ozljede ili štete bilo koje vrste.</string>
+    <string name="disclaimer_safety">🚗 SIGURNOST NA PRVOM MJESTU\n\nNIKADA ne koristite ovu aplikaciju tijekom vožnje. Postavite je prije početka putovanja i sigurno se zaustavite ako trebate napraviti bilo kakve promjene.\n\nVaša sigurnost i sigurnost drugih je vaša odgovornost.</string>
+    <string name="disclaimer_accept">Razumijem i prihvaćam</string>
+    <string name="disclaimer_reject">Pad</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Catalan translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Avís important</string>
+    <string name="disclaimer_text">Aquesta aplicació utilitza dades recopilades per crowdsourcing d\'OpenStreetMap per mostrar els límits de velocitat. Aquestes dades poden ser incompletes, inexactes o desactualitzades.\n\nNO OFEREIXEM CAP GARANTIA pel que fa a l\'exactitud, la fiabilitat o la integritat de la informació sobre els límits de velocitat que es mostra.\n\nSOU L\'ÚNIC RESPONSABLE d\'obeir totes les lleis de trànsit i els límits de velocitat publicats. Consulteu sempre els senyals de trànsit oficials com a font autoritària.\n\nEn utilitzar aquesta aplicació, reconeixeu que els desenvolupadors, els col·laboradors i els proveïdors de dades NO ACCEPTEN CAP RESPONSABILITAT per les conseqüències derivades de la confiança en la informació que es mostra, incloses, entre d\'altres, infraccions de trànsit, accidents, lesions o danys de qualsevol tipus.</string>
+    <string name="disclaimer_safety">🚗 LA SEGURETAT PRIMER\n\nNO interactuïs MAI amb aquesta aplicació mentre condueixes. Configura-la abans de començar el viatge i atura\'t amb seguretat si cal fer algun canvi.\n\nLa teva seguretat i la dels altres és responsabilitat teva.</string>
+    <string name="disclaimer_accept">Entenc i accepto</string>
+    <string name="disclaimer_reject">Rebutjar</string>
+</resources>

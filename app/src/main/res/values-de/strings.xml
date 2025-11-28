@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- German translations - Disclaimer -->
+    <!-- German translations - Disclaimer (Auto-generated via Google Translate) -->
     <string name="disclaimer_title">Wichtiger Hinweis</string>
-    <string name="disclaimer_text">Diese App verwendet gemeinschaftlich erstellte Daten von OpenStreetMap zur Anzeige von Geschwindigkeitsbegrenzungen. Diese Daten können unvollständig, ungenau oder veraltet sein.\n\nWIR ÜBERNEHMEN KEINE GARANTIE für die Richtigkeit, Zuverlässigkeit oder Vollständigkeit der angezeigten Geschwindigkeitsbegrenzungsinformationen.\n\nSIE SIND ALLEIN VERANTWORTLICH für die Einhaltung aller Verkehrsregeln und ausgeschilderten Geschwindigkeitsbegrenzungen. Beziehen Sie sich immer auf offizielle Verkehrsschilder als maßgebliche Quelle.\n\nDurch die Nutzung dieser App erkennen Sie an, dass die Entwickler, Mitwirkenden und Datenanbieter KEINE HAFTUNG für Konsequenzen übernehmen, die aus dem Vertrauen auf die angezeigten Informationen entstehen, einschließlich aber nicht beschränkt auf Verkehrsverstöße, Unfälle, Verletzungen oder Schäden jeglicher Art.</string>
-    <string name="disclaimer_safety">🚗 SICHERHEIT ZUERST\n\nBedienen Sie diese App NIEMALS während der Fahrt. Richten Sie sie vor Fahrtantritt ein und halten Sie sicher an, wenn Sie Änderungen vornehmen müssen.\n\nIhre Sicherheit und die Sicherheit anderer liegt in Ihrer Verantwortung.</string>
-    <string name="disclaimer_accept">Ich Verstehe und Akzeptiere</string>
-    <string name="disclaimer_reject">Ablehnen</string>
+    <string name="disclaimer_text">Diese App verwendet von Nutzern beigesteuerte Daten von OpenStreetMap, um Geschwindigkeitsbegrenzungen anzuzeigen. Diese Daten können unvollständig, ungenau oder veraltet sein.\n\nWir übernehmen keine Gewähr für die Richtigkeit, Zuverlässigkeit oder Vollständigkeit der angezeigten Geschwindigkeitsbegrenzungen.\n\nSie sind allein verantwortlich für die Einhaltung aller Verkehrsregeln und Geschwindigkeitsbegrenzungen. Beachten Sie stets die offiziellen Verkehrsschilder.\n\nDurch die Nutzung dieser App bestätigen Sie, dass die Entwickler, Mitwirkenden und Datenanbieter keine Haftung für Folgen übernehmen, die sich aus dem Vertrauen auf die angezeigten Informationen ergeben, einschließlich, aber nicht beschränkt auf Verkehrsverstöße, Unfälle, Verletzungen oder Schäden jeglicher Art.</string>
+    <string name="disclaimer_safety">🚗 SICHERHEIT GEHT VOR\n\nNutzen Sie diese App NIEMALS während der Fahrt. Richten Sie die Einstellungen vor Fahrtantritt ein und halten Sie sicher an, falls Sie Änderungen vornehmen müssen.\n\nIhre Sicherheit und die Sicherheit anderer liegen in Ihrer Verantwortung.</string>
+    <string name="disclaimer_accept">Ich verstehe und akzeptiere</string>
+    <string name="disclaimer_reject">Abfall</string>
 </resources>
-

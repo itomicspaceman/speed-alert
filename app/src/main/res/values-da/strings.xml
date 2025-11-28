@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Danish translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Vigtig meddelelse</string>
+    <string name="disclaimer_text">Denne app bruger crowdsourcede data fra OpenStreetMap til at vise hastighedsgrænser. Disse data kan være ufuldstændige, unøjagtige eller forældede.\n\nVI GIVER INGEN GARANTI vedrørende nøjagtigheden, pålideligheden eller fuldstændigheden af de viste oplysninger om hastighedsgrænser.\n\nDU ER ALENE ANSVARLIG for at overholde alle færdselslove og opsatte hastighedsgrænser. Henvis altid til officielle vejskilte som den autoritative kilde.\n\nVed at bruge denne app anerkender du, at udviklerne, bidragyderne og dataudbyderne INTET ANSVAR påtager sig for konsekvenser, der opstår som følge af tillid til viste oplysninger, herunder, men ikke begrænset til, trafikforseelser, ulykker, skader eller skader af nogen art.</string>
+    <string name="disclaimer_safety">🚗 SIKKERHED FØRST\n\nInterager ALDRIG med denne app, mens du kører. Opsæt den, inden du starter din rejse, og træk den sikkert ind til siden, hvis du har brug for at foretage ændringer.\n\nDin og andres sikkerhed er dit ansvar.</string>
+    <string name="disclaimer_accept">Jeg forstår og accepterer</string>
+    <string name="disclaimer_reject">Nedgang</string>
+</resources>

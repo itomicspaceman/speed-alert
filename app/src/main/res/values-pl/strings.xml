@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Polish translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Ważna informacja</string>
+    <string name="disclaimer_text">Ta aplikacja wykorzystuje dane pochodzące z crowdsourcingu z OpenStreetMap do wyświetlania ograniczeń prędkości. Dane te mogą być niekompletne, niedokładne lub nieaktualne.\n\nNIE UDZIELAMY ŻADNYCH GWARANCJI dotyczących dokładności, wiarygodności ani kompletności wyświetlanych informacji o ograniczeniach prędkości.\n\nPONOSISZ WYŁĄCZNĄ ODPOWIEDZIALNOŚĆ za przestrzeganie wszystkich przepisów ruchu drogowego i ograniczeń prędkości. Zawsze podawaj oficjalne znaki drogowe jako wiarygodne źródło informacji.\n\nKorzystając z tej aplikacji, potwierdzasz, że twórcy, współautorzy i dostawcy danych NIE PONOSZĄ ODPOWIEDZIALNOŚCI za jakiekolwiek konsekwencje wynikające z polegania na wyświetlanych informacjach, w tym między innymi za wykroczenia drogowe, wypadki, obrażenia lub szkody wszelkiego rodzaju.</string>
+    <string name="disclaimer_safety">🚗 BEZPIECZEŃSTWO PRZEDE WSZYSTKIM\n\nNIGDY nie korzystaj z tej aplikacji podczas jazdy. Skonfiguruj ją przed rozpoczęciem podróży i zatrzymaj się bezpiecznie, jeśli musisz wprowadzić jakiekolwiek zmiany.\n\nTwoje bezpieczeństwo i bezpieczeństwo innych jest Twoją odpowiedzialnością.</string>
+    <string name="disclaimer_accept">Rozumiem i akceptuję</string>
+    <string name="disclaimer_reject">Spadek</string>
+</resources>

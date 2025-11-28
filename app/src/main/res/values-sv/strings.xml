@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Swedish translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Viktigt meddelande</string>
+    <string name="disclaimer_text">Den här appen använder crowdsourcad data från OpenStreetMap för att visa hastighetsgränser. Denna information kan vara ofullständig, felaktig eller föråldrad.\n\nVI LÄMNAR INGA GARANTIER gällande riktigheten, tillförlitligheten eller fullständigheten av information om hastighetsgränser som visas.\n\nDU ÄR ENSAM ANSVARIG för att följa alla trafiklagar och angivna hastighetsgränser. Använd alltid officiella vägskyltar som auktoritativ källa.\n\nGenom att använda den här appen bekräftar du att utvecklarna, bidragsgivarna och dataleverantörerna INGET ANSVAR tar för några konsekvenser som uppstår till följd av att visad information förlitas på den, inklusive men inte begränsat till trafikförseelser, olyckor, skador eller skador av något slag.</string>
+    <string name="disclaimer_safety">🚗 SÄKERHET FÖRST\n\nInteragera ALDRIG med den här appen medan du kör. Konfigurera innan du påbörjar din resa och stanna säkert om du behöver göra några ändringar.\n\nDin och andras säkerhet är ditt ansvar.</string>
+    <string name="disclaimer_accept">Jag förstår och accepterar</string>
+    <string name="disclaimer_reject">Nedgång</string>
+</resources>

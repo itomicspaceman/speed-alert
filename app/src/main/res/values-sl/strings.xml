@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Slovenian translations - Disclaimer (Auto-generated via Google Translate) -->
+    <string name="disclaimer_title">Pomembno obvestilo</string>
+    <string name="disclaimer_text">Ta aplikacija za prikaz omejitev hitrosti uporablja podatke, zbrane iz množičnega vira OpenStreetMap. Ti podatki so lahko nepopolni, netočni ali zastareli.\n\nNE JAMČIMO NOBENEGA JAMSTVA glede točnosti, zanesljivosti ali popolnosti prikazanih informacij o omejitvah hitrosti.\n\nZA UPOŠTEVANJE VSEH PROMETNIH ZAPOSLOV IN OBJAVLJENIH OMEJAH HIDROSTI STE IZKLJUČNO ODGOVORNI VI. Vedno se sklicujte na uradne prometne znake kot verodostojen vir.\n\nZ uporabo te aplikacije potrjujete, da razvijalci, sodelavci in ponudniki podatkov NE PREVZEMAJO NOBENE ODGOVORNOSTI za kakršne koli posledice, ki izhajajo iz zanašanja na prikazane informacije, vključno z, vendar ne omejeno na, prometne prekrške, nesreče, poškodbe ali kakršno koli škodo.</string>
+    <string name="disclaimer_safety">🚗 VARNOST NA PRVEM MESTU\n\nNIKOLI ne uporabljajte te aplikacije med vožnjo. Preden se odpravite na pot, jo nastavite in se varno ustavite, če morate narediti kakršne koli spremembe.\n\nVaša varnost in varnost drugih sta vaša odgovornost.</string>
+    <string name="disclaimer_accept">Razumem in sprejemam</string>
+    <string name="disclaimer_reject">Zavrnitev</string>
+</resources>
