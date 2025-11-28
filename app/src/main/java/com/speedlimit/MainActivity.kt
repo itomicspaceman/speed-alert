@@ -175,13 +175,13 @@ class MainActivity : AppCompatActivity() {
         val button = TextView(this).apply {
             text = limit.toString()
             setTextColor(Color.WHITE)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 48f)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 56f)
             typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
             gravity = Gravity.CENTER
             
-            // Set size and margins
-            val size = dpToPx(80)
-            val margin = dpToPx(8)
+            // Large touch targets for easy tapping while driving
+            val size = dpToPx(100)
+            val margin = dpToPx(6)
             layoutParams = FlexboxLayout.LayoutParams(size, size).apply {
                 setMargins(margin, margin, margin, margin)
             }
