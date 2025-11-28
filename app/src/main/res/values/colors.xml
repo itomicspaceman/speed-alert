@@ -19,5 +19,8 @@
     <color name="text_muted">#888899</color>
     
     <color name="info_blue">#007BFF</color>
+    
+    <!-- Launcher icon background -->
+    <color name="ic_launcher_background">#000000</color>
 </resources>
 

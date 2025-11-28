@@ -60,7 +60,7 @@ class SpeedMonitorService : Service() {
         Log.d(TAG, "Service created")
         
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        speedLimitProvider = SpeedLimitProvider()
+        speedLimitProvider = SpeedLimitProvider(this)
         alertPlayer = AlertPlayer(this)
         
         createNotificationChannel()
