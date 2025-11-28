@@ -36,6 +36,7 @@ class FloatingSpeedService : Service() {
     private lateinit var floatingView: View
     private lateinit var speedText: TextView
     private lateinit var unitText: TextView
+    private lateinit var closeButton: TextView
     
     private var isFlashing = false
     private var flashAnimator: ValueAnimator? = null
@@ -94,6 +95,7 @@ class FloatingSpeedService : Service() {
         floatingView = LayoutInflater.from(this).inflate(R.layout.floating_speed, null)
         speedText = floatingView.findViewById(R.id.floatingSpeedText)
         unitText = floatingView.findViewById(R.id.floatingUnitText)
+        closeButton = floatingView.findViewById(R.id.closeButton)
 
         // Set up window parameters
         val layoutParams = WindowManager.LayoutParams(
@@ -113,11 +115,14 @@ class FloatingSpeedService : Service() {
             y = 200
         }
 
-        // Add touch listener for dragging
+        // Add touch listener for dragging (with tap detection)
         setupDragListener(layoutParams)
-
-        // Add double-tap listener to close
-        setupDoubleTapListener()
+        
+        // Close button handler
+        closeButton.setOnClickListener {
+            openMainApp()
+            stopSelf()
+        }
 
         // Add the view to window
         windowManager.addView(floatingView, layoutParams)
@@ -128,6 +133,8 @@ class FloatingSpeedService : Service() {
         var initialY = 0
         var initialTouchX = 0f
         var initialTouchY = 0f
+        var lastTapTime = 0L
+        var hasMoved = false
 
         floatingView.setOnTouchListener { _, event ->
             when (event.action) {
@@ -136,30 +143,37 @@ class FloatingSpeedService : Service() {
                     initialY = layoutParams.y
                     initialTouchX = event.rawX
                     initialTouchY = event.rawY
+                    hasMoved = false
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    layoutParams.x = initialX + (event.rawX - initialTouchX).toInt()
-                    layoutParams.y = initialY + (event.rawY - initialTouchY).toInt()
-                    windowManager.updateViewLayout(floatingView, layoutParams)
+                    val deltaX = event.rawX - initialTouchX
+                    val deltaY = event.rawY - initialTouchY
+                    
+                    // Only count as move if moved more than 10 pixels
+                    if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+                        hasMoved = true
+                        layoutParams.x = initialX + deltaX.toInt()
+                        layoutParams.y = initialY + deltaY.toInt()
+                        windowManager.updateViewLayout(floatingView, layoutParams)
+                    }
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    if (!hasMoved) {
+                        // This was a tap, not a drag
+                        val currentTime = System.currentTimeMillis()
+                        if (currentTime - lastTapTime < 400) {
+                            // Double tap detected
+                            openMainApp()
+                            stopSelf()
+                        }
+                        lastTapTime = currentTime
+                    }
                     true
                 }
                 else -> false
             }
-        }
-    }
-
-    private fun setupDoubleTapListener() {
-        var lastTapTime = 0L
-        
-        floatingView.setOnClickListener {
-            val currentTime = System.currentTimeMillis()
-            if (currentTime - lastTapTime < 300) {
-                // Double tap detected - close floating view and open main app
-                openMainApp()
-                stopSelf()
-            }
-            lastTapTime = currentTime
         }
     }
 

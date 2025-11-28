@@ -7,11 +7,26 @@
     android:background="@drawable/floating_background"
     android:padding="12dp">
 
+    <!-- Close button (top-right) -->
+    <TextView
+        android:id="@+id/closeButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="-4dp"
+        android:layout_marginEnd="-4dp"
+        android:text="✕"
+        android:textColor="#888888"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:background="?attr/selectableItemBackgroundBorderless" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="8dp">
 
         <!-- Current Speed -->
         <TextView
