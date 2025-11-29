@@ -20,7 +20,7 @@
     <!-- Disclaimer Screen -->
     <string name="disclaimer_title">Important Notice</string>
     <string name="disclaimer_text">This app uses crowdsourced data from OpenStreetMap to display speed limits. This data may be incomplete, inaccurate, or outdated.\n\nWE MAKE NO WARRANTIES regarding the accuracy, reliability, or completeness of any speed limit information displayed.\n\nYOU ARE SOLELY RESPONSIBLE for obeying all traffic laws and posted speed limits. Always refer to official road signs as the authoritative source.\n\nBy using this app, you acknowledge that the developers, contributors, and data providers accept NO LIABILITY for any consequences arising from reliance on information displayed, including but not limited to traffic violations, accidents, injuries, or damages of any kind.</string>
-    <string name="disclaimer_safety">🚗 SAFETY FIRST\n\nNEVER interact with this app while driving. Set up before you start your journey and pull over safely if you need to make any changes.\n\nYour safety and the safety of others is your responsibility.</string>
+    <string name="disclaimer_safety">🚗 SAFETY FIRST\n\nOnly interact with this app when it is safe to do so. Keep your eyes on the road and hands on the wheel. If in doubt, pull over first.\n\nYour safety and the safety of others is always your responsibility.</string>
     <string name="disclaimer_accept">I Understand &amp; Accept</string>
     <string name="disclaimer_reject">Decline</string>
     
