@@ -17,6 +17,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.WindowManager
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -192,6 +193,12 @@ class MainActivity : AppCompatActivity() {
         }
         
         dialog.show()
+        
+        // Make dialog wider (90% of screen width)
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
 
     override fun onResume() {
@@ -416,6 +423,12 @@ class MainActivity : AppCompatActivity() {
         }
         
         dialog.show()
+        
+        // Make dialog wider (90% of screen width)
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
     
     /**
@@ -442,6 +455,12 @@ class MainActivity : AppCompatActivity() {
         }
         
         dialog.show()
+        
+        // Make dialog wider (90% of screen width)
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
     
     /**
@@ -487,6 +506,12 @@ class MainActivity : AppCompatActivity() {
         }
         
         dialog.show()
+        
+        // Make dialog wider (90% of screen width)
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
     
     /**
