@@ -97,7 +97,15 @@
 
 ## Version History
 
-### v3.3 (Current)
+### v3.4 (Current)
+- Chrome Custom Tabs for smoother OSM OAuth login (slides up over app)
+- Truly responsive dialogs: match_parent with margins, rounded corners
+- All buttons use wrap_content height (no text cutoff)
+- Softened safety disclaimer ("when safe" not "never")
+- Added dialog_background.xml with 16dp rounded corners
+- setDialogFullWidth() helper for consistent dialog sizing
+
+### v3.3
 - OSM OAuth2 integration with real credentials
 - Friendly encouragement flow for contributions
 - "Why Connect?" info dialog with privacy reassurance
