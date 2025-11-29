@@ -193,12 +193,7 @@ class MainActivity : AppCompatActivity() {
         }
         
         dialog.show()
-        
-        // Make dialog wider (90% of screen width)
-        dialog.window?.setLayout(
-            (resources.displayMetrics.widthPixels * 0.9).toInt(),
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
+        setDialogFullWidth(dialog)
     }
 
     override fun onResume() {
@@ -423,12 +418,22 @@ class MainActivity : AppCompatActivity() {
         }
         
         dialog.show()
-        
-        // Make dialog wider (90% of screen width)
-        dialog.window?.setLayout(
-            (resources.displayMetrics.widthPixels * 0.9).toInt(),
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
+        setDialogFullWidth(dialog)
+    }
+    
+    /**
+     * Make dialog full width with standard margins.
+     * Adapts naturally to any screen size.
+     */
+    private fun setDialogFullWidth(dialog: AlertDialog) {
+        dialog.window?.apply {
+            setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+            // Horizontal margins let content breathe
+            setBackgroundDrawableResource(android.R.color.transparent)
+        }
     }
     
     /**
@@ -455,12 +460,7 @@ class MainActivity : AppCompatActivity() {
         }
         
         dialog.show()
-        
-        // Make dialog wider (90% of screen width)
-        dialog.window?.setLayout(
-            (resources.displayMetrics.widthPixels * 0.9).toInt(),
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
+        setDialogFullWidth(dialog)
     }
     
     /**
@@ -506,12 +506,7 @@ class MainActivity : AppCompatActivity() {
         }
         
         dialog.show()
-        
-        // Make dialog wider (90% of screen width)
-        dialog.window?.setLayout(
-            (resources.displayMetrics.widthPixels * 0.9).toInt(),
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
+        setDialogFullWidth(dialog)
     }
     
     /**
