@@ -29,6 +29,20 @@
     <string name="floating_mode_hint">Double-tap to return to app</string>
     <string name="overlay_permission_required">Overlay permission is required for floating mode</string>
     
+    <!-- Settings Screen -->
+    <string name="settings_free_section">FREE FEATURES</string>
+    <string name="settings_premium_section">PREMIUM</string>
+    <string name="settings_osm_account">OpenStreetMap</string>
+    <string name="settings_osm_not_connected">Not connected</string>
+    <string name="settings_osm_connected">Connected as %s</string>
+    <string name="settings_contributions">Contributions</string>
+    <string name="settings_voice">Voice Announcements</string>
+    <string name="settings_voice_limit_change">Limit changes</string>
+    <string name="settings_voice_unknown">Unknown zones</string>
+    <string name="settings_voice_over_limit">Over limit</string>
+    <string name="settings_subscribe">👑 Unlock Premium</string>
+    <string name="settings_restore">Restore Purchases</string>
+    
     <!-- OSM Contribution -->
     <string name="osm_contribute_title">Help Improve Maps</string>
     <string name="osm_contribute_message">Your local knowledge makes roads safer for millions of drivers worldwide.</string>

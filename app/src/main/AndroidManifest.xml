@@ -66,6 +66,12 @@
                     android:path="/callback" />
             </intent-filter>
         </activity>
+        
+        <!-- Settings screen -->
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SpeedLimit" />
 
         <!-- Foreground service for speed monitoring -->
         <service

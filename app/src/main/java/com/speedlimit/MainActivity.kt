@@ -212,6 +212,10 @@ class MainActivity : AppCompatActivity() {
                 checkPermissionsAndStart()
             }
         }
+        
+        binding.settingsButton.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
     }
     
     private fun checkOverlayPermissionAndStartFloating() {

@@ -58,8 +58,12 @@ class SpeedMonitorService : Service() {
     private lateinit var locationCallback: LocationCallback
     private lateinit var speedLimitProvider: SpeedLimitProvider
     private lateinit var alertPlayer: AlertPlayer
+    private lateinit var voiceAnnouncer: VoiceAnnouncer
     
     private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    
+    // Track last known speed limit for change detection
+    private var lastKnownSpeedLimit: Int = -1
     
     private var lastAlertTime = 0L
     private val alertCooldownMs = 5000L // 5 seconds between alerts
@@ -86,6 +90,7 @@ class SpeedMonitorService : Service() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         speedLimitProvider = SpeedLimitProvider(this)
         alertPlayer = AlertPlayer(this)
+        voiceAnnouncer = VoiceAnnouncer(this)
         
         createNotificationChannel()
         setupLocationCallback()
@@ -116,6 +121,7 @@ class SpeedMonitorService : Service() {
         isRunning = false
         stopLocationUpdates()
         alertPlayer.release()
+        voiceAnnouncer.shutdown()
         serviceScope.cancel()
         
         // Unregister rate limit receiver
@@ -277,6 +283,8 @@ class SpeedMonitorService : Service() {
         serviceScope.launch {
             try {
                 val speedLimitMph = speedLimitProvider.getSpeedLimit(lat, lon)
+                val countryCode = speedLimitProvider.currentCountryCode
+                val usesMph = SpeedUnitHelper.usesMph(countryCode)
                 
                 val isOverLimit = if (speedLimitMph != null) {
                     // Check against the detected speed limit
@@ -290,9 +298,26 @@ class SpeedMonitorService : Service() {
                 
                 Log.d(TAG, "Speed limit: $speedLimitMph mph, Over limit: $isOverLimit")
                 
+                // Voice announcements (premium feature)
+                if (speedLimitMph != null) {
+                    if (speedLimitMph != lastKnownSpeedLimit) {
+                        // Speed limit changed - announce it
+                        val displayLimit = if (usesMph) speedLimitMph else SpeedUnitHelper.mphToKmh(speedLimitMph)
+                        voiceAnnouncer.announceSpeedLimitChange(displayLimit, usesMph)
+                        lastKnownSpeedLimit = speedLimitMph
+                    }
+                } else {
+                    if (lastKnownSpeedLimit != -1) {
+                        // Entered unknown zone
+                        voiceAnnouncer.announceUnknownZone()
+                        lastKnownSpeedLimit = -1
+                    }
+                }
+                
                 // Play alert if over limit
                 if (isOverLimit && canPlayAlert()) {
                     alertPlayer.playAlert()
+                    voiceAnnouncer.announceOverLimit()
                     lastAlertTime = System.currentTimeMillis()
                     
                     // Auto-show floating display if user dismissed it

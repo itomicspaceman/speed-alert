@@ -9,6 +9,21 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
+    <!-- Settings Button (top-left) -->
+    <ImageButton
+        android:id="@+id/settingsButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_settings"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="Settings" />
+
     <!-- Floating Mode Button (top-right, below status bar) -->
     <ImageButton
         android:id="@+id/floatingModeButton"
