@@ -43,18 +43,36 @@
     <string name="settings_subscribe">👑 Unlock Premium</string>
     <string name="settings_restore">Restore Purchases</string>
     
-    <!-- OSM Contribution -->
-    <string name="osm_contribute_title">Help Improve Maps</string>
-    <string name="osm_contribute_message">Your local knowledge makes roads safer for millions of drivers worldwide.</string>
+    <!-- OSM Contribution - Encouragement Flow -->
+    <string name="osm_contribute_title">Share This Speed Limit?</string>
+    <string name="osm_contribute_message">Help fellow drivers by sharing what you know. Your contribution goes directly to OpenStreetMap - the free map used by millions worldwide.</string>
     <string name="osm_connect_button">🗺️ Connect to OpenStreetMap</string>
-    <string name="osm_submit_button">✓ Submit Speed Limit</string>
-    <string name="osm_cancel_button">Not Now</string>
-    <string name="osm_success_title">Thank You!</string>
-    <string name="osm_success_message">You\'ve helped make roads safer.</string>
-    <string name="osm_contribution_count">You\'ve contributed to %d roads!</string>
-    <string name="osm_first_contribution">Your first contribution - amazing!</string>
+    <string name="osm_submit_button">✓ Share This Limit</string>
+    <string name="osm_cancel_button">Maybe Later</string>
+    <string name="osm_success_title">🎉 Shared!</string>
+    <string name="osm_success_message">You just helped make roads safer for everyone. Thank you!</string>
+    <string name="osm_contribution_count">You\'ve improved %d roads - you\'re a star!</string>
+    <string name="osm_first_contribution">Your first contribution! Welcome to the community 🌍</string>
     <string name="osm_login_required">Connect your OpenStreetMap account to contribute</string>
-    <string name="osm_submitting">Submitting…</string>
-    <string name="osm_error">Could not submit. Please try again.</string>
+    <string name="osm_submitting">Sharing…</string>
+    <string name="osm_error">Couldn\'t share this time. Try again later.</string>
+    
+    <!-- OSM Why Connect Dialog -->
+    <string name="osm_why_connect_title">Why Connect?</string>
+    <string name="osm_why_connect_what">OpenStreetMap is a free, community-built map of the world - like Wikipedia for maps!</string>
+    <string name="osm_why_connect_how">When you share a speed limit, it instantly helps every driver using apps powered by OpenStreetMap.</string>
+    <string name="osm_why_connect_privacy_title">Your Privacy</string>
+    <string name="osm_why_connect_privacy">• Only your chosen username is shown publicly\n• Your email is never shared with anyone\n• You can delete your account anytime\n• We never see or store your password</string>
+    <string name="osm_why_connect_time">Creating an account takes about 2 minutes and you only do it once.</string>
+    <string name="osm_why_connect_button">Let\'s Do It!</string>
+    <string name="osm_why_connect_skip">Not Right Now</string>
+    
+    <!-- OSM Login Success -->
+    <string name="osm_login_success_title">Connected!</string>
+    <string name="osm_login_success_message">Welcome, %s! You\'re all set to start sharing speed limits.</string>
+    <string name="osm_login_success_button">Great!</string>
+    
+    <!-- OSM Contributing As -->
+    <string name="osm_contributing_as">Contributing as %s</string>
 </resources>
 

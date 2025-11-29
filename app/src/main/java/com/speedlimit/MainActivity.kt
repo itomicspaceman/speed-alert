@@ -28,6 +28,8 @@ import com.google.android.flexbox.FlexboxLayout
 import com.speedlimit.databinding.ActivityMainBinding
 import com.speedlimit.databinding.DialogOsmContributionBinding
 import com.speedlimit.databinding.DialogOsmSuccessBinding
+import com.speedlimit.databinding.DialogOsmWhyConnectBinding
+import com.speedlimit.databinding.DialogOsmLoginSuccessBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -158,14 +160,38 @@ class MainActivity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.Main).launch {
                     val success = osmContributor.handleOAuthCallback(code)
                     if (success) {
-                        // If we had a pending contribution, complete it now
-                        if (pendingContributionLimit > 0) {
-                            showContributionDialog(pendingContributionLimit)
-                        }
+                        // Show login success dialog
+                        showLoginSuccessDialog()
                     }
                 }
             }
         }
+    }
+    
+    /**
+     * Show login success dialog after OAuth completes.
+     */
+    private fun showLoginSuccessDialog() {
+        val dialogBinding = DialogOsmLoginSuccessBinding.inflate(LayoutInflater.from(this))
+        
+        val username = osmContributor.getUsername() ?: "there"
+        dialogBinding.messageText.text = getString(R.string.osm_login_success_message, username)
+        
+        val dialog = AlertDialog.Builder(this, R.style.Theme_SpeedLimit_Dialog)
+            .setView(dialogBinding.root)
+            .setCancelable(false)
+            .create()
+        
+        dialogBinding.greatButton.setOnClickListener {
+            dialog.dismiss()
+            // If we had a pending contribution, complete it now
+            if (pendingContributionLimit > 0) {
+                showContributionDialog(pendingContributionLimit)
+                pendingContributionLimit = -1
+            }
+        }
+        
+        dialog.show()
     }
 
     override fun onResume() {
@@ -345,14 +371,14 @@ class MainActivity : AppCompatActivity() {
         // Check if logged in
         val isLoggedIn = osmContributor.isLoggedIn()
         dialogBinding.connectOsmButton.visibility = if (isLoggedIn) android.view.View.GONE else android.view.View.VISIBLE
+        dialogBinding.whyConnectLink.visibility = if (isLoggedIn) android.view.View.GONE else android.view.View.VISIBLE
         dialogBinding.submitButton.visibility = if (isLoggedIn) android.view.View.VISIBLE else android.view.View.GONE
         
         // Update message with username if logged in
         if (isLoggedIn) {
             val username = osmContributor.getUsername()
             if (username != null) {
-                dialogBinding.messageText.text = getString(R.string.osm_contribute_message) + 
-                    "\n\nContributing as: $username"
+                dialogBinding.messageText.text = getString(R.string.osm_contributing_as, username)
             }
         }
         
@@ -364,6 +390,12 @@ class MainActivity : AppCompatActivity() {
             // Start OAuth flow
             val intent = osmContributor.startLogin()
             startActivity(intent)
+        }
+        
+        // Show "Why Connect?" info dialog
+        dialogBinding.whyConnectLink.setOnClickListener {
+            dialog.dismiss()
+            showWhyConnectDialog(limit)
         }
         
         dialogBinding.submitButton.setOnClickListener {
@@ -381,6 +413,33 @@ class MainActivity : AppCompatActivity() {
         }
         
         dialogBinding.cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        
+        dialog.show()
+    }
+    
+    /**
+     * Show the "Why Connect?" info dialog.
+     */
+    private fun showWhyConnectDialog(pendingLimit: Int) {
+        val dialogBinding = DialogOsmWhyConnectBinding.inflate(LayoutInflater.from(this))
+        
+        val dialog = AlertDialog.Builder(this, R.style.Theme_SpeedLimit_Dialog)
+            .setView(dialogBinding.root)
+            .create()
+        
+        dialogBinding.connectButton.setOnClickListener {
+            // Save the limit for after OAuth completes
+            pendingContributionLimit = pendingLimit
+            dialog.dismiss()
+            
+            // Start OAuth flow
+            val intent = osmContributor.startLogin()
+            startActivity(intent)
+        }
+        
+        dialogBinding.skipButton.setOnClickListener {
             dialog.dismiss()
         }
         

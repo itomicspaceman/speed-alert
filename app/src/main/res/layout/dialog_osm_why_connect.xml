@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#1A1A1A">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Globe Icon -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="🌍"
+            android:textSize="64sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/osm_why_connect_title"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="20dp" />
+
+        <!-- What is OSM -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/osm_why_connect_what"
+            android:textColor="#CCCCCC"
+            android:textSize="16sp"
+            android:lineSpacingMultiplier="1.3"
+            android:layout_marginBottom="16dp" />
+
+        <!-- How it helps -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/osm_why_connect_how"
+            android:textColor="#CCCCCC"
+            android:textSize="16sp"
+            android:lineSpacingMultiplier="1.3"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Privacy Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#252525"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp">
+
+            <!-- Privacy Title with Lock Icon -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔒 Your Privacy"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Privacy Points -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/osm_why_connect_privacy"
+                android:textColor="#AAAAAA"
+                android:textSize="14sp"
+                android:lineSpacingMultiplier="1.4" />
+
+        </LinearLayout>
+
+        <!-- Time estimate -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/osm_why_connect_time"
+            android:textColor="#888888"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Connect Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/connectButton"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="@string/osm_why_connect_button"
+            android:textSize="16sp"
+            style="@style/Widget.Material3.Button"
+            app:backgroundTint="#4CAF50"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Skip Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/skipButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="@string/osm_why_connect_skip"
+            android:textSize="14sp"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:textColor="#888888" />
+
+    </LinearLayout>
+
+</ScrollView>
+

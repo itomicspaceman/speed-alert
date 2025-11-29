@@ -34,9 +34,8 @@ class OsmContributor(private val context: Context) {
         private const val OSM_TOKEN_URL = "https://www.openstreetmap.org/oauth2/token"
         private const val OSM_API_URL = "https://api.openstreetmap.org/api/0.6"
         
-        // OAuth2 credentials - TODO: Replace with actual registered app credentials
-        // Register at: https://www.openstreetmap.org/oauth2/applications
-        private const val CLIENT_ID = "YOUR_OSM_CLIENT_ID"
+        // OAuth2 credentials - Registered at openstreetmap.org
+        private const val CLIENT_ID = "umYux_wSZM7OAuGnvlvTdiZQwNcCeUlXL4CmqA_Ncb8"
         private const val REDIRECT_URI = "speedlimit://oauth/callback"
         
         // Scopes needed for editing
