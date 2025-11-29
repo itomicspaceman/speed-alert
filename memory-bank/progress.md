@@ -52,33 +52,67 @@
 
 ## What's Left to Build
 
-### Phase 1: Polish (Next)
-- [ ] Custom app icon design
-- [ ] Real-world road testing
-- [ ] Battery usage optimization
-- [ ] Error handling improvements
+### Phase 0: Play Store Submission (Priority)
+- [x] Privacy policy (GitHub Pages)
+- [x] Store listing text drafted
+- [ ] Feature graphic (1024x500)
+- [ ] Phone screenshots (min 2)
+- [ ] Release signing keystore
+- [ ] Submit to Play Store
 
-### Phase 2: Crowdsourcing
-- [ ] Backend API for contributions
-- [ ] Tap speed limit to report
-- [ ] Validation (multiple reports)
-- [ ] OSM contribution pathway
+### Phase 1: OSM Crowdsourcing ✅
+- [x] OAuth2 integration with real Client ID
+- [x] "Why Connect?" info dialog with privacy reassurance
+- [x] Login success celebration dialog
+- [x] Friendly encouragement messaging
+- [ ] Test actual OSM contribution flow
 
-### Phase 3: Enhanced Features
-- [ ] Offline speed limit caching
-- [ ] User preferences screen
-- [ ] Alert threshold customization
-- [ ] Trip history logging
+### Phase 2: Voice Announcements (Premium)
+- [x] VoiceAnnouncer.kt implemented
+- [x] Settings toggles (limit change, unknown zone, over limit)
+- [ ] Gate behind subscription
 
-### Phase 4: Platform Expansion
-- [ ] Home screen widget
-- [ ] Wear OS companion app
-- [ ] Android Auto integration
-- [ ] Play Store listing
+### Phase 3: Settings Screen ✅
+- [x] Two-section layout (Free / Premium)
+- [x] OSM account connection
+- [x] Contribution count display
+- [x] Voice announcement toggles (locked for free)
+
+### Phase 4: AdMob Integration
+- [ ] Interstitial ad after disclaimer
+- [ ] Never show ads while driving
+
+### Phase 5: Google Play Billing
+- [ ] Subscription check
+- [ ] Unlock premium features
+- [ ] Restore purchases
+
+### Premium Features (Subscribers Only)
+- [ ] Voice announcements (implemented, needs gating)
+- [ ] Custom font selection (5-10 font options)
+- [ ] Custom alert threshold
+- [ ] Vertical/horizontal floating layout option
+- [ ] Ad-free experience
+- [ ] Contribution stats/badges
 
 ## Version History
 
-### v2.4 (Current)
+### v3.3 (Current)
+- OSM OAuth2 integration with real credentials
+- Friendly encouragement flow for contributions
+- "Why Connect?" info dialog with privacy reassurance
+- Login success celebration dialog
+- Improved caching accuracy (150m, bearing detection)
+- OSM attribution text
+- UI consistency fixes (fonts, padding, dialog sizing)
+
+### v3.0-3.2
+- Floating overlay shows speed/limit (e.g., "41/30")
+- Settings screen with free/premium sections
+- Voice announcements (premium feature)
+- Firebase Analytics + Crashlytics
+
+### v2.4
 - 85 language translations for disclaimer
 - Disclaimer shows every launch
 - Google Translate API script
