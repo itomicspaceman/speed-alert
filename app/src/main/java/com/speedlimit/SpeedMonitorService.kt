@@ -259,7 +259,14 @@ class SpeedMonitorService : Service() {
             0f
         }
         
-        Log.d(TAG, "Current speed: $speedMph mph at ${location.latitude}, ${location.longitude}")
+        // Get bearing (direction of travel) - important for detecting turns
+        val bearing = if (location.hasBearing()) {
+            location.bearing
+        } else {
+            -1f  // Unknown bearing
+        }
+        
+        Log.d(TAG, "Current speed: $speedMph mph, bearing: $bearing° at ${location.latitude}, ${location.longitude}")
         
         // Get country-aware threshold (lower for km/h countries to catch 20 km/h zones)
         val countryCode = speedLimitProvider.currentCountryCode
@@ -271,7 +278,7 @@ class SpeedMonitorService : Service() {
         
         // Only check speed limits if above threshold
         if (speedMph >= threshold) {
-            checkSpeedLimit(location.latitude, location.longitude, speedMph)
+            checkSpeedLimit(location.latitude, location.longitude, speedMph, bearing)
         } else {
             // Below threshold, just update display
             broadcastSpeedUpdate(speedMph, -1, false)
@@ -279,10 +286,10 @@ class SpeedMonitorService : Service() {
         }
     }
 
-    private fun checkSpeedLimit(lat: Double, lon: Double, currentSpeedMph: Float) {
+    private fun checkSpeedLimit(lat: Double, lon: Double, currentSpeedMph: Float, bearing: Float) {
         serviceScope.launch {
             try {
-                val speedLimitMph = speedLimitProvider.getSpeedLimit(lat, lon)
+                val speedLimitMph = speedLimitProvider.getSpeedLimit(lat, lon, bearing)
                 val countryCode = speedLimitProvider.currentCountryCode
                 val usesMph = SpeedUnitHelper.usesMph(countryCode)
                 
