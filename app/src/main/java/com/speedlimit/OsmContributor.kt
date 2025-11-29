@@ -8,8 +8,10 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
@@ -228,7 +230,7 @@ class OsmContributor(private val context: Context) {
             .url("$OSM_API_URL/changeset/create")
             .header("Authorization", "Bearer $accessToken")
             .header("Content-Type", "application/xml")
-            .put(okhttp3.RequestBody.create(null, changesetXml.toByteArray()))
+            .put(changesetXml.toRequestBody("application/xml".toMediaTypeOrNull()))
             .build()
         
         val response = httpClient.newCall(request).execute()
@@ -281,7 +283,7 @@ class OsmContributor(private val context: Context) {
             .url("$OSM_API_URL/way/$wayId")
             .header("Authorization", "Bearer $accessToken")
             .header("Content-Type", "application/xml")
-            .put(okhttp3.RequestBody.create(null, modifiedXml.toByteArray()))
+            .put(modifiedXml.toRequestBody("application/xml".toMediaTypeOrNull()))
             .build()
         
         val response = httpClient.newCall(request).execute()
@@ -296,7 +298,7 @@ class OsmContributor(private val context: Context) {
         val request = Request.Builder()
             .url("$OSM_API_URL/changeset/$changesetId/close")
             .header("Authorization", "Bearer $accessToken")
-            .put(okhttp3.RequestBody.create(null, ByteArray(0)))
+            .put(ByteArray(0).toRequestBody(null))
             .build()
         
         httpClient.newCall(request).execute()
