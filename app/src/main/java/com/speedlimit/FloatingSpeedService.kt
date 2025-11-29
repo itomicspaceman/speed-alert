@@ -47,20 +47,29 @@ class FloatingSpeedService : Service() {
     private lateinit var windowManager: WindowManager
     private lateinit var floatingView: View
     private lateinit var speedText: TextView
+    private lateinit var limitText: TextView
     private lateinit var unitText: TextView
     private lateinit var closeButton: TextView
     
+    // Vertical layout views (premium)
+    private lateinit var horizontalContainer: View
+    private lateinit var verticalContainer: View
+    private lateinit var speedTextVertical: TextView
+    private lateinit var limitTextVertical: TextView
+    
     private var isFlashing = false
     private var flashAnimator: ValueAnimator? = null
+    private var useVerticalLayout = false  // Premium feature
 
     // Broadcast receiver for speed updates
     private val speedUpdateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 val speedMph = it.getFloatExtra(SpeedMonitorService.EXTRA_SPEED, 0f)
+                val speedLimitMph = it.getIntExtra(SpeedMonitorService.EXTRA_SPEED_LIMIT, -1)
                 val isOverLimit = it.getBooleanExtra(SpeedMonitorService.EXTRA_IS_OVER_LIMIT, false)
                 val countryCode = it.getStringExtra(SpeedMonitorService.EXTRA_COUNTRY_CODE) ?: "GB"
-                updateDisplay(speedMph, isOverLimit, countryCode)
+                updateDisplay(speedMph, speedLimitMph, isOverLimit, countryCode)
             }
         }
     }
@@ -151,9 +160,23 @@ class FloatingSpeedService : Service() {
     private fun createFloatingView() {
         // Inflate the floating layout
         floatingView = LayoutInflater.from(this).inflate(R.layout.floating_speed, null)
+        
+        // Horizontal layout views (default)
+        horizontalContainer = floatingView.findViewById(R.id.horizontalSpeedContainer)
         speedText = floatingView.findViewById(R.id.floatingSpeedText)
+        limitText = floatingView.findViewById(R.id.floatingLimitText)
+        
+        // Vertical layout views (premium)
+        verticalContainer = floatingView.findViewById(R.id.verticalSpeedContainer)
+        speedTextVertical = floatingView.findViewById(R.id.floatingSpeedTextVertical)
+        limitTextVertical = floatingView.findViewById(R.id.floatingLimitTextVertical)
+        
         unitText = floatingView.findViewById(R.id.floatingUnitText)
         closeButton = floatingView.findViewById(R.id.closeButton)
+        
+        // TODO: Check premium status and load preference for vertical layout
+        // useVerticalLayout = premiumManager.isPremium() && prefs.getBoolean("vertical_layout", false)
+        updateLayoutMode()
 
         // Set up window parameters
         val layoutParams = WindowManager.LayoutParams(
@@ -251,14 +274,22 @@ class FloatingSpeedService : Service() {
         }
     }
 
-    private fun updateDisplay(speedMph: Float, isOverLimit: Boolean, countryCode: String) {
+    private fun updateDisplay(speedMph: Float, speedLimitMph: Int, isOverLimit: Boolean, countryCode: String) {
         val usesMph = SpeedUnitHelper.usesMph(countryCode)
         
         // Convert to display units
         val displaySpeed = if (usesMph) speedMph.toInt() else SpeedUnitHelper.mphToKmh(speedMph.toInt())
+        val displayLimit = if (speedLimitMph > 0) {
+            if (usesMph) speedLimitMph.toString() else SpeedUnitHelper.mphToKmh(speedLimitMph).toString()
+        } else {
+            "?"
+        }
         
-        // Update display
+        // Update both layouts
         speedText.text = displaySpeed.toString()
+        limitText.text = displayLimit
+        speedTextVertical.text = displaySpeed.toString()
+        limitTextVertical.text = displayLimit
         unitText.text = SpeedUnitHelper.getUnitLabel(countryCode)
         
         // Handle flashing when over limit
@@ -271,6 +302,17 @@ class FloatingSpeedService : Service() {
                 stopFlashing()
             }
             speedText.setTextColor(Color.WHITE)
+            speedTextVertical.setTextColor(Color.WHITE)
+        }
+    }
+    
+    private fun updateLayoutMode() {
+        if (useVerticalLayout) {
+            horizontalContainer.visibility = View.GONE
+            verticalContainer.visibility = View.VISIBLE
+        } else {
+            horizontalContainer.visibility = View.VISIBLE
+            verticalContainer.visibility = View.GONE
         }
     }
 
@@ -287,6 +329,7 @@ class FloatingSpeedService : Service() {
                 val fraction = animator.animatedValue as Float
                 val color = if (fraction < 0.5f) Color.WHITE else Color.parseColor("#FF0000")
                 speedText.setTextColor(color)
+                speedTextVertical.setTextColor(color)
             }
             start()
         }
