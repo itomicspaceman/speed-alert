@@ -46,7 +46,7 @@
     <!-- OSM Contribution - Encouragement Flow -->
     <string name="osm_contribute_title">Share This Speed Limit?</string>
     <string name="osm_contribute_message">Help fellow drivers by sharing what you know. Your contribution goes directly to OpenStreetMap - the free map used by millions worldwide.</string>
-    <string name="osm_connect_button">🗺️ Connect to OpenStreetMap</string>
+    <string name="osm_connect_button">Connect to OpenStreetMap</string>
     <string name="osm_submit_button">✓ Share This Limit</string>
     <string name="osm_cancel_button">Maybe Later</string>
     <string name="osm_success_title">🎉 Shared!</string>
