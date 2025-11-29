@@ -87,10 +87,10 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/rejectButton"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
             android:layout_weight="1"
             android:text="@string/disclaimer_reject"
-            android:textSize="16sp"
             style="@style/Widget.Material3.Button.OutlinedButton"
             app:strokeColor="#666666"
             android:textColor="#999999"
