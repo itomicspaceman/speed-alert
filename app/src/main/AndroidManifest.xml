@@ -67,9 +67,32 @@
             </intent-filter>
         </activity>
         
+        <!-- OSM Setup screen (post-disclaimer) -->
+        <activity
+            android:name=".OsmSetupActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SpeedLimit">
+            <!-- Also handle OAuth callback here for post-setup flow -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="speedlimit"
+                    android:host="oauth"
+                    android:path="/callback" />
+            </intent-filter>
+        </activity>
+        
         <!-- Settings screen -->
         <activity
             android:name=".SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SpeedLimit" />
+        
+        <!-- My Contributions screen -->
+        <activity
+            android:name=".MyContributionsActivity"
             android:exported="false"
             android:theme="@style/Theme.SpeedLimit" />
 

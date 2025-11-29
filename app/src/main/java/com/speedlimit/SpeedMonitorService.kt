@@ -36,6 +36,9 @@ class SpeedMonitorService : Service() {
         const val EXTRA_IS_OVER_LIMIT = "is_over_limit"
         const val EXTRA_COUNTRY_CODE = "country_code"
         const val EXTRA_WAY_ID = "way_id"
+        const val EXTRA_LATITUDE = "latitude"
+        const val EXTRA_LONGITUDE = "longitude"
+        const val EXTRA_ACCURACY = "accuracy"
         
         // Speed threshold before checking limits (country-aware)
         const val SPEED_CHECK_THRESHOLD_MPH = 20f      // For mph countries
@@ -278,15 +281,15 @@ class SpeedMonitorService : Service() {
         
         // Only check speed limits if above threshold
         if (speedMph >= threshold) {
-            checkSpeedLimit(location.latitude, location.longitude, speedMph, bearing)
+            checkSpeedLimit(location.latitude, location.longitude, speedMph, bearing, location.accuracy)
         } else {
             // Below threshold, just update display
-            broadcastSpeedUpdate(speedMph, -1, false)
+            broadcastSpeedUpdate(speedMph, -1, false, location.latitude, location.longitude, location.accuracy)
             updateNotification(speedMph.toInt(), null)
         }
     }
 
-    private fun checkSpeedLimit(lat: Double, lon: Double, currentSpeedMph: Float, bearing: Float) {
+    private fun checkSpeedLimit(lat: Double, lon: Double, currentSpeedMph: Float, bearing: Float, accuracy: Float) {
         serviceScope.launch {
             try {
                 val speedLimitMph = speedLimitProvider.getSpeedLimit(lat, lon, bearing)
@@ -337,13 +340,13 @@ class SpeedMonitorService : Service() {
                     }
                 }
                 
-                // Broadcast update to UI
-                broadcastSpeedUpdate(currentSpeedMph, speedLimitMph ?: -1, isOverLimit)
+                // Broadcast update to UI (including location for crowdsourcing validation)
+                broadcastSpeedUpdate(currentSpeedMph, speedLimitMph ?: -1, isOverLimit, lat, lon, accuracy)
                 updateNotification(currentSpeedMph.toInt(), speedLimitMph)
                 
             } catch (e: Exception) {
                 Log.e(TAG, "Error checking speed limit", e)
-                broadcastSpeedUpdate(currentSpeedMph, -1, false)
+                broadcastSpeedUpdate(currentSpeedMph, -1, false, lat, lon, accuracy)
                 updateNotification(currentSpeedMph.toInt(), null)
             }
         }
@@ -353,7 +356,8 @@ class SpeedMonitorService : Service() {
         return System.currentTimeMillis() - lastAlertTime > alertCooldownMs
     }
 
-    private fun broadcastSpeedUpdate(speedMph: Float, speedLimit: Int, isOverLimit: Boolean) {
+    private fun broadcastSpeedUpdate(speedMph: Float, speedLimit: Int, isOverLimit: Boolean, 
+                                       lat: Double = 0.0, lon: Double = 0.0, accuracy: Float = Float.MAX_VALUE) {
         val countryCode = speedLimitProvider.currentCountryCode
         val wayId = speedLimitProvider.currentWayId
         val intent = Intent(ACTION_SPEED_UPDATE).apply {
@@ -362,6 +366,9 @@ class SpeedMonitorService : Service() {
             putExtra(EXTRA_IS_OVER_LIMIT, isOverLimit)
             putExtra(EXTRA_COUNTRY_CODE, countryCode)
             putExtra(EXTRA_WAY_ID, wayId)
+            putExtra(EXTRA_LATITUDE, lat)
+            putExtra(EXTRA_LONGITUDE, lon)
+            putExtra(EXTRA_ACCURACY, accuracy)
             setPackage(packageName)
         }
         sendBroadcast(intent)

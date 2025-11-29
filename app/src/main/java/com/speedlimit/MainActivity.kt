@@ -9,9 +9,13 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
+import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.provider.Settings
 import android.util.Log
 import android.util.TypedValue
@@ -43,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var osmContributor: OsmContributor
+    private lateinit var contributionLog: ContributionLog
     private var isMonitoring = false
     private var isFlashing = false
     private var flashAnimator: ValueAnimator? = null
@@ -58,6 +63,14 @@ class MainActivity : AppCompatActivity() {
     // Current way ID for crowdsourcing (received from SpeedMonitorService)
     private var currentWayId: Long = -1L
     
+    // Currently detected speed limit (for "same limit" check)
+    private var currentDetectedLimit: Int = -1
+    
+    // Current location (for validation)
+    private var currentLatitude: Double = 0.0
+    private var currentLongitude: Double = 0.0
+    private var currentGpsAccuracy: Float = Float.MAX_VALUE
+    
     // Pending contribution after OAuth login
     private var pendingContributionLimit: Int = -1
 
@@ -70,11 +83,22 @@ class MainActivity : AppCompatActivity() {
                 val isOverLimit = it.getBooleanExtra(SpeedMonitorService.EXTRA_IS_OVER_LIMIT, false)
                 val countryCode = it.getStringExtra(SpeedMonitorService.EXTRA_COUNTRY_CODE) ?: "GB"
                 val wayId = it.getLongExtra(SpeedMonitorService.EXTRA_WAY_ID, -1L)
+                val latitude = it.getDoubleExtra(SpeedMonitorService.EXTRA_LATITUDE, 0.0)
+                val longitude = it.getDoubleExtra(SpeedMonitorService.EXTRA_LONGITUDE, 0.0)
+                val accuracy = it.getFloatExtra(SpeedMonitorService.EXTRA_ACCURACY, Float.MAX_VALUE)
                 
                 // Store way ID for crowdsourcing
                 if (wayId > 0) {
                     currentWayId = wayId
                 }
+                
+                // Store current location for validation
+                currentLatitude = latitude
+                currentLongitude = longitude
+                currentGpsAccuracy = accuracy
+                
+                // Store currently detected limit for "same limit" check
+                currentDetectedLimit = speedLimitMph
                 
                 updateSpeedDisplay(speedMph, speedLimitMph, isOverLimit, countryCode)
             }
@@ -136,6 +160,9 @@ class MainActivity : AppCompatActivity() {
         
         // Initialize OSM contributor
         osmContributor = OsmContributor(this)
+        
+        // Initialize contribution log
+        contributionLog = ContributionLog(this)
 
         setupUI()
         setupSpeedLimitGrid(currentCountryCode)
@@ -171,6 +198,7 @@ class MainActivity : AppCompatActivity() {
     
     /**
      * Show login success dialog after OAuth completes.
+     * After dismissing, auto-submits any pending contribution.
      */
     private fun showLoginSuccessDialog() {
         val dialogBinding = DialogOsmLoginSuccessBinding.inflate(LayoutInflater.from(this))
@@ -185,10 +213,13 @@ class MainActivity : AppCompatActivity() {
         
         dialogBinding.greatButton.setOnClickListener {
             dialog.dismiss()
-            // If we had a pending contribution, complete it now
+            // If we had a pending contribution, submit it silently now
             if (pendingContributionLimit > 0) {
-                showContributionDialog(pendingContributionLimit)
+                val limit = pendingContributionLimit
                 pendingContributionLimit = -1
+                
+                // Now try the submission again (will go through validation)
+                onSpeedLimitSelected(limit)
             }
         }
         
@@ -340,24 +371,186 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Called when user taps a speed limit to contribute to OpenStreetMap.
+     * Implements silent validation and one-tap submission for safe driving UX.
      */
     private fun onSpeedLimitSelected(limit: Int) {
-        // Visual feedback - brief flash of the selected button
-        speedLimitButtons.forEachIndexed { index, button ->
-            val limitValue = currentDisplayLimits.getOrNull(index) ?: 0
-            if (limitValue == limit) {
-                // Flash green briefly to confirm selection
-                button.setTextColor(Color.GREEN)
-                button.postDelayed({ button.setTextColor(Color.WHITE) }, 300)
-            }
+        val button = findButtonForLimit(limit) ?: return
+        val unit = if (SpeedUnitHelper.usesMph(currentCountryCode)) "mph" else "km/h"
+        
+        // === VALIDATION CHECKS ===
+        
+        // 1. Skip if same as currently detected limit (nothing to contribute)
+        if (limit == currentDetectedLimit && currentDetectedLimit > 0) {
+            // Silently skip - the limit is already correct
+            logAttempt(limit, unit, ContributionLog.Status.SKIPPED_SAME_LIMIT, "Same as detected limit")
+            return
         }
         
-        // Show contribution dialog
-        showContributionDialog(limit)
+        // 2. Check if logged into OSM
+        if (!osmContributor.isLoggedIn()) {
+            // Not logged in - show prompt (this is the ONLY time we show a dialog)
+            showContributionDialog(limit)
+            return
+        }
+        
+        // 3. Check rate limiting (time + distance)
+        val rateLimitReason = contributionLog.canSubmit(currentLatitude, currentLongitude)
+        if (rateLimitReason != null) {
+            flashButton(button, false) // Red flash
+            vibrateError()
+            logAttempt(limit, unit, ContributionLog.Status.FAILED_RATE_LIMITED, rateLimitReason)
+            return
+        }
+        
+        // 4. Check GPS accuracy
+        if (currentGpsAccuracy > 50f) {
+            flashButton(button, false) // Red flash
+            vibrateError()
+            logAttempt(limit, unit, ContributionLog.Status.FAILED_GPS_POOR, 
+                "GPS accuracy: ${currentGpsAccuracy.toInt()}m (need <50m)")
+            return
+        }
+        
+        // 5. Check if we have a valid way ID
+        if (currentWayId <= 0) {
+            flashButton(button, false) // Red flash
+            vibrateError()
+            logAttempt(limit, unit, ContributionLog.Status.FAILED_NO_WAY, "No road detected at location")
+            return
+        }
+        
+        // 6. Check if location is valid
+        if (currentLatitude == 0.0 && currentLongitude == 0.0) {
+            flashButton(button, false) // Red flash
+            vibrateError()
+            logAttempt(limit, unit, ContributionLog.Status.FAILED_GPS_POOR, "No location available")
+            return
+        }
+        
+        // === ALL CHECKS PASSED - SUBMIT SILENTLY ===
+        submitSpeedLimitSilently(limit, unit, button)
+    }
+    
+    /**
+     * Find the button view for a given speed limit value.
+     */
+    private fun findButtonForLimit(limit: Int): TextView? {
+        return speedLimitButtons.getOrNull(currentDisplayLimits.indexOf(limit))
+    }
+    
+    /**
+     * Flash a button green (success) or red (failure).
+     */
+    private fun flashButton(button: TextView, success: Boolean) {
+        val originalColor = button.currentTextColor
+        val flashColor = if (success) Color.parseColor("#00FF00") else Color.parseColor("#FF0000")
+        
+        // Flash animation
+        val animator = ValueAnimator.ofFloat(0f, 1f, 0f).apply {
+            duration = 500
+            addUpdateListener { 
+                val fraction = it.animatedValue as Float
+                if (fraction > 0.5f) {
+                    button.setTextColor(flashColor)
+                } else {
+                    button.setTextColor(originalColor)
+                }
+            }
+        }
+        animator.start()
+        
+        // Reset to appropriate color after animation
+        button.postDelayed({
+            // If this limit is currently detected, show it highlighted
+            if (currentDisplayLimits.getOrNull(speedLimitButtons.indexOf(button)) == currentDetectedLimit) {
+                button.setTextColor(ContextCompat.getColor(this, R.color.info_blue))
+            } else {
+                button.setTextColor(Color.WHITE)
+            }
+        }, 600)
+    }
+    
+    /**
+     * Vibrate for success feedback.
+     */
+    private fun vibrateSuccess() {
+        vibrate(longArrayOf(0, 100)) // Single short pulse
+    }
+    
+    /**
+     * Vibrate for error feedback.
+     */
+    private fun vibrateError() {
+        vibrate(longArrayOf(0, 50, 50, 50)) // Double pulse
+    }
+    
+    /**
+     * Vibrate with pattern.
+     */
+    private fun vibrate(pattern: LongArray) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                val vibrator = vibratorManager.defaultVibrator
+                vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
+            } else {
+                @Suppress("DEPRECATION")
+                val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
+                } else {
+                    @Suppress("DEPRECATION")
+                    vibrator.vibrate(pattern, -1)
+                }
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Vibration failed", e)
+        }
+    }
+    
+    /**
+     * Log a contribution attempt to local storage.
+     */
+    private fun logAttempt(limit: Int, unit: String, status: ContributionLog.Status, reason: String?) {
+        contributionLog.logAttempt(
+            ContributionLog.Attempt(
+                timestamp = System.currentTimeMillis(),
+                latitude = currentLatitude,
+                longitude = currentLongitude,
+                wayId = currentWayId,
+                wayName = null, // Could be fetched from OSM if needed
+                speedLimit = limit,
+                unit = unit,
+                status = status,
+                failureReason = reason
+            )
+        )
+    }
+    
+    /**
+     * Submit speed limit silently (no confirmation dialog).
+     * Shows green flash on success, red flash on failure.
+     */
+    private fun submitSpeedLimitSilently(limit: Int, unit: String, button: TextView) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val success = osmContributor.submitSpeedLimit(currentWayId, limit, unit)
+            
+            if (success) {
+                flashButton(button, true) // Green flash
+                vibrateSuccess()
+                logAttempt(limit, unit, ContributionLog.Status.SUCCESS, null)
+            } else {
+                flashButton(button, false) // Red flash
+                vibrateError()
+                logAttempt(limit, unit, ContributionLog.Status.FAILED_API_ERROR, "OSM API error")
+            }
+        }
     }
     
     /**
      * Show the OSM contribution dialog.
+     * This is ONLY shown when the user is NOT logged in.
+     * Once logged in, submissions are silent (one-tap).
      */
     private fun showContributionDialog(limit: Int) {
         val dialogBinding = DialogOsmContributionBinding.inflate(LayoutInflater.from(this))
@@ -370,24 +563,20 @@ class MainActivity : AppCompatActivity() {
             .setView(dialogBinding.root)
             .create()
         
-        // Check if logged in
-        val isLoggedIn = osmContributor.isLoggedIn()
-        dialogBinding.connectOsmButton.visibility = if (isLoggedIn) android.view.View.GONE else android.view.View.VISIBLE
-        dialogBinding.whyConnectLink.visibility = if (isLoggedIn) android.view.View.GONE else android.view.View.VISIBLE
-        dialogBinding.submitButton.visibility = if (isLoggedIn) android.view.View.VISIBLE else android.view.View.GONE
-        
-        // Update message with username if logged in
-        if (isLoggedIn) {
-            val username = osmContributor.getUsername()
-            if (username != null) {
-                dialogBinding.messageText.text = getString(R.string.osm_contributing_as, username)
-            }
-        }
+        // This dialog is only shown when NOT logged in
+        // Hide submit button, show connect button
+        dialogBinding.connectOsmButton.visibility = android.view.View.VISIBLE
+        dialogBinding.whyConnectLink.visibility = android.view.View.VISIBLE
+        dialogBinding.submitButton.visibility = android.view.View.GONE
         
         dialogBinding.connectOsmButton.setOnClickListener {
             // Save the limit for after OAuth completes
             pendingContributionLimit = limit
             dialog.dismiss()
+            
+            // Log the attempt (pending auth)
+            val unitStr = if (SpeedUnitHelper.usesMph(currentCountryCode)) "mph" else "km/h"
+            logAttempt(limit, unitStr, ContributionLog.Status.FAILED_NO_AUTH, "User not logged in - starting OAuth")
             
             // Start OAuth flow (uses Chrome Custom Tabs)
             osmContributor.startLogin()
@@ -397,20 +586,6 @@ class MainActivity : AppCompatActivity() {
         dialogBinding.whyConnectLink.setOnClickListener {
             dialog.dismiss()
             showWhyConnectDialog(limit)
-        }
-        
-        dialogBinding.submitButton.setOnClickListener {
-            dialog.dismiss()
-            
-            // Check if we have a way ID to submit to
-            if (currentWayId <= 0) {
-                // No way ID - can't submit yet
-                showNoWayIdDialog()
-                return@setOnClickListener
-            }
-            
-            // Submit the speed limit
-            submitSpeedLimit(limit)
         }
         
         dialogBinding.cancelButton.setOnClickListener {
@@ -463,62 +638,6 @@ class MainActivity : AppCompatActivity() {
         setDialogFullWidth(dialog)
     }
     
-    /**
-     * Submit the speed limit to OSM.
-     */
-    private fun submitSpeedLimit(limit: Int) {
-        val unit = if (SpeedUnitHelper.usesMph(currentCountryCode)) "mph" else "km/h"
-        
-        CoroutineScope(Dispatchers.Main).launch {
-            val success = osmContributor.submitSpeedLimit(currentWayId, limit, unit)
-            
-            if (success) {
-                showSuccessDialog()
-            } else {
-                // Show error (simplified)
-                AlertDialog.Builder(this@MainActivity, R.style.Theme_SpeedLimit_Dialog)
-                    .setMessage(R.string.osm_error)
-                    .setPositiveButton(android.R.string.ok, null)
-                    .show()
-            }
-        }
-    }
-    
-    /**
-     * Show success dialog after contribution.
-     */
-    private fun showSuccessDialog() {
-        val dialogBinding = DialogOsmSuccessBinding.inflate(LayoutInflater.from(this))
-        
-        val count = osmContributor.getContributionCount()
-        dialogBinding.contributionCount.text = if (count == 1) {
-            getString(R.string.osm_first_contribution)
-        } else {
-            getString(R.string.osm_contribution_count, count)
-        }
-        
-        val dialog = AlertDialog.Builder(this, R.style.Theme_SpeedLimit_Dialog)
-            .setView(dialogBinding.root)
-            .create()
-        
-        dialogBinding.closeButton.setOnClickListener {
-            dialog.dismiss()
-        }
-        
-        dialog.show()
-        setDialogFullWidth(dialog)
-    }
-    
-    /**
-     * Show dialog when no way ID is available.
-     */
-    private fun showNoWayIdDialog() {
-        AlertDialog.Builder(this, R.style.Theme_SpeedLimit_Dialog)
-            .setTitle("🗺️")
-            .setMessage("Keep driving until a road is detected, then try again.")
-            .setPositiveButton(android.R.string.ok, null)
-            .show()
-    }
 
     private fun dpToPx(dp: Int): Int {
         return TypedValue.applyDimension(

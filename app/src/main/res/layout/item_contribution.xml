@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="12dp"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Status icon -->
+    <TextView
+        android:id="@+id/statusIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:text="✅"
+        android:textSize="20sp"
+        android:gravity="center" />
+
+    <!-- Details -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="12dp">
+
+        <!-- Speed limit value -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/speedLimitText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50 mph"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-condensed" />
+
+            <TextView
+                android:id="@+id/statusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="• Shared"
+                android:textColor="#4CAF50"
+                android:textSize="12sp"
+                android:layout_marginStart="8dp" />
+
+        </LinearLayout>
+
+        <!-- Location/Road name if available -->
+        <TextView
+            android:id="@+id/locationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Way 12345678"
+            android:textColor="#888888"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <!-- Failure reason (only shown for failed attempts) -->
+        <TextView
+            android:id="@+id/failureReasonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GPS accuracy too low"
+            android:textColor="#FF6B6B"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!-- Time -->
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2:34 PM"
+        android:textColor="#666666"
+        android:textSize="12sp" />
+
+</LinearLayout>
+

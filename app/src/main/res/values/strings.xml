@@ -74,5 +74,24 @@
     
     <!-- OSM Contributing As -->
     <string name="osm_contributing_as">Contributing as %s</string>
+    
+    <!-- OSM Setup Screen (Post-Disclaimer) -->
+    <string name="osm_setup_title">Help Improve Roads</string>
+    <string name="osm_setup_description">Want to help fellow drivers by sharing speed limit data? Connect your free OpenStreetMap account now while you have a moment!</string>
+    <string name="osm_setup_benefit_1">✓ Help millions of drivers worldwide</string>
+    <string name="osm_setup_benefit_2">✓ One-tap sharing while driving</string>
+    <string name="osm_setup_benefit_3">✓ Make roads safer for everyone</string>
+    <string name="osm_setup_time">⏱️ Takes about 2 minutes</string>
+    <string name="osm_setup_connect">🗺️ Connect Now</string>
+    <string name="osm_setup_skip">Skip for Now</string>
+    <string name="osm_setup_footer">You can always set this up later in Settings</string>
+    
+    <!-- My Contributions Screen -->
+    <string name="contributions_title">My Contributions</string>
+    <string name="contributions_empty">No contributions yet.\nTap a speed limit while driving to share it!</string>
+    <string name="contributions_total">Total: %d shared, %d failed</string>
+    <string name="contributions_view_osm">View on OpenStreetMap →</string>
+    <string name="contribution_success">Shared</string>
+    <string name="contribution_failed">Failed</string>
 </resources>
 

@@ -1,5 +1,6 @@
 package com.speedlimit
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var osmContributor: OsmContributor
+    private lateinit var contributionLog: ContributionLog
     private lateinit var voiceAnnouncer: VoiceAnnouncer
     
     // TODO: Replace with actual subscription check
@@ -25,6 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(binding.root)
         
         osmContributor = OsmContributor(this)
+        contributionLog = ContributionLog(this)
         voiceAnnouncer = VoiceAnnouncer(this)
         
         setupUI()
@@ -46,6 +49,11 @@ class SettingsActivity : AppCompatActivity() {
                 // Start OAuth flow
                 osmContributor.startLogin()
             }
+        }
+        
+        // Contributions row - navigate to My Contributions screen
+        binding.contributionRow.setOnClickListener {
+            startActivity(Intent(this, MyContributionsActivity::class.java))
         }
         
         // Voice icon - tap to preview
@@ -102,9 +110,14 @@ class SettingsActivity : AppCompatActivity() {
             binding.osmStatusText.text = getString(R.string.settings_osm_not_connected)
         }
         
-        // Contribution count
-        val count = osmContributor.getContributionCount()
-        binding.contributionCountText.text = count.toString()
+        // Contribution count (from local log)
+        val successCount = contributionLog.getSuccessCount()
+        val failedCount = contributionLog.getFailedCount()
+        binding.contributionCountText.text = if (failedCount > 0) {
+            "$successCount ✅  $failedCount ❌"
+        } else {
+            "$successCount"
+        }
         
         // Premium features state
         updatePremiumUI()
