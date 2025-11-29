@@ -1,20 +1,33 @@
 # Speed/Limit - Android Speed Limit Notification App
 
-A proof-of-concept Android app that monitors your driving speed and alerts you when exceeding speed limits.
+A feature-rich Android app that monitors your driving speed and alerts you when exceeding speed limits. Uses crowdsourced data from OpenStreetMap.
+
+![App Icon](app/src/main/ic_launcher-playstore.png)
 
 ## Features
 
-- **Background Speed Monitoring**: Runs as a foreground service, continues working when minimized
-- **GPS Speed Detection**: Uses high-accuracy GPS to track your speed
-- **OpenStreetMap Speed Limits**: Queries Overpass API for road speed limit data
-- **Smart Alerts**: Only checks speed limits when traveling above 20 mph
-- **5% Tolerance**: Alerts when speed exceeds limit by more than 5%
-- **Loud Audio + Vibration**: Unmissable alerts using system alarm tones
+### Core Features (Free)
+- **Real-time Speed Monitoring**: GPS-based speed detection with foreground service
+- **Smart Speed Limit Detection**: Queries OpenStreetMap Overpass API with intelligent caching
+- **Visual & Audio Alerts**: Flashing red/white display + loud audio when over limit
+- **Floating Overlay Mode**: Compact display that floats over other apps
+- **International Support**: Auto-detects country and displays mph/km/h accordingly
+- **85+ Language Support**: Legal disclaimer translated for global coverage
+- **OSM Crowdsourcing**: Contribute speed limits using your OpenStreetMap account
+
+### Premium Features (Coming Soon)
+- **Voice Announcements**: Android TTS announces limit changes, unknown zones, and over-limit warnings
+- **Ad-Free Experience**: No interstitial ads
+- **Contribution Stats**: Track your OSM contributions
+
+## Screenshots
+
+*Coming soon*
 
 ## Requirements
 
 - Android 8.0 (API 26) or higher
-- GPS/Location enabled on device
+- GPS/Location enabled
 - Internet connection (for speed limit lookups)
 
 ## Building the App
@@ -22,105 +35,103 @@ A proof-of-concept Android app that monitors your driving speed and alerts you w
 ### Prerequisites
 
 1. **Install Android Studio** from [developer.android.com](https://developer.android.com/studio)
-   - This installs the Android SDK automatically
-   - Default installation is fine
+2. **Open the Project**: File > Open > Select this folder
+3. **Wait for Gradle Sync** to complete
 
-2. **First-Time Setup (Required)**
-   - Open Android Studio
-   - File > Open > Select this `speed` folder
-   - Android Studio will download Gradle and dependencies automatically
-   - Wait for "Gradle sync" to complete (may take a few minutes)
+### Build Debug APK
 
-3. **Verify SDK Location**
-   - After Android Studio installs, check `local.properties` file
-   - Update `sdk.dir` path if your SDK is in a different location
+#### Option A: Android Studio
 
-### Build Steps
+1. Build > Generate Signed Bundle / APK > APK
+2. Choose "debug" build variant
+3. APK location: `app/build/outputs/apk/debug/SpeedLimit-X.X.apk`
 
-#### Option A: Command Line (Recommended)
-
-Open PowerShell in this folder and run:
+#### Option B: Command Line
 
 ```powershell
 .\gradlew.bat assembleDebug
 ```
 
-The APK will be at: `app\build\outputs\apk\debug\speed-limit-1.0.apk`
+### Install on Phone
 
-#### Option B: Android Studio
+1. Enable **Developer Options** (Settings > About Phone > Tap "Build Number" 7 times)
+2. Enable **Install from Unknown Sources** (Settings > Security)
+3. For **Pixel/Android 13+**: After first install attempt, go to Settings > Apps > Speed/Limit > ⋮ > "Allow restricted settings" to enable overlay permission
+4. Transfer APK via Google Drive, email, or USB
+5. Tap to install
 
-1. Open Android Studio
-2. File > Open > Select this folder
-3. Wait for Gradle sync to complete
-4. Build > Build Bundle(s) / APK(s) > Build APK(s)
-5. Click "locate" in the notification to find the APK
+## Development
 
-### Installing on Your Phone
+### Project Structure
 
-1. **Enable Developer Options** on your Android phone:
-   - Go to Settings > About Phone
-   - Tap "Build Number" 7 times
-   - Developer Options will appear in Settings
+```
+app/src/main/
+├── java/com/speedlimit/
+│   ├── MainActivity.kt          # Main UI
+│   ├── DisclaimerActivity.kt    # Legal disclaimer (shown every launch)
+│   ├── SettingsActivity.kt      # Settings screen
+│   ├── SpeedMonitorService.kt   # Foreground service for GPS
+│   ├── FloatingSpeedService.kt  # Floating overlay service
+│   ├── SpeedLimitProvider.kt    # Overpass API + smart caching
+│   ├── SpeedUnitHelper.kt       # mph/km/h detection & conversion
+│   ├── VoiceAnnouncer.kt        # TTS voice announcements
+│   ├── OsmContributor.kt        # OSM OAuth & contributions
+│   ├── AlertPlayer.kt           # Audio alerts
+│   └── AnalyticsHelper.kt       # Firebase integration
+├── res/
+│   ├── layout/                  # UI layouts
+│   ├── values/strings.xml       # English strings
+│   └── values-XX/strings.xml    # 85+ language translations
+└── docs/
+    ├── privacy-policy.html      # Privacy policy (GitHub Pages)
+    ├── STORE_LISTING.md         # Play Store assets
+    └── RELEASE.md               # Release build guide
+```
 
-2. **Enable Unknown Sources**:
-   - Settings > Security (or Privacy)
-   - Enable "Install from Unknown Sources" or "Install unknown apps"
+### Key Technologies
 
-3. **Transfer the APK**:
-   - Email the APK to yourself and open on phone
-   - Upload to Google Drive/OneDrive and download on phone
-   - Connect phone via USB and copy file
+- **Kotlin 2.0.21** with Coroutines
+- **Material 3** design
+- **Firebase Analytics & Crashlytics** for monitoring
+- **OpenStreetMap Overpass API** for speed limits
+- **Android TTS** for voice announcements
+- **FlexboxLayout** for dynamic speed limit grid
 
-4. **Install**:
-   - Tap the APK file on your phone
-   - Confirm installation when prompted
+### Smart Caching
 
-## Usage
+The app uses intelligent caching to reduce API calls by ~70-80%:
+- Caches by OSM way ID (road segment)
+- 500m safety net for limit changes
+- 2-minute maximum cache age
+- Exponential backoff on rate limits
 
-1. Open the app
-2. Grant location permissions when prompted
-   - Select "Allow all the time" for background monitoring
-3. Tap **Start Monitoring**
-4. The app will:
-   - Show your current speed
-   - Display detected speed limit when above 20 mph
-   - Alert with sound + vibration if you exceed the limit by 5%
+## Privacy
 
-## Permissions Explained
+See [Privacy Policy](docs/privacy-policy.html)
 
-| Permission          | Why Needed                                  |
-|:--------------------|:--------------------------------------------|
-| Location            | To track your speed via GPS                 |
-| Background Location | To work when app is minimized               |
-| Internet            | To fetch speed limits from OpenStreetMap    |
-| Notifications       | To show the persistent service notification |
-| Vibrate             | For alert vibrations                        |
+**Key Points:**
+- Location data processed on-device only
+- No personal data collected or stored
+- Anonymous usage analytics via Firebase
+- OSM contributions use your own OSM account
 
-## Limitations (POC)
+## Contributing
 
-- **OSM Coverage**: Not all roads have speed limit data in OpenStreetMap
-- **Data Accuracy**: Community-contributed data may occasionally be incorrect
-- **Network Required**: Speed limits are fetched live (with caching)
-- **UK-Focused**: Speed limit parsing assumes UK conventions (mph)
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
 
-## Technical Notes
+## License
 
-- Uses Overpass API (free, no API key required)
-- 30-second cache to reduce API calls
-- Queries roads within 50m of current position
-- Handles various OSM speed formats (mph, km/h, "national", etc.)
+*To be determined*
 
-## Troubleshooting
+## Acknowledgments
 
-**App doesn't start monitoring:**
-- Check location permission is granted
-- Ensure GPS is enabled on device
+- **OpenStreetMap** for speed limit data
+- **Overpass API** for free API access
+- All OSM contributors worldwide
 
-**No speed limit shown:**
-- You may be in an area without OSM speed data
-- Check internet connection
+---
 
-**Alerts not working:**
-- Check phone isn't on silent/vibrate only
-- Ensure alarm volume is turned up
-
+**Disclaimer**: Speed/Limit uses crowdsourced data that may be incomplete or inaccurate. Always refer to official road signs. The developers accept no liability for any consequences arising from use of this app.
