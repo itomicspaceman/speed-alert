@@ -65,7 +65,7 @@ Everyone
 speedlimit@itomic.com.au
 
 ## Privacy Policy URL
-https://itomicspaceman.github.io/speed-alert/privacy-policy.html
+https://itomicspaceman.github.io/speed-limit/privacy-policy.html
 
 ---
 

@@ -64,6 +64,6 @@ Speed/Limit is an Android native application that monitors driving speed and ale
 - Floating overlay works over other apps ✅
 
 ## Repository
-- GitHub: itomicspaceman/speed-alert
+- GitHub: itomicspaceman/speed-limit
 - Local: C:\Users\Ross Gerring\Herd\speed
 - Current Version: 2.4

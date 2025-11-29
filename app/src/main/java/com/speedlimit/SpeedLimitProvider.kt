@@ -295,7 +295,7 @@ class SpeedLimitProvider(private val context: Context) {
 
         val request = Request.Builder()
             .url(url)
-            .header("User-Agent", "SpeedLimit/2.5 (Android App; https://github.com/itomicspaceman/speed-alert)")
+            .header("User-Agent", "SpeedLimit/3.1 (Android App; https://github.com/itomicspaceman/speed-limit)")
             .build()
 
         val response = httpClient.newCall(request).execute()

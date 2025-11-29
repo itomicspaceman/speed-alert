@@ -46,7 +46,7 @@
 ### Build & Deploy ✅
 - [x] Gradle build configuration
 - [x] Custom APK naming (SpeedLimit-{version}.apk)
-- [x] GitHub repository (itomicspaceman/speed-alert)
+- [x] GitHub repository (itomicspaceman/speed-limit)
 - [x] Launcher icon (adaptive icon)
 - [x] Package name: com.speedlimit
 
