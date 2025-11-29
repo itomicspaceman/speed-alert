@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/"
-                android:textColor="#888888"
+                android:textColor="@android:color/white"
                 android:textSize="56sp"
                 android:fontFamily="sans-serif-condensed"
                 android:includeFontPadding="false" />
@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="?"
-                android:textColor="#888888"
+                android:textColor="@android:color/white"
                 android:textSize="56sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-condensed"
@@ -99,7 +99,7 @@
                 android:id="@+id/floatingDivider"
                 android:layout_width="60dp"
                 android:layout_height="2dp"
-                android:background="#888888"
+                android:background="@android:color/white"
                 android:layout_marginVertical="2dp" />
 
             <!-- Speed Limit -->
@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="?"
-                android:textColor="#888888"
+                android:textColor="@android:color/white"
                 android:textSize="36sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-condensed"
