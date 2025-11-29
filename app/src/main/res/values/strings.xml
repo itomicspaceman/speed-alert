@@ -28,5 +28,19 @@
     <string name="floating_mode">Floating Mode</string>
     <string name="floating_mode_hint">Double-tap to return to app</string>
     <string name="overlay_permission_required">Overlay permission is required for floating mode</string>
+    
+    <!-- OSM Contribution -->
+    <string name="osm_contribute_title">Help Improve Maps</string>
+    <string name="osm_contribute_message">Your local knowledge makes roads safer for millions of drivers worldwide.</string>
+    <string name="osm_connect_button">🗺️ Connect to OpenStreetMap</string>
+    <string name="osm_submit_button">✓ Submit Speed Limit</string>
+    <string name="osm_cancel_button">Not Now</string>
+    <string name="osm_success_title">Thank You!</string>
+    <string name="osm_success_message">You\'ve helped make roads safer.</string>
+    <string name="osm_contribution_count">You\'ve contributed to %d roads!</string>
+    <string name="osm_first_contribution">Your first contribution - amazing!</string>
+    <string name="osm_login_required">Connect your OpenStreetMap account to contribute</string>
+    <string name="osm_submitting">Submitting…</string>
+    <string name="osm_error">Could not submit. Please try again.</string>
 </resources>
 

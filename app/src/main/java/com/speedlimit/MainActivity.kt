@@ -13,8 +13,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,10 +26,20 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.android.flexbox.FlexboxLayout
 import com.speedlimit.databinding.ActivityMainBinding
+import com.speedlimit.databinding.DialogOsmContributionBinding
+import com.speedlimit.databinding.DialogOsmSuccessBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TAG = "MainActivity"
+    }
+
     private lateinit var binding: ActivityMainBinding
+    private lateinit var osmContributor: OsmContributor
     private var isMonitoring = false
     private var isFlashing = false
     private var flashAnimator: ValueAnimator? = null
@@ -39,6 +51,12 @@ class MainActivity : AppCompatActivity() {
     // Current display limits and country
     private var currentDisplayLimits = listOf<Int>()
     private var currentCountryCode = "GB"
+    
+    // Current way ID for crowdsourcing (received from SpeedMonitorService)
+    private var currentWayId: Long = -1L
+    
+    // Pending contribution after OAuth login
+    private var pendingContributionLimit: Int = -1
 
     // Broadcast receiver for speed updates from the service
     private val speedUpdateReceiver = object : BroadcastReceiver() {
@@ -48,6 +66,13 @@ class MainActivity : AppCompatActivity() {
                 val speedLimitMph = it.getIntExtra(SpeedMonitorService.EXTRA_SPEED_LIMIT, -1)
                 val isOverLimit = it.getBooleanExtra(SpeedMonitorService.EXTRA_IS_OVER_LIMIT, false)
                 val countryCode = it.getStringExtra(SpeedMonitorService.EXTRA_COUNTRY_CODE) ?: "GB"
+                val wayId = it.getLongExtra(SpeedMonitorService.EXTRA_WAY_ID, -1L)
+                
+                // Store way ID for crowdsourcing
+                if (wayId > 0) {
+                    currentWayId = wayId
+                }
+                
                 updateSpeedDisplay(speedMph, speedLimitMph, isOverLimit, countryCode)
             }
         }
@@ -105,10 +130,42 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize Firebase Analytics and Crashlytics
         AnalyticsHelper.initialize(this)
+        
+        // Initialize OSM contributor
+        osmContributor = OsmContributor(this)
 
         setupUI()
         setupSpeedLimitGrid(currentCountryCode)
         checkIfServiceRunning()
+        
+        // Handle OAuth callback if app was launched from OSM
+        handleOAuthIntent(intent)
+    }
+    
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleOAuthIntent(intent)
+    }
+    
+    private fun handleOAuthIntent(intent: Intent?) {
+        val data = intent?.data ?: return
+        
+        // Check if this is an OAuth callback
+        if (data.scheme == "speedlimit" && data.host == "oauth" && data.path == "/callback") {
+            val code = data.getQueryParameter("code")
+            if (code != null) {
+                Log.d(TAG, "Received OAuth callback with code")
+                CoroutineScope(Dispatchers.Main).launch {
+                    val success = osmContributor.handleOAuthCallback(code)
+                    if (success) {
+                        // If we had a pending contribution, complete it now
+                        if (pendingContributionLimit > 0) {
+                            showContributionDialog(pendingContributionLimit)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -250,8 +307,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Called when user taps a speed limit to contribute.
-     * TODO: Implement crowdsourcing - send to backend/OSM
+     * Called when user taps a speed limit to contribute to OpenStreetMap.
      */
     private fun onSpeedLimitSelected(limit: Int) {
         // Visual feedback - brief flash of the selected button
@@ -263,7 +319,124 @@ class MainActivity : AppCompatActivity() {
                 button.postDelayed({ button.setTextColor(Color.WHITE) }, 300)
             }
         }
-        // TODO: Send to backend/OSM - currentLocation, selectedLimit, timestamp
+        
+        // Show contribution dialog
+        showContributionDialog(limit)
+    }
+    
+    /**
+     * Show the OSM contribution dialog.
+     */
+    private fun showContributionDialog(limit: Int) {
+        val dialogBinding = DialogOsmContributionBinding.inflate(LayoutInflater.from(this))
+        
+        val unit = SpeedUnitHelper.getUnitLabel(currentCountryCode)
+        dialogBinding.speedLimitValue.text = limit.toString()
+        dialogBinding.speedLimitUnit.text = unit
+        
+        val dialog = AlertDialog.Builder(this, R.style.Theme_SpeedLimit_Dialog)
+            .setView(dialogBinding.root)
+            .create()
+        
+        // Check if logged in
+        val isLoggedIn = osmContributor.isLoggedIn()
+        dialogBinding.connectOsmButton.visibility = if (isLoggedIn) android.view.View.GONE else android.view.View.VISIBLE
+        dialogBinding.submitButton.visibility = if (isLoggedIn) android.view.View.VISIBLE else android.view.View.GONE
+        
+        // Update message with username if logged in
+        if (isLoggedIn) {
+            val username = osmContributor.getUsername()
+            if (username != null) {
+                dialogBinding.messageText.text = getString(R.string.osm_contribute_message) + 
+                    "\n\nContributing as: $username"
+            }
+        }
+        
+        dialogBinding.connectOsmButton.setOnClickListener {
+            // Save the limit for after OAuth completes
+            pendingContributionLimit = limit
+            dialog.dismiss()
+            
+            // Start OAuth flow
+            val intent = osmContributor.startLogin()
+            startActivity(intent)
+        }
+        
+        dialogBinding.submitButton.setOnClickListener {
+            dialog.dismiss()
+            
+            // Check if we have a way ID to submit to
+            if (currentWayId <= 0) {
+                // No way ID - can't submit yet
+                showNoWayIdDialog()
+                return@setOnClickListener
+            }
+            
+            // Submit the speed limit
+            submitSpeedLimit(limit)
+        }
+        
+        dialogBinding.cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        
+        dialog.show()
+    }
+    
+    /**
+     * Submit the speed limit to OSM.
+     */
+    private fun submitSpeedLimit(limit: Int) {
+        val unit = if (SpeedUnitHelper.usesMph(currentCountryCode)) "mph" else "km/h"
+        
+        CoroutineScope(Dispatchers.Main).launch {
+            val success = osmContributor.submitSpeedLimit(currentWayId, limit, unit)
+            
+            if (success) {
+                showSuccessDialog()
+            } else {
+                // Show error (simplified)
+                AlertDialog.Builder(this@MainActivity, R.style.Theme_SpeedLimit_Dialog)
+                    .setMessage(R.string.osm_error)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
+            }
+        }
+    }
+    
+    /**
+     * Show success dialog after contribution.
+     */
+    private fun showSuccessDialog() {
+        val dialogBinding = DialogOsmSuccessBinding.inflate(LayoutInflater.from(this))
+        
+        val count = osmContributor.getContributionCount()
+        dialogBinding.contributionCount.text = if (count == 1) {
+            getString(R.string.osm_first_contribution)
+        } else {
+            getString(R.string.osm_contribution_count, count)
+        }
+        
+        val dialog = AlertDialog.Builder(this, R.style.Theme_SpeedLimit_Dialog)
+            .setView(dialogBinding.root)
+            .create()
+        
+        dialogBinding.closeButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        
+        dialog.show()
+    }
+    
+    /**
+     * Show dialog when no way ID is available.
+     */
+    private fun showNoWayIdDialog() {
+        AlertDialog.Builder(this, R.style.Theme_SpeedLimit_Dialog)
+            .setTitle("🗺️")
+            .setMessage("Keep driving until a road is detected, then try again.")
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
     }
 
     private fun dpToPx(dp: Int): Int {

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="32dp"
+    android:background="#1A1A1A"
+    android:gravity="center">
+
+    <!-- Success Animation / Emoji -->
+    <TextView
+        android:id="@+id/successEmoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎉"
+        android:textSize="72sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Thank you message -->
+    <TextView
+        android:id="@+id/successTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/osm_success_title"
+        android:textColor="#4CAF50"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/successMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/osm_success_message"
+        android:textColor="#CCCCCC"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Contribution count (for subscribers) -->
+    <TextView
+        android:id="@+id/contributionCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/osm_first_contribution"
+        android:textColor="#007BFF"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Close button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="✓"
+        android:textSize="24sp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        style="@style/Widget.Material3.Button"
+        app:backgroundTint="#4CAF50"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+</LinearLayout>
+

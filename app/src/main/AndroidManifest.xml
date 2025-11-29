@@ -52,8 +52,20 @@
         <!-- Main app screen -->
         <activity
             android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.App.Starting" />
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:launchMode="singleTask">
+            <!-- OAuth callback from OpenStreetMap -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="speedlimit"
+                    android:host="oauth"
+                    android:path="/callback" />
+            </intent-filter>
+        </activity>
 
         <!-- Foreground service for speed monitoring -->
         <service

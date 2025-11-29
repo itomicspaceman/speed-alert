@@ -76,6 +76,10 @@ class SpeedLimitProvider(private val context: Context) {
     // Current country (for display purposes)
     var currentCountryCode: String = "GB"
         private set
+    
+    // Current way ID (for crowdsourcing)
+    val currentWayId: Long
+        get() = cachedWayId ?: -1L
 
     /**
      * Get the speed limit for a given location.
