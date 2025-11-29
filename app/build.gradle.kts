@@ -15,8 +15,8 @@ android {
         applicationId = "com.speedlimit"
         minSdk = 26
         targetSdk = 35
-        versionCode = 24
-        versionName = "3.3"
+        versionCode = 25
+        versionName = "3.4"
     }
 
     buildTypes {
@@ -61,6 +61,9 @@ dependencies {
     
     // Splash screen
     implementation("androidx.core:core-splashscreen:1.0.1")
+    
+    // Chrome Custom Tabs for smoother OAuth login
+    implementation("androidx.browser:browser:1.7.0")
     
     // Coroutines for async operations
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

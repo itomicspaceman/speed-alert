@@ -387,9 +387,8 @@ class MainActivity : AppCompatActivity() {
             pendingContributionLimit = limit
             dialog.dismiss()
             
-            // Start OAuth flow
-            val intent = osmContributor.startLogin()
-            startActivity(intent)
+            // Start OAuth flow (uses Chrome Custom Tabs)
+            osmContributor.startLogin()
         }
         
         // Show "Why Connect?" info dialog
@@ -434,9 +433,8 @@ class MainActivity : AppCompatActivity() {
             pendingContributionLimit = pendingLimit
             dialog.dismiss()
             
-            // Start OAuth flow
-            val intent = osmContributor.startLogin()
-            startActivity(intent)
+            // Start OAuth flow (uses Chrome Custom Tabs)
+            osmContributor.startLogin()
         }
         
         dialogBinding.skipButton.setOnClickListener {

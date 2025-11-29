@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
@@ -77,10 +79,11 @@ class OsmContributor(private val context: Context) {
     }
 
     /**
-     * Start the OAuth2 login flow.
-     * This opens the OSM website for the user to authorize our app.
+     * Start the OAuth2 login flow using Chrome Custom Tabs.
+     * This provides a smoother in-app experience while still being secure.
+     * Falls back to regular browser if Custom Tabs not available.
      */
-    fun startLogin(): Intent {
+    fun startLogin() {
         val authUrl = Uri.parse(OSM_AUTH_URL).buildUpon()
             .appendQueryParameter("client_id", CLIENT_ID)
             .appendQueryParameter("redirect_uri", REDIRECT_URI)
@@ -88,8 +91,22 @@ class OsmContributor(private val context: Context) {
             .appendQueryParameter("scope", SCOPES)
             .build()
         
-        Log.d(TAG, "Starting OAuth flow: $authUrl")
-        return Intent(Intent.ACTION_VIEW, authUrl)
+        Log.d(TAG, "Starting OAuth flow with Custom Tabs: $authUrl")
+        
+        // Build Custom Tab with dark theme to match our app
+        val colorScheme = CustomTabColorSchemeParams.Builder()
+            .setToolbarColor(0xFF1A1A1A.toInt())  // Dark toolbar
+            .setNavigationBarColor(0xFF000000.toInt())  // Black nav bar
+            .build()
+        
+        val customTabsIntent = CustomTabsIntent.Builder()
+            .setDefaultColorSchemeParams(colorScheme)
+            .setShowTitle(true)
+            .setUrlBarHidingEnabled(true)
+            .build()
+        
+        // Launch - automatically falls back to browser if Custom Tabs unavailable
+        customTabsIntent.launchUrl(context, authUrl)
     }
 
     /**

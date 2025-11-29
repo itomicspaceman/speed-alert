@@ -45,7 +45,7 @@ object AnalyticsHelper {
             crashlytics = FirebaseCrashlytics.getInstance()
             
             // Set custom keys for Crashlytics
-            crashlytics?.setCustomKey("app_version", "3.3")
+            crashlytics?.setCustomKey("app_version", "3.4")
             
             Log.i(TAG, "Firebase Analytics and Crashlytics initialized")
         } catch (e: Exception) {

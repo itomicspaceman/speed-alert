@@ -44,7 +44,7 @@ class SettingsActivity : AppCompatActivity() {
                 showLogoutDialog()
             } else {
                 // Start OAuth flow
-                startActivity(osmContributor.startLogin())
+                osmContributor.startLogin()
             }
         }
         
