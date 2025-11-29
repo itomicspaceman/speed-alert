@@ -74,10 +74,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/connectOsmButton"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:text="@string/osm_connect_button"
-        android:textSize="15sp"
-        android:textAllCaps="false"
         style="@style/Widget.Material3.Button"
         app:backgroundTint="#4CAF50"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -99,10 +97,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submitButton"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:text="@string/osm_submit_button"
-        android:textSize="15sp"
-        android:textAllCaps="false"
         android:visibility="gone"
         style="@style/Widget.Material3.Button"
         app:backgroundTint="#4CAF50"
@@ -113,9 +109,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/cancelButton"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:text="@string/osm_cancel_button"
-        android:textSize="13sp"
         style="@style/Widget.Material3.Button.TextButton"
         android:textColor="#888888" />
 
