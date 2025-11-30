@@ -34,21 +34,21 @@ class SettingsActivity : AppCompatActivity() {
         loadSettings()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Refresh settings when returning from OsmSettingsActivity
+        loadSettings()
+    }
+
     private fun setupUI() {
         // Back button
         binding.backButton.setOnClickListener {
             finish()
         }
         
-        // OSM Account row
+        // OSM Account row - navigate to OSM Settings screen
         binding.osmAccountRow.setOnClickListener {
-            if (osmContributor.isLoggedIn()) {
-                // Show logout dialog
-                showLogoutDialog()
-            } else {
-                // Start OAuth flow
-                osmContributor.startLogin()
-            }
+            startActivity(Intent(this, OsmSettingsActivity::class.java))
         }
         
         // Contributions row - navigate to My Contributions screen
@@ -162,18 +162,6 @@ class SettingsActivity : AppCompatActivity() {
             binding.subscribeButton.visibility = View.VISIBLE
             binding.restorePurchases.visibility = View.VISIBLE
         }
-    }
-
-    private fun showLogoutDialog() {
-        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_SpeedLimit_Dialog)
-            .setTitle("🗺️")
-            .setMessage("Disconnect from OpenStreetMap?")
-            .setPositiveButton("Disconnect") { _, _ ->
-                osmContributor.logout()
-                loadSettings()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
     }
 
     private fun showSubscribePrompt() {

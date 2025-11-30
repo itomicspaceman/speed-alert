@@ -95,6 +95,12 @@
             android:name=".MyContributionsActivity"
             android:exported="false"
             android:theme="@style/Theme.SpeedLimit" />
+        
+        <!-- OSM Settings screen -->
+        <activity
+            android:name=".OsmSettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SpeedLimit" />
 
         <!-- Foreground service for speed monitoring -->
         <service

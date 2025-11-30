@@ -94,6 +94,21 @@
     <string name="contribution_success">Shared</string>
     <string name="contribution_failed">Failed</string>
     
+    <!-- OSM Settings Screen -->
+    <string name="osm_settings_connected_as">Connected as %s</string>
+    <string name="osm_settings_not_connected">Not connected</string>
+    <string name="osm_settings_not_connected_message">Connect your OpenStreetMap account to share speed limit data and help fellow drivers worldwide.</string>
+    <string name="osm_settings_connect">🗺️ Connect to OpenStreetMap</string>
+    <string name="osm_settings_view_profile">View Profile</string>
+    <string name="osm_settings_view_profile_desc">See your public OSM profile</string>
+    <string name="osm_settings_edit_history">Edit History</string>
+    <string name="osm_settings_edit_history_desc">All your contributions on OSM</string>
+    <string name="osm_settings_about">About OpenStreetMap</string>
+    <string name="osm_settings_about_desc">Learn about the community</string>
+    <string name="osm_settings_disconnect">Disconnect Account</string>
+    <string name="osm_settings_disconnect_confirm">Disconnect from OpenStreetMap?</string>
+    <string name="osm_settings_disconnect_message">You can reconnect anytime to continue sharing speed limits.</string>
+    
     <!-- App Tour -->
     <string name="tour_start_title">▶️ Start Here</string>
     <string name="tour_start_description">Tap to begin monitoring your speed</string>
