@@ -450,7 +450,7 @@ class MainActivity : AppCompatActivity() {
         val rateLimitReason = contributionLog.canSubmit(currentLatitude, currentLongitude)
         if (rateLimitReason != null) {
             rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_RATE_LIMITED, 
-                rateLimitReason, "Rejected. Please wait.")
+                rateLimitReason, getString(R.string.voice_rejected_wait))
             return
         }
         
@@ -462,14 +462,14 @@ class MainActivity : AppCompatActivity() {
                 "GPS accuracy: ${currentGpsAccuracy.toInt()}m (need <50m)"
             }
             rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_GPS_POOR,
-                accuracyMessage, "Rejected. Poor GPS accuracy.")
+                accuracyMessage, getString(R.string.voice_rejected_gps))
             return
         }
         
         // 5. Check if location is valid
         if (currentLatitude == 0.0 && currentLongitude == 0.0) {
             rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_GPS_POOR,
-                "No location available", "Rejected. No location.")
+                "No location available", getString(R.string.voice_rejected_no_location))
             return
         }
         
@@ -483,7 +483,7 @@ class MainActivity : AppCompatActivity() {
                 
                 if (roadResult == null) {
                     rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_NO_WAY,
-                        "No road detected at location", "Rejected. No road detected.")
+                        "No road detected at location", getString(R.string.voice_rejected_no_road))
                     return@launch
                 }
                 
@@ -491,7 +491,7 @@ class MainActivity : AppCompatActivity() {
                 if (!roadResult.isValidForSpeedLimit) {
                     val roadTypeName = roadResult.highwayType.replace("_", " ")
                     rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_INVALID_WAY,
-                        "Not a road ($roadTypeName)", "Rejected. Not a road.")
+                        "Not a road ($roadTypeName)", getString(R.string.voice_rejected_not_road))
                     return@launch
                 }
                 
@@ -616,11 +616,11 @@ class MainActivity : AppCompatActivity() {
                 logAttempt(limit, unit, ContributionLog.Status.SUCCESS, null)
                 
                 // Voice "Thank you!" - brief and non-distracting
-                voiceAnnouncer.speakFeedback("Thank you")
+                voiceAnnouncer.speakFeedback(getString(R.string.voice_thank_you))
             } else {
                 // OSM rejected the submission
                 rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_API_ERROR,
-                    "OSM API error", "Rejected by OpenStreetMap.")
+                    "OSM API error", getString(R.string.voice_rejected_osm))
             }
         }
     }

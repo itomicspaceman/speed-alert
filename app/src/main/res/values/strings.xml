@@ -115,6 +115,15 @@
     <string name="osm_settings_disconnect_confirm">Disconnect from OpenStreetMap?</string>
     <string name="osm_settings_disconnect_message">You can reconnect anytime to continue sharing speed limits.</string>
     
+    <!-- Voice Feedback for Contributions -->
+    <string name="voice_thank_you">Thank you</string>
+    <string name="voice_rejected_wait">Rejected. Please wait.</string>
+    <string name="voice_rejected_gps">Rejected. Poor GPS accuracy.</string>
+    <string name="voice_rejected_no_location">Rejected. No location.</string>
+    <string name="voice_rejected_no_road">Rejected. No road detected.</string>
+    <string name="voice_rejected_not_road">Rejected. Not a road.</string>
+    <string name="voice_rejected_osm">Rejected by OpenStreetMap.</string>
+    
     <!-- App Tour -->
     <string name="tour_start_title">▶️ Start Here</string>
     <string name="tour_start_description">Tap to begin monitoring your speed</string>
