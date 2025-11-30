@@ -59,8 +59,8 @@ dependencies {
     // FlexboxLayout for dynamic speed limit grid
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     
-    // Splash screen
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    // Splash screen (1.2.0+ required for branding image)
+    implementation("androidx.core:core-splashscreen:1.2.0")
     
     // Chrome Custom Tabs for smoother OAuth login
     implementation("androidx.browser:browser:1.7.0")
