@@ -53,6 +53,9 @@ class SpeedLimitProvider(private val context: Context) {
         const val CACHE_MAX_AGE_MS = 300_000L       // 5 minutes (longer since we cache more)
         const val MAX_CACHED_SEGMENTS = 100         // Limit memory usage
         
+        // User submission cache - instant gratification before Overpass syncs
+        const val USER_SUBMISSION_TTL_MS = 300_000L // 5 minutes - then defer to OSM
+        
         // Rate limit handling
         const val INITIAL_BACKOFF_MS = 30_000L
         const val MAX_BACKOFF_MS = 300_000L
@@ -80,6 +83,18 @@ class SpeedLimitProvider(private val context: Context) {
     )
     
     data class LatLon(val lat: Double, val lon: Double)
+    
+    /**
+     * User-submitted speed limit with expiry.
+     * Provides instant gratification for 5 minutes before deferring to OSM.
+     */
+    data class UserSubmission(
+        val wayId: Long,
+        val speedLimitMph: Int,
+        val timestamp: Long = System.currentTimeMillis()
+    ) {
+        fun isExpired(): Boolean = System.currentTimeMillis() - timestamp > USER_SUBMISSION_TTL_MS
+    }
     
     /**
      * Bounding box for tracking queried areas.
@@ -112,6 +127,9 @@ class SpeedLimitProvider(private val context: Context) {
     
     // Current matched segment
     private var currentSegment: RoadSegment? = null
+    
+    // User submissions cache - instant gratification before Overpass syncs
+    private val userSubmissions = mutableMapOf<Long, UserSubmission>()
     
     // Statistics
     private var totalQueriesThisSession: Int = 0
@@ -201,6 +219,13 @@ class SpeedLimitProvider(private val context: Context) {
             if (shouldPrefetch && bearing >= 0) {
                 Log.d(TAG, "Pre-fetching corridor ahead...")
                 queryCorridorAsync(lat, lon, bearing.toDouble())
+            }
+            
+            // Check for user submission override (instant gratification)
+            val userLimit = getUserSubmittedLimit(matchedSegment.wayId)
+            if (userLimit != null) {
+                Log.d(TAG, "Using USER SUBMITTED limit: $userLimit mph (way: ${matchedSegment.wayId})")
+                return@withContext userLimit
             }
             
             Log.d(TAG, "Segment MATCH: ${matchedSegment.speedLimitMph} mph (way: ${matchedSegment.wayId}) " +
@@ -626,6 +651,53 @@ class SpeedLimitProvider(private val context: Context) {
         }
         context.sendBroadcast(intent)
     }
+    
+    // ==================== USER SUBMISSION CACHE ====================
+    
+    /**
+     * Record a user-submitted speed limit for instant gratification.
+     * The submission will be used for 5 minutes before deferring to OSM.
+     * 
+     * @param wayId The OSM way ID
+     * @param speedLimitMph The speed limit in mph
+     */
+    fun recordUserSubmission(wayId: Long, speedLimitMph: Int) {
+        // Clean up expired submissions first
+        cleanupExpiredSubmissions()
+        
+        userSubmissions[wayId] = UserSubmission(wayId, speedLimitMph)
+        Log.d(TAG, "Recorded user submission: $speedLimitMph mph for way $wayId (valid for 5 min)")
+    }
+    
+    /**
+     * Get a user-submitted speed limit if it exists and hasn't expired.
+     * 
+     * @return Speed limit in mph, or null if no valid submission exists
+     */
+    private fun getUserSubmittedLimit(wayId: Long): Int? {
+        val submission = userSubmissions[wayId] ?: return null
+        
+        if (submission.isExpired()) {
+            userSubmissions.remove(wayId)
+            Log.d(TAG, "User submission for way $wayId expired, deferring to OSM")
+            return null
+        }
+        
+        return submission.speedLimitMph
+    }
+    
+    /**
+     * Clean up expired user submissions.
+     */
+    private fun cleanupExpiredSubmissions() {
+        val expiredKeys = userSubmissions.filter { it.value.isExpired() }.keys
+        expiredKeys.forEach { userSubmissions.remove(it) }
+        if (expiredKeys.isNotEmpty()) {
+            Log.d(TAG, "Cleaned up ${expiredKeys.size} expired user submissions")
+        }
+    }
+    
+    // ==================== STATISTICS ====================
     
     /**
      * Get cache statistics.
