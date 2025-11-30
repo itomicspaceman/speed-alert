@@ -364,12 +364,11 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Creates a styled TextView button for a speed limit value.
-     * Maximizes touch target for safe tapping while driving.
      * 
      * Touch target strategy:
-     * - Use padding instead of margins (padding = clickable, margins = dead space)
-     * - Use flexGrow to expand buttons to fill available width
-     * - Generous height for easy tapping
+     * - Keep original visual appearance (centered numbers with spacing)
+     * - Increase padding to expand clickable area beyond the visible text
+     * - Margins provide visual separation between buttons
      */
     private fun createSpeedLimitButton(limit: Int): TextView {
         val button = TextView(this).apply {
@@ -379,23 +378,22 @@ class MainActivity : AppCompatActivity() {
             typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
             gravity = Gravity.CENTER
             
-            // MAXIMIZED touch targets for safe driving
-            // Height: generous for easy vertical tapping
-            // Width: flexGrow expands to fill row, no dead space between buttons
-            val height = dpToPx(100)  // Tall touch target
+            // Layout: same visual appearance as before
+            val height = dpToPx(100)  // Slightly taller for easier tapping
+            val marginH = dpToPx(6)   // Visual spacing between buttons
+            val marginV = dpToPx(4)   // Visual spacing between rows
             
             layoutParams = FlexboxLayout.LayoutParams(
-                0,  // Width = 0, let flexGrow handle it
+                FlexboxLayout.LayoutParams.WRAP_CONTENT,
                 height
             ).apply {
-                // flexGrow = 1 makes each button expand equally to fill the row
-                flexGrow = 1f
-                // Tiny margin just for visual separation (1dp = minimal dead space)
-                setMargins(dpToPx(1), dpToPx(2), dpToPx(1), dpToPx(2))
+                setMargins(marginH, marginV, marginH, marginV)
+                minWidth = dpToPx(90)
             }
             
-            // Padding is INSIDE the clickable area - generous for easier tapping
-            setPadding(dpToPx(16), dpToPx(8), dpToPx(16), dpToPx(8))
+            // GENEROUS padding = larger clickable area around the number
+            // This expands the touch target without changing the visual layout
+            setPadding(dpToPx(20), dpToPx(8), dpToPx(20), dpToPx(8))
             
             // Make it clickable with visual feedback
             setBackgroundResource(android.R.drawable.list_selector_background)
