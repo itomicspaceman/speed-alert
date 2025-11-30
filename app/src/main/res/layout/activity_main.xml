@@ -73,39 +73,50 @@
 
     </LinearLayout>
 
-    <!-- Unknown Speed Limit Indicator - shows "?" when no limit detected -->
-    <TextView
-        android:id="@+id/unknownLimitIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="?"
-        android:textColor="#FFAA00"
-        android:textSize="64sp"
-        android:fontFamily="sans-serif-light"
-        android:visibility="gone"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/speedLimitContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Speed Limit Selection (FlexboxLayout for dynamic items) -->
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/speedLimitContainer"
+    <!-- Speed Limit Grid with "?" Badge -->
+    <FrameLayout
+        android:id="@+id/speedLimitGridContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
-        app:flexWrap="wrap"
-        app:justifyContent="center"
-        app:alignItems="center"
         app:layout_constraintBottom_toTopOf="@+id/toggleButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        
-        <!-- Speed limit buttons will be added dynamically -->
-        
-    </com.google.android.flexbox.FlexboxLayout>
+
+        <!-- Speed Limit Selection (FlexboxLayout for dynamic items) -->
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/speedLimitContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:flexWrap="wrap"
+            app:justifyContent="center"
+            app:alignItems="center">
+            
+            <!-- Speed limit buttons will be added dynamically -->
+            
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <!-- Small "?" Badge - shows in top-right corner when no limit detected -->
+        <TextView
+            android:id="@+id/unknownLimitIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:text="?"
+            android:textColor="#FFAA00"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-medium"
+            android:background="@drawable/badge_unknown_limit"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:visibility="gone"
+            android:elevation="4dp" />
+
+    </FrameLayout>
 
     <!-- Start/Stop Button - 135dp (reduced from 180dp) -->
     <ImageButton
