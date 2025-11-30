@@ -58,7 +58,8 @@ class SplashActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, DisclaimerActivity::class.java))
             finish()
-            // No transition animation for smooth flow
+            // Smooth fade transition (suppress deprecation - still works, replacement requires API 34+)
+            @Suppress("DEPRECATION")
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }, 1800) // 1.8 seconds total splash time
     }
