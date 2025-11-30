@@ -113,7 +113,7 @@
     <string name="tour_start_title">▶️ Start Here</string>
     <string name="tour_start_description">Tap to begin monitoring your speed</string>
     <string name="tour_limits_title">🚦 Speed Limits</string>
-    <string name="tour_limits_description">Tap any limit to share it with other drivers via OpenStreetMap</string>
+    <string name="tour_limits_description">Tap any limit to share your improvement with other drivers via OpenStreetMap</string>
     <string name="tour_floating_title">📱 Mini Mode</string>
     <string name="tour_floating_description">Float over other apps while driving</string>
     <string name="tour_settings_title">⚙️ Settings</string>
