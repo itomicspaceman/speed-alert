@@ -198,7 +198,16 @@ class MainActivity : AppCompatActivity() {
     
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent) // Update the intent for future reference
         handleOAuthIntent(intent)
+        
+        // Check if we should show the tour (from Settings -> Show Tour Again)
+        val showTour = intent.getBooleanExtra("show_tour", false)
+        if (showTour) {
+            binding.root.post {
+                startAppTour()
+            }
+        }
     }
     
     private fun handleOAuthIntent(intent: Intent?) {
