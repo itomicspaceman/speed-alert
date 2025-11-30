@@ -99,6 +99,21 @@ class SettingsActivity : AppCompatActivity() {
         binding.restorePurchases.setOnClickListener {
             // TODO: Implement restore purchases
         }
+        
+        // Show Tour Again
+        binding.showTourRow.setOnClickListener {
+            // Reset tour and navigate to MainActivity to show it
+            val tourManager = TourManager(this)
+            tourManager.resetTour()
+            
+            // Navigate to MainActivity and trigger tour
+            val intent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                putExtra("show_tour", true)
+            }
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun loadSettings() {

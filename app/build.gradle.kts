@@ -15,8 +15,8 @@ android {
         applicationId = "com.speedlimit"
         minSdk = 26
         targetSdk = 35
-        versionCode = 25
-        versionName = "3.4"
+        versionCode = 26
+        versionName = "3.5"
     }
 
     buildTypes {
@@ -85,5 +85,8 @@ dependencies {
     
     // Firebase Crashlytics - for crash and error reporting
     implementation("com.google.firebase:firebase-crashlytics")
+    
+    // TapTargetView - for feature spotlight tour
+    implementation("com.getkeepsafe.taptargetview:taptargetview:1.14.0")
 }
 

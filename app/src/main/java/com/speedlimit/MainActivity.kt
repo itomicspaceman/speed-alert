@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var osmContributor: OsmContributor
     private lateinit var contributionLog: ContributionLog
+    private lateinit var tourManager: TourManager
     private var isMonitoring = false
     private var isFlashing = false
     private var flashAnimator: ValueAnimator? = null
@@ -163,6 +164,9 @@ class MainActivity : AppCompatActivity() {
         
         // Initialize contribution log
         contributionLog = ContributionLog(this)
+        
+        // Initialize tour manager
+        tourManager = TourManager(this)
 
         setupUI()
         setupSpeedLimitGrid(currentCountryCode)
@@ -170,6 +174,26 @@ class MainActivity : AppCompatActivity() {
         
         // Handle OAuth callback if app was launched from OSM
         handleOAuthIntent(intent)
+        
+        // Show tour on first launch OR if triggered from Settings
+        val showTourFromSettings = intent?.getBooleanExtra("show_tour", false) ?: false
+        if (!tourManager.isTourCompleted() || showTourFromSettings) {
+            binding.root.post {
+                startAppTour()
+            }
+        }
+    }
+    
+    /**
+     * Start the app tour to guide new users.
+     */
+    fun startAppTour() {
+        tourManager.startTour(
+            toggleButton = binding.toggleButton,
+            speedLimitContainer = binding.speedLimitContainer,
+            floatingButton = binding.floatingModeButton,
+            settingsButton = binding.settingsButton
+        )
     }
     
     override fun onNewIntent(intent: Intent) {
