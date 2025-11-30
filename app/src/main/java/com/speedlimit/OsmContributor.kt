@@ -3,10 +3,13 @@ package com.speedlimit
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.net.Uri
 import android.util.Log
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
@@ -25,6 +28,8 @@ import java.util.concurrent.TimeUnit
  * - Zero cost to us (no backend needed)
  * - Follows OSM contribution guidelines
  * - User owns their contributions
+ * 
+ * Security: OAuth tokens are stored using EncryptedSharedPreferences (AES-256).
  */
 class OsmContributor(private val context: Context) {
 
@@ -44,13 +49,72 @@ class OsmContributor(private val context: Context) {
         private const val SCOPES = "read_prefs write_api"
         
         // SharedPreferences keys
-        private const val PREFS_NAME = "osm_auth"
+        private const val PREFS_NAME = "osm_auth_encrypted"
+        private const val OLD_PREFS_NAME = "osm_auth" // For migration
         private const val KEY_ACCESS_TOKEN = "access_token"
         private const val KEY_USERNAME = "username"
         private const val KEY_CONTRIBUTION_COUNT = "contribution_count"
     }
 
-    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences = createEncryptedPrefs()
+    
+    /**
+     * Create encrypted SharedPreferences using AES-256 encryption.
+     * Falls back to regular prefs if encryption fails (rare edge case).
+     */
+    private fun createEncryptedPrefs(): SharedPreferences {
+        return try {
+            val masterKey = MasterKey.Builder(context)
+                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                .build()
+            
+            val encryptedPrefs = EncryptedSharedPreferences.create(
+                context,
+                PREFS_NAME,
+                masterKey,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+            
+            // Migrate from old unencrypted prefs if needed
+            migrateFromOldPrefs(encryptedPrefs)
+            
+            Log.d(TAG, "Using encrypted storage for OAuth tokens")
+            encryptedPrefs
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to create encrypted prefs, falling back to standard", e)
+            // Fallback to standard prefs (should be rare)
+            context.getSharedPreferences(OLD_PREFS_NAME, Context.MODE_PRIVATE)
+        }
+    }
+    
+    /**
+     * Migrate existing OAuth tokens from old unencrypted storage to encrypted storage.
+     */
+    private fun migrateFromOldPrefs(encryptedPrefs: SharedPreferences) {
+        val oldPrefs = context.getSharedPreferences(OLD_PREFS_NAME, Context.MODE_PRIVATE)
+        
+        // Check if old prefs have data and new prefs don't
+        val oldToken = oldPrefs.getString(KEY_ACCESS_TOKEN, null)
+        val newToken = encryptedPrefs.getString(KEY_ACCESS_TOKEN, null)
+        
+        if (oldToken != null && newToken == null) {
+            Log.i(TAG, "Migrating OAuth tokens to encrypted storage")
+            
+            // Copy data to encrypted prefs
+            encryptedPrefs.edit().apply {
+                putString(KEY_ACCESS_TOKEN, oldToken)
+                putString(KEY_USERNAME, oldPrefs.getString(KEY_USERNAME, null))
+                putInt(KEY_CONTRIBUTION_COUNT, oldPrefs.getInt(KEY_CONTRIBUTION_COUNT, 0))
+                apply()
+            }
+            
+            // Clear old unencrypted prefs
+            oldPrefs.edit().clear().apply()
+            
+            Log.i(TAG, "Migration complete - old prefs cleared")
+        }
+    }
     
     private val httpClient = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)

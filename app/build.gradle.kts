@@ -88,5 +88,8 @@ dependencies {
     
     // TapTargetView - for feature spotlight tour
     implementation("com.getkeepsafe.taptargetview:taptargetview:1.14.0")
+    
+    // Jetpack Security - for encrypted storage of OAuth tokens
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 }
 
