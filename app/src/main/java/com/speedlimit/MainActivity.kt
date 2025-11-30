@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var osmContributor: OsmContributor
     private lateinit var contributionLog: ContributionLog
     private lateinit var tourManager: TourManager
+    private lateinit var speedLimitProvider: SpeedLimitProvider  // For way ID lookup when contributing
     private var isMonitoring = false
     private var isFlashing = false
     private var flashAnimator: ValueAnimator? = null
@@ -164,6 +165,9 @@ class MainActivity : AppCompatActivity() {
         
         // Initialize contribution log
         contributionLog = ContributionLog(this)
+        
+        // Initialize speed limit provider (for way ID lookup when contributing)
+        speedLimitProvider = SpeedLimitProvider(this)
         
         // Initialize tour manager
         tourManager = TourManager(this)
@@ -459,19 +463,29 @@ class MainActivity : AppCompatActivity() {
             return
         }
         
-        // 5. Check if we have a valid way ID
-        if (currentWayId <= 0) {
-            flashButton(button, false) // Red flash
-            vibrateError()
-            logAttempt(limit, unit, ContributionLog.Status.FAILED_NO_WAY, "No road detected at location")
-            return
-        }
-        
-        // 6. Check if location is valid
+        // 5. Check if location is valid
         if (currentLatitude == 0.0 && currentLongitude == 0.0) {
             flashButton(button, false) // Red flash
             vibrateError()
             logAttempt(limit, unit, ContributionLog.Status.FAILED_GPS_POOR, "No location available")
+            return
+        }
+        
+        // 6. Check if we have a valid way ID - if not, try to find one
+        if (currentWayId <= 0) {
+            // Launch coroutine to find the nearest road
+            CoroutineScope(Dispatchers.Main).launch {
+                val foundWayId = speedLimitProvider.findNearestWayId(currentLatitude, currentLongitude)
+                if (foundWayId > 0) {
+                    currentWayId = foundWayId
+                    // Now submit with the found way ID
+                    submitSpeedLimitSilently(limit, unit, button)
+                } else {
+                    flashButton(button, false) // Red flash
+                    vibrateError()
+                    logAttempt(limit, unit, ContributionLog.Status.FAILED_NO_WAY, "No road detected at location")
+                }
+            }
             return
         }
         

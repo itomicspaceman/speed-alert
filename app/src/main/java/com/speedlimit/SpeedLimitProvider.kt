@@ -130,8 +130,13 @@ class SpeedLimitProvider(private val context: Context) {
         private set
     
     // Current way ID (for crowdsourcing)
+    // Note: This may be -1 if no road with maxspeed found - use findNearestWayId() for contributions
     val currentWayId: Long
-        get() = currentSegment?.wayId ?: -1L
+        get() = currentSegment?.wayId ?: lastFoundWayId ?: -1L
+    
+    // Last found way ID from any query (including contribution lookups)
+    private var lastFoundWayId: Long? = null
+    private var lastFoundWayLocation: LatLon? = null
 
     /**
      * Get the speed limit for a given location.
@@ -601,5 +606,73 @@ class SpeedLimitProvider(private val context: Context) {
             val remaining = ((rateLimitEndTime - System.currentTimeMillis()) / 1000).toInt()
             "API paused (${remaining}s)"
         } else null
+    }
+    
+    /**
+     * Find the nearest road (way) at a location for crowdsourcing purposes.
+     * This queries ANY road, not just ones with maxspeed tags.
+     * Call this before contributing a speed limit.
+     * 
+     * @return Way ID of nearest road, or -1 if none found
+     */
+    suspend fun findNearestWayId(lat: Double, lon: Double): Long = withContext(Dispatchers.IO) {
+        // First check if we're close to the last found location
+        val lastLoc = lastFoundWayLocation
+        val lastWay = lastFoundWayId
+        if (lastLoc != null && lastWay != null) {
+            val dist = calculateDistance(lat, lon, lastLoc.lat, lastLoc.lon)
+            if (dist < 50) {  // Within 50m of last lookup
+                Log.d(TAG, "Using cached way ID: $lastWay (${dist.toInt()}m from last lookup)")
+                return@withContext lastWay
+            }
+        }
+        
+        // Query for ANY highway (road) near this location, not just ones with maxspeed
+        val query = """
+            [out:json][timeout:10];
+            way(around:30,$lat,$lon)["highway"];
+            out ids;
+        """.trimIndent()
+        
+        Log.d(TAG, "Finding nearest road for contribution at $lat, $lon")
+        
+        try {
+            val url = "$OVERPASS_API_URL?data=${java.net.URLEncoder.encode(query, "UTF-8")}"
+            
+            val request = Request.Builder()
+                .url(url)
+                .header("User-Agent", "SpeedLimit/3.5 (Android App; https://github.com/itomicspaceman/speed-limit)")
+                .build()
+
+            val response = httpClient.newCall(request).execute()
+            
+            if (!response.isSuccessful) {
+                Log.e(TAG, "Road lookup failed: ${response.code}")
+                return@withContext -1L
+            }
+
+            val responseBody = response.body?.string() ?: return@withContext -1L
+            val json = JSONObject(responseBody)
+            val elements = json.optJSONArray("elements")
+            
+            if (elements == null || elements.length() == 0) {
+                Log.w(TAG, "No roads found at location")
+                return@withContext -1L
+            }
+            
+            // Get the first (nearest) way ID
+            val wayId = elements.getJSONObject(0).getLong("id")
+            
+            // Cache this for nearby future lookups
+            lastFoundWayId = wayId
+            lastFoundWayLocation = LatLon(lat, lon)
+            
+            Log.d(TAG, "Found road for contribution: way $wayId")
+            return@withContext wayId
+            
+        } catch (e: Exception) {
+            Log.e(TAG, "Error finding road", e)
+            return@withContext -1L
+        }
     }
 }
