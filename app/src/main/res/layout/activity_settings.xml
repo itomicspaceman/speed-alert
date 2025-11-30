@@ -373,10 +373,15 @@
             android:padding="16dp"
             android:layout_marginTop="8dp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#333333"
+        <!-- OTHER SECTION -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OTHER"
+            android:textColor="#888888"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp" />
 
@@ -416,11 +421,10 @@
                 android:textSize="24sp" />
         </LinearLayout>
 
-        <!-- Spacer to push branding to bottom -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="1dp"
+            android:background="#333333" />
 
         <!-- Branding -->
         <TextView
@@ -431,7 +435,7 @@
             android:textSize="12sp"
             android:layout_gravity="center"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="32dp" />
 
     </LinearLayout>
 </ScrollView>
