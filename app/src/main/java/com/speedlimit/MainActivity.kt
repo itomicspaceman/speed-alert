@@ -21,6 +21,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.WindowManager
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
