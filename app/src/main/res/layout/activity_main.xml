@@ -73,6 +73,21 @@
 
     </LinearLayout>
 
+    <!-- Unknown Speed Limit Indicator - shows "?" when no limit detected -->
+    <TextView
+        android:id="@+id/unknownLimitIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="?"
+        android:textColor="#FFAA00"
+        android:textSize="64sp"
+        android:fontFamily="sans-serif-light"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/speedLimitContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Speed Limit Selection (FlexboxLayout for dynamic items) -->
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/speedLimitContainer"

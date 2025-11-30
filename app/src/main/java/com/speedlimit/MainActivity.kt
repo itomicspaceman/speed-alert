@@ -899,6 +899,13 @@ class MainActivity : AppCompatActivity() {
         // Update unit label
         binding.currentSpeedUnit.text = SpeedUnitHelper.getUnitLabel(countryCode)
         
+        // Show/hide unknown limit indicator
+        if (speedLimitMph <= 0) {
+            binding.unknownLimitIndicator.visibility = View.VISIBLE
+        } else {
+            binding.unknownLimitIndicator.visibility = View.GONE
+        }
+        
         // Highlight matching speed limit button
         speedLimitButtons.forEachIndexed { index, button ->
             val limitValue = currentDisplayLimits.getOrNull(index) ?: 0
@@ -951,6 +958,7 @@ class MainActivity : AppCompatActivity() {
         binding.currentSpeedText.text = "0"
         binding.currentSpeedText.setTextColor(Color.WHITE)
         speedLimitButtons.forEach { it.setTextColor(Color.WHITE) }
+        binding.unknownLimitIndicator.visibility = View.GONE
     }
 }
 
