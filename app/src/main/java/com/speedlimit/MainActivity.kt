@@ -471,16 +471,9 @@ class MainActivity : AppCompatActivity() {
             return
         }
         
-        // 6. Validate speed limit value is reasonable
-        val speedValidationError = speedLimitProvider.validateSpeedLimit(limit, currentCountryCode)
-        if (speedValidationError != null) {
-            flashButton(button, false) // Red flash
-            vibrateError()
-            logAttempt(limit, unit, ContributionLog.Status.FAILED_API_ERROR, speedValidationError)
-            return
-        }
+        // Note: Speed value validation not needed - UI only offers pre-defined valid limits
         
-        // 7. Check if we have a valid way ID - if not, try to find one with validation
+        // 6. Check if we have a valid way ID - if not, try to find one with validation
         if (currentWayId <= 0) {
             // Launch coroutine to find and validate the nearest road
             CoroutineScope(Dispatchers.Main).launch {

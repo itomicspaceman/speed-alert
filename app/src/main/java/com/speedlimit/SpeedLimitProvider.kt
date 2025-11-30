@@ -761,29 +761,4 @@ class SpeedLimitProvider(private val context: Context) {
         return true
     }
     
-    /**
-     * Validate a speed limit value is reasonable.
-     * @param speedMph Speed in mph
-     * @param countryCode Country for context
-     * @return Error message if invalid, null if valid
-     */
-    fun validateSpeedLimit(speedMph: Int, countryCode: String): String? {
-        val usesMph = SpeedUnitHelper.usesMph(countryCode)
-        
-        // Convert to display units for error messages
-        val displaySpeed = if (usesMph) speedMph else SpeedUnitHelper.mphToKmh(speedMph)
-        val unit = if (usesMph) "mph" else "km/h"
-        
-        // Minimum speed limit (5 mph / 10 km/h)
-        if (speedMph < 5) {
-            return "Speed limit too low ($displaySpeed $unit)"
-        }
-        
-        // Maximum speed limit (85 mph / 140 km/h) - highest in world is ~160 km/h
-        if (speedMph > 85) {
-            return "Speed limit too high ($displaySpeed $unit)"
-        }
-        
-        return null  // Valid
-    }
 }
