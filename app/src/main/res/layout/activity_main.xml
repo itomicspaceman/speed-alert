@@ -9,32 +9,32 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <!-- Settings Button (top-left) -->
+    <!-- Settings Button (top-left) - 72dp for easy tapping -->
     <ImageButton
         android:id="@+id/settingsButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:src="@drawable/ic_settings"
         android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
+        android:padding="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:contentDescription="Settings" />
 
-    <!-- Floating Mode Button (top-right, below status bar) -->
+    <!-- Floating Mode Button (top-right) - 72dp for easy tapping -->
     <ImageButton
         android:id="@+id/floatingModeButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:src="@drawable/ic_floating"
         android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:padding="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/floating_mode"
@@ -92,11 +92,11 @@
         
     </com.google.android.flexbox.FlexboxLayout>
 
-    <!-- Start/Stop Button -->
+    <!-- Start/Stop Button - 135dp (reduced from 180dp) -->
     <ImageButton
         android:id="@+id/toggleButton"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="135dp"
+        android:layout_height="135dp"
         android:src="@drawable/ic_play"
         android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackgroundBorderless"
