@@ -449,30 +449,27 @@ class MainActivity : AppCompatActivity() {
         // 3. Check rate limiting (time + distance)
         val rateLimitReason = contributionLog.canSubmit(currentLatitude, currentLongitude)
         if (rateLimitReason != null) {
-            flashButton(button, false) // Red flash
-            vibrateError()
-            logAttempt(limit, unit, ContributionLog.Status.FAILED_RATE_LIMITED, rateLimitReason)
+            rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_RATE_LIMITED, 
+                rateLimitReason, "Rejected. Please wait.")
             return
         }
         
         // 4. Check GPS accuracy
         if (currentGpsAccuracy > 50f || currentGpsAccuracy == Float.MAX_VALUE) {
-            flashButton(button, false) // Red flash
-            vibrateError()
             val accuracyMessage = if (currentGpsAccuracy >= Float.MAX_VALUE - 1) {
                 "GPS not available yet"
             } else {
                 "GPS accuracy: ${currentGpsAccuracy.toInt()}m (need <50m)"
             }
-            logAttempt(limit, unit, ContributionLog.Status.FAILED_GPS_POOR, accuracyMessage)
+            rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_GPS_POOR,
+                accuracyMessage, "Rejected. Poor GPS accuracy.")
             return
         }
         
         // 5. Check if location is valid
         if (currentLatitude == 0.0 && currentLongitude == 0.0) {
-            flashButton(button, false) // Red flash
-            vibrateError()
-            logAttempt(limit, unit, ContributionLog.Status.FAILED_GPS_POOR, "No location available")
+            rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_GPS_POOR,
+                "No location available", "Rejected. No location.")
             return
         }
         
@@ -485,19 +482,16 @@ class MainActivity : AppCompatActivity() {
                 val roadResult = speedLimitProvider.findNearestRoad(currentLatitude, currentLongitude)
                 
                 if (roadResult == null) {
-                    flashButton(button, false) // Red flash
-                    vibrateError()
-                    logAttempt(limit, unit, ContributionLog.Status.FAILED_NO_WAY, "No road detected at location")
+                    rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_NO_WAY,
+                        "No road detected at location", "Rejected. No road detected.")
                     return@launch
                 }
                 
                 // Check if this road type is appropriate for speed limits
                 if (!roadResult.isValidForSpeedLimit) {
-                    flashButton(button, false) // Red flash
-                    vibrateError()
                     val roadTypeName = roadResult.highwayType.replace("_", " ")
-                    logAttempt(limit, unit, ContributionLog.Status.FAILED_INVALID_WAY, 
-                        "Not a road (${roadTypeName})")
+                    rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_INVALID_WAY,
+                        "Not a road ($roadTypeName)", "Rejected. Not a road.")
                     return@launch
                 }
                 
@@ -624,11 +618,28 @@ class MainActivity : AppCompatActivity() {
                 // Voice "Thank you!" - brief and non-distracting
                 voiceAnnouncer.speakFeedback("Thank you")
             } else {
-                flashButton(button, false) // Red flash
-                vibrateError()
-                logAttempt(limit, unit, ContributionLog.Status.FAILED_API_ERROR, "OSM API error")
+                // OSM rejected the submission
+                rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_API_ERROR,
+                    "OSM API error", "Rejected by OpenStreetMap.")
             }
         }
+    }
+    
+    /**
+     * Handle a rejected contribution with visual, haptic, voice feedback and logging.
+     */
+    private fun rejectContribution(
+        button: TextView, 
+        limit: Int, 
+        unit: String, 
+        status: ContributionLog.Status,
+        logReason: String,
+        voiceMessage: String
+    ) {
+        flashButton(button, false) // Red flash
+        vibrateError()
+        logAttempt(limit, unit, status, logReason)
+        voiceAnnouncer.speakFeedback(voiceMessage)
     }
     
     /**
