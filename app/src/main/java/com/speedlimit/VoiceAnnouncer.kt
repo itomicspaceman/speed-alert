@@ -152,6 +152,18 @@ class VoiceAnnouncer(private val context: Context) : TextToSpeech.OnInitListener
         if (!isInitialized) return
         speak(text)
     }
+    
+    /**
+     * Speak a short feedback message (for contributions, etc.).
+     * This is NOT gated by premium - it's brief positive feedback for everyone.
+     * Uses device's default language via TTS.
+     */
+    fun speakFeedback(text: String) {
+        if (!isInitialized) return
+        
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "feedback_announcement")
+        Log.d(TAG, "Speaking feedback: $text")
+    }
 
     /**
      * Speak the given text.

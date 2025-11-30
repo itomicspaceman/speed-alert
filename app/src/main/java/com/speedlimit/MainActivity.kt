@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var contributionLog: ContributionLog
     private lateinit var tourManager: TourManager
     private lateinit var speedLimitProvider: SpeedLimitProvider  // For way ID lookup when contributing
+    private lateinit var voiceAnnouncer: VoiceAnnouncer  // For "Thank you!" on successful contribution
     private var isMonitoring = false
     private var isFlashing = false
     private var flashAnimator: ValueAnimator? = null
@@ -168,6 +169,9 @@ class MainActivity : AppCompatActivity() {
         
         // Initialize speed limit provider (for way ID lookup when contributing)
         speedLimitProvider = SpeedLimitProvider(this)
+        
+        // Initialize voice announcer (for "Thank you!" on successful contribution)
+        voiceAnnouncer = VoiceAnnouncer(this)
         
         // Initialize tour manager
         tourManager = TourManager(this)
@@ -288,6 +292,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         stopFlashing()
+        voiceAnnouncer.shutdown()
     }
 
     private fun setupUI() {
@@ -615,6 +620,9 @@ class MainActivity : AppCompatActivity() {
                 flashButton(button, true) // Green flash
                 vibrateSuccess()
                 logAttempt(limit, unit, ContributionLog.Status.SUCCESS, null)
+                
+                // Voice "Thank you!" - brief and non-distracting
+                voiceAnnouncer.speakFeedback("Thank you")
             } else {
                 flashButton(button, false) // Red flash
                 vibrateError()
