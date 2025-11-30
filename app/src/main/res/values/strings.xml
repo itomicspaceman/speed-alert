@@ -37,9 +37,15 @@
     <string name="settings_osm_connected">Connected as %s</string>
     <string name="settings_contributions">Contributions</string>
     <string name="settings_voice">Voice Announcements</string>
+    <string name="settings_voice_desc">Spoken alerts for speed limit changes</string>
     <string name="settings_voice_limit_change">Limit changes</string>
     <string name="settings_voice_unknown">Unknown zones</string>
     <string name="settings_voice_over_limit">Over limit</string>
+    <string name="settings_customization">Customization</string>
+    <string name="settings_customization_desc">Fonts, themes, and display options</string>
+    <string name="settings_ad_free">Ad-Free Experience</string>
+    <string name="settings_ad_free_desc">No interruptions, ever</string>
+    <string name="settings_coming_soon">Coming soon</string>
     <string name="settings_subscribe">👑 Unlock Premium</string>
     <string name="settings_restore">Restore Purchases</string>
     
