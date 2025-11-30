@@ -365,10 +365,12 @@ class MainActivity : AppCompatActivity() {
     /**
      * Creates a styled TextView button for a speed limit value.
      * 
-     * Touch target strategy:
-     * - Keep original visual appearance (centered numbers with spacing)
-     * - Increase padding to expand clickable area beyond the visible text
-     * - Margins provide visual separation between buttons
+     * Layout strategy for international flexibility:
+     * - FlexboxLayout handles wrapping naturally based on content width
+     * - 2-digit numbers (mph): typically fit 3 per row
+     * - 3-digit numbers (km/h like 100, 120): naturally take more space, may fit 2-3 per row
+     * - Moderate padding expands touch target without forcing layout changes
+     * - Works for 5-7 speed limits across different countries
      */
     private fun createSpeedLimitButton(limit: Int): TextView {
         val button = TextView(this).apply {
@@ -378,22 +380,26 @@ class MainActivity : AppCompatActivity() {
             typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
             gravity = Gravity.CENTER
             
-            // Layout: same visual appearance as before
-            val height = dpToPx(100)  // Slightly taller for easier tapping
-            val marginH = dpToPx(6)   // Visual spacing between buttons
-            val marginV = dpToPx(4)   // Visual spacing between rows
+            // Height: generous for easy tapping
+            val height = dpToPx(95)
+            
+            // Margins: visual spacing between buttons (small = less dead space)
+            val marginH = dpToPx(8)
+            val marginV = dpToPx(6)
             
             layoutParams = FlexboxLayout.LayoutParams(
                 FlexboxLayout.LayoutParams.WRAP_CONTENT,
                 height
             ).apply {
                 setMargins(marginH, marginV, marginH, marginV)
-                minWidth = dpToPx(90)
+                // No minWidth - let content determine width naturally
+                // This allows 3-digit numbers to be wider than 2-digit
             }
             
-            // GENEROUS padding = larger clickable area around the number
-            // This expands the touch target without changing the visual layout
-            setPadding(dpToPx(20), dpToPx(8), dpToPx(20), dpToPx(8))
+            // Padding: expands touch target (clickable area)
+            // Horizontal: generous for easier side tapping
+            // Vertical: moderate, height already generous
+            setPadding(dpToPx(14), dpToPx(6), dpToPx(14), dpToPx(6))
             
             // Make it clickable with visual feedback
             setBackgroundResource(android.R.drawable.list_selector_background)
