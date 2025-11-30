@@ -157,16 +157,21 @@ class MyContributionsActivity : AppCompatActivity() {
                     locationText.visibility = View.GONE
                 }
 
-                // Time
+                // Time - always show date and time
                 val date = Date(attempt.timestamp)
                 val today = Calendar.getInstance()
                 val attemptCal = Calendar.getInstance().apply { time = date }
                 
-                timeText.text = if (today.get(Calendar.DAY_OF_YEAR) == attemptCal.get(Calendar.DAY_OF_YEAR) &&
-                    today.get(Calendar.YEAR) == attemptCal.get(Calendar.YEAR)) {
-                    timeFormat.format(date)
-                } else {
-                    "${dateFormat.format(date)}, ${timeFormat.format(date)}"
+                val isToday = today.get(Calendar.DAY_OF_YEAR) == attemptCal.get(Calendar.DAY_OF_YEAR) &&
+                    today.get(Calendar.YEAR) == attemptCal.get(Calendar.YEAR)
+                
+                val isYesterday = today.get(Calendar.DAY_OF_YEAR) - 1 == attemptCal.get(Calendar.DAY_OF_YEAR) &&
+                    today.get(Calendar.YEAR) == attemptCal.get(Calendar.YEAR)
+                
+                timeText.text = when {
+                    isToday -> "Today, ${timeFormat.format(date)}"
+                    isYesterday -> "Yesterday, ${timeFormat.format(date)}"
+                    else -> "${dateFormat.format(date)}, ${timeFormat.format(date)}"
                 }
             }
         }

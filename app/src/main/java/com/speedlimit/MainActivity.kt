@@ -427,11 +427,15 @@ class MainActivity : AppCompatActivity() {
         }
         
         // 4. Check GPS accuracy
-        if (currentGpsAccuracy > 50f) {
+        if (currentGpsAccuracy > 50f || currentGpsAccuracy == Float.MAX_VALUE) {
             flashButton(button, false) // Red flash
             vibrateError()
-            logAttempt(limit, unit, ContributionLog.Status.FAILED_GPS_POOR, 
-                "GPS accuracy: ${currentGpsAccuracy.toInt()}m (need <50m)")
+            val accuracyMessage = if (currentGpsAccuracy >= Float.MAX_VALUE - 1) {
+                "GPS not available yet"
+            } else {
+                "GPS accuracy: ${currentGpsAccuracy.toInt()}m (need <50m)"
+            }
+            logAttempt(limit, unit, ContributionLog.Status.FAILED_GPS_POOR, accuracyMessage)
             return
         }
         
