@@ -159,6 +159,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Keep screen on while app is visible (like Waze/Google Maps)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         // Initialize Firebase Analytics and Crashlytics
         AnalyticsHelper.initialize(this)
         
