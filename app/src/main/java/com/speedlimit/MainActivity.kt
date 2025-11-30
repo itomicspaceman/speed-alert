@@ -471,20 +471,41 @@ class MainActivity : AppCompatActivity() {
             return
         }
         
-        // 6. Check if we have a valid way ID - if not, try to find one
+        // 6. Validate speed limit value is reasonable
+        val speedValidationError = speedLimitProvider.validateSpeedLimit(limit, currentCountryCode)
+        if (speedValidationError != null) {
+            flashButton(button, false) // Red flash
+            vibrateError()
+            logAttempt(limit, unit, ContributionLog.Status.FAILED_API_ERROR, speedValidationError)
+            return
+        }
+        
+        // 7. Check if we have a valid way ID - if not, try to find one with validation
         if (currentWayId <= 0) {
-            // Launch coroutine to find the nearest road
+            // Launch coroutine to find and validate the nearest road
             CoroutineScope(Dispatchers.Main).launch {
-                val foundWayId = speedLimitProvider.findNearestWayId(currentLatitude, currentLongitude)
-                if (foundWayId > 0) {
-                    currentWayId = foundWayId
-                    // Now submit with the found way ID
-                    submitSpeedLimitSilently(limit, unit, button)
-                } else {
+                val roadResult = speedLimitProvider.findNearestRoad(currentLatitude, currentLongitude)
+                
+                if (roadResult == null) {
                     flashButton(button, false) // Red flash
                     vibrateError()
                     logAttempt(limit, unit, ContributionLog.Status.FAILED_NO_WAY, "No road detected at location")
+                    return@launch
                 }
+                
+                // Check if this road type is appropriate for speed limits
+                if (!roadResult.isValidForSpeedLimit) {
+                    flashButton(button, false) // Red flash
+                    vibrateError()
+                    val roadTypeName = roadResult.highwayType.replace("_", " ")
+                    logAttempt(limit, unit, ContributionLog.Status.FAILED_INVALID_WAY, 
+                        "Not a road (${roadTypeName})")
+                    return@launch
+                }
+                
+                // All good - submit
+                currentWayId = roadResult.wayId
+                submitSpeedLimitSilently(limit, unit, button)
             }
             return
         }

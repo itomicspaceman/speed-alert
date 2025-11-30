@@ -137,6 +137,44 @@ class SpeedLimitProvider(private val context: Context) {
     // Last found way ID from any query (including contribution lookups)
     private var lastFoundWayId: Long? = null
     private var lastFoundWayLocation: LatLon? = null
+    private var lastFoundHighwayType: String? = null
+    
+    /**
+     * Highway types that are appropriate for speed limits.
+     * Based on OSM highway classification.
+     */
+    private val VALID_SPEED_LIMIT_HIGHWAYS = setOf(
+        "motorway", "motorway_link",
+        "trunk", "trunk_link",
+        "primary", "primary_link",
+        "secondary", "secondary_link",
+        "tertiary", "tertiary_link",
+        "unclassified",
+        "residential",
+        "living_street",
+        "service"  // Parking lots etc - some have speed limits
+    )
+    
+    /**
+     * Highway types that should NOT have speed limits.
+     */
+    private val INVALID_SPEED_LIMIT_HIGHWAYS = setOf(
+        "footway", "pedestrian", "path", "steps", "corridor",
+        "cycleway", "bridleway", "track",
+        "bus_guideway", "raceway",
+        "proposed", "construction",
+        "platform", "rest_area"
+    )
+    
+    /**
+     * Result from finding nearest road for contributions.
+     */
+    data class NearestRoadResult(
+        val wayId: Long,
+        val highwayType: String,
+        val name: String? = null,
+        val isValidForSpeedLimit: Boolean
+    )
 
     /**
      * Get the speed limit for a given location.
@@ -611,27 +649,32 @@ class SpeedLimitProvider(private val context: Context) {
     /**
      * Find the nearest road (way) at a location for crowdsourcing purposes.
      * This queries ANY road, not just ones with maxspeed tags.
-     * Call this before contributing a speed limit.
+     * Returns detailed info including highway type for validation.
      * 
-     * @return Way ID of nearest road, or -1 if none found
+     * @return NearestRoadResult with way ID and validation info, or null if none found
      */
-    suspend fun findNearestWayId(lat: Double, lon: Double): Long = withContext(Dispatchers.IO) {
+    suspend fun findNearestRoad(lat: Double, lon: Double): NearestRoadResult? = withContext(Dispatchers.IO) {
         // First check if we're close to the last found location
         val lastLoc = lastFoundWayLocation
         val lastWay = lastFoundWayId
-        if (lastLoc != null && lastWay != null) {
+        val lastType = lastFoundHighwayType
+        if (lastLoc != null && lastWay != null && lastType != null) {
             val dist = calculateDistance(lat, lon, lastLoc.lat, lastLoc.lon)
             if (dist < 50) {  // Within 50m of last lookup
-                Log.d(TAG, "Using cached way ID: $lastWay (${dist.toInt()}m from last lookup)")
-                return@withContext lastWay
+                Log.d(TAG, "Using cached road: $lastWay ($lastType, ${dist.toInt()}m from last lookup)")
+                return@withContext NearestRoadResult(
+                    wayId = lastWay,
+                    highwayType = lastType,
+                    isValidForSpeedLimit = isValidHighwayForSpeedLimit(lastType)
+                )
             }
         }
         
-        // Query for ANY highway (road) near this location, not just ones with maxspeed
+        // Query for ANY highway (road) near this location with tags
         val query = """
             [out:json][timeout:10];
             way(around:30,$lat,$lon)["highway"];
-            out ids;
+            out tags;
         """.trimIndent()
         
         Log.d(TAG, "Finding nearest road for contribution at $lat, $lon")
@@ -648,31 +691,99 @@ class SpeedLimitProvider(private val context: Context) {
             
             if (!response.isSuccessful) {
                 Log.e(TAG, "Road lookup failed: ${response.code}")
-                return@withContext -1L
+                return@withContext null
             }
 
-            val responseBody = response.body?.string() ?: return@withContext -1L
+            val responseBody = response.body?.string() ?: return@withContext null
             val json = JSONObject(responseBody)
             val elements = json.optJSONArray("elements")
             
             if (elements == null || elements.length() == 0) {
                 Log.w(TAG, "No roads found at location")
-                return@withContext -1L
+                return@withContext null
             }
             
-            // Get the first (nearest) way ID
-            val wayId = elements.getJSONObject(0).getLong("id")
+            // Find the first valid road (prefer roads that can have speed limits)
+            for (i in 0 until elements.length()) {
+                val element = elements.getJSONObject(i)
+                val wayId = element.getLong("id")
+                val tags = element.optJSONObject("tags") ?: continue
+                val highwayType = tags.optString("highway", "")
+                val name = tags.optString("name", null)
+                
+                if (highwayType.isNotEmpty()) {
+                    val isValid = isValidHighwayForSpeedLimit(highwayType)
+                    
+                    // Cache this for nearby future lookups
+                    lastFoundWayId = wayId
+                    lastFoundWayLocation = LatLon(lat, lon)
+                    lastFoundHighwayType = highwayType
+                    
+                    Log.d(TAG, "Found road: way $wayId ($highwayType${if (name != null) ", $name" else ""}) - valid for speed limit: $isValid")
+                    
+                    return@withContext NearestRoadResult(
+                        wayId = wayId,
+                        highwayType = highwayType,
+                        name = name,
+                        isValidForSpeedLimit = isValid
+                    )
+                }
+            }
             
-            // Cache this for nearby future lookups
-            lastFoundWayId = wayId
-            lastFoundWayLocation = LatLon(lat, lon)
-            
-            Log.d(TAG, "Found road for contribution: way $wayId")
-            return@withContext wayId
+            return@withContext null
             
         } catch (e: Exception) {
             Log.e(TAG, "Error finding road", e)
-            return@withContext -1L
+            return@withContext null
         }
+    }
+    
+    /**
+     * Legacy method for backwards compatibility.
+     * @return Way ID of nearest road, or -1 if none found
+     */
+    suspend fun findNearestWayId(lat: Double, lon: Double): Long {
+        return findNearestRoad(lat, lon)?.wayId ?: -1L
+    }
+    
+    /**
+     * Check if a highway type is appropriate for speed limits.
+     */
+    private fun isValidHighwayForSpeedLimit(highwayType: String): Boolean {
+        // If it's explicitly valid, return true
+        if (highwayType in VALID_SPEED_LIMIT_HIGHWAYS) return true
+        
+        // If it's explicitly invalid, return false
+        if (highwayType in INVALID_SPEED_LIMIT_HIGHWAYS) return false
+        
+        // For unknown types, be permissive but log
+        Log.w(TAG, "Unknown highway type: $highwayType - allowing contribution")
+        return true
+    }
+    
+    /**
+     * Validate a speed limit value is reasonable.
+     * @param speedMph Speed in mph
+     * @param countryCode Country for context
+     * @return Error message if invalid, null if valid
+     */
+    fun validateSpeedLimit(speedMph: Int, countryCode: String): String? {
+        val usesMph = SpeedUnitHelper.usesMph(countryCode)
+        
+        // Convert to display units for error messages
+        val displaySpeed = if (usesMph) speedMph else SpeedUnitHelper.mphToKmh(speedMph)
+        val unit = if (usesMph) "mph" else "km/h"
+        
+        // Minimum speed limit (5 mph / 10 km/h)
+        if (speedMph < 5) {
+            return "Speed limit too low ($displaySpeed $unit)"
+        }
+        
+        // Maximum speed limit (85 mph / 140 km/h) - highest in world is ~160 km/h
+        if (speedMph > 85) {
+            return "Speed limit too high ($displaySpeed $unit)"
+        }
+        
+        return null  // Valid
     }
 }
