@@ -38,9 +38,9 @@
         android:theme="@style/Theme.SpeedLimit"
         tools:targetApi="34">
         
-        <!-- Disclaimer screen - shown on first launch -->
+        <!-- Splash screen - app entry point -->
         <activity
-            android:name=".DisclaimerActivity"
+            android:name=".SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.SpeedLimit">
             <intent-filter>
@@ -48,6 +48,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- Disclaimer screen - shown after splash -->
+        <activity
+            android:name=".DisclaimerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SpeedLimit" />
         
         <!-- Main app screen -->
         <activity
