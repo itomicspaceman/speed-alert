@@ -111,6 +111,10 @@
     <string name="osm_settings_edit_history_desc">All your contributions on OSM</string>
     <string name="osm_settings_about">About OpenStreetMap</string>
     <string name="osm_settings_about_desc">Learn about the community</string>
+    <string name="osm_settings_switch_account">Switch Account</string>
+    <string name="osm_settings_switch_account_desc">Log in as a different OSM user</string>
+    <string name="osm_settings_switch_confirm">Switch OSM Account?</string>
+    <string name="osm_settings_switch_message">You\'ll be logged out of OpenStreetMap in the browser, then you can log in with a different account.</string>
     <string name="osm_settings_disconnect">Disconnect Account</string>
     <string name="osm_settings_disconnect_confirm">Disconnect from OpenStreetMap?</string>
     <string name="osm_settings_disconnect_message">You can reconnect anytime to continue sharing speed limits.</string>
