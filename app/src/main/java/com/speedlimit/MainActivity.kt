@@ -620,6 +620,20 @@ class MainActivity : AppCompatActivity() {
                                else SpeedUnitHelper.kmhToMph(limit)
                 speedLimitProvider.recordUserSubmission(currentWayId, limitMph, currentLatitude, currentLongitude)
                 
+                // INSTANT GRATIFICATION: Immediately update the UI to show the submitted limit
+                currentDetectedLimit = limitMph
+                binding.searchingIndicator.visibility = View.GONE
+                
+                // Highlight the submitted speed limit button
+                speedLimitButtons.forEachIndexed { index, btn ->
+                    val limitValue = currentDisplayLimits.getOrNull(index) ?: 0
+                    if (limitValue == limit) {
+                        btn.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.info_blue))
+                    } else {
+                        btn.setTextColor(Color.WHITE)
+                    }
+                }
+                
                 // Voice "Thank you!" - brief and non-distracting
                 voiceAnnouncer.speakFeedback(getString(R.string.voice_thank_you))
             } else {
