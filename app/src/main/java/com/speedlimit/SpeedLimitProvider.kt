@@ -292,14 +292,20 @@ class SpeedLimitProvider(private val context: Context) {
         
         // Log why we're querying
         if (needsPeriodicRefresh) {
-            Log.d(TAG, "Periodic cache refresh triggered (${(now - lastCacheRefreshTime) / 1000}s since last)")
+            Log.i(TAG, "=== PERIODIC REFRESH: Clearing cache and re-querying ===")
+            // Clear the cache to force fresh road detection
+            cachedSegments.clear()
+        } else if (matchedSegment == null) {
+            Log.d(TAG, "No segment match in cache, querying API...")
         }
         
-        // No cached segment matches - need to query
-        Log.d(TAG, "No segment match, querying API...")
-        
         try {
-            val result = if (bearing >= 0) {
+            // For periodic refresh, use point query for more accurate local road detection
+            // Corridor query might miss roads perpendicular to travel direction
+            val result = if (needsPeriodicRefresh) {
+                Log.d(TAG, "Using POINT query for periodic refresh")
+                queryPoint(lat, lon)
+            } else if (bearing >= 0) {
                 queryCorridor(lat, lon, bearing.toDouble())
             } else {
                 // No bearing available - fall back to point query
@@ -495,9 +501,10 @@ class SpeedLimitProvider(private val context: Context) {
                     ?: continue
                 
                 // Get road name, ref (code), and type for debug display
-                val roadName = tags.optString("name", null)
-                val roadRef = tags.optString("ref", null)  // Road code like "B3082"
-                val highwayType = tags.optString("highway", null)
+                // Note: optString returns "" for missing keys, so we convert to null
+                val roadName = tags.optString("name", "").takeIf { it.isNotEmpty() }
+                val roadRef = tags.optString("ref", "").takeIf { it.isNotEmpty() }  // Road code like "B3082"
+                val highwayType = tags.optString("highway", "").takeIf { it.isNotEmpty() }
                 
                 // Get geometry (list of coordinates)
                 val geometry = mutableListOf<LatLon>()
@@ -513,6 +520,7 @@ class SpeedLimitProvider(private val context: Context) {
                 }
                 
                 if (geometry.isNotEmpty()) {
+                    Log.d(TAG, "Parsed segment: ${roadName ?: "unnamed"} (${roadRef ?: "no ref"}) way:$wayId, ${speedLimitMph}mph, ${geometry.size} points")
                     segments.add(RoadSegment(
                         wayId = wayId,
                         speedLimitMph = speedLimitMph,
@@ -523,6 +531,8 @@ class SpeedLimitProvider(private val context: Context) {
                     ))
                 }
             }
+            
+            Log.i(TAG, "Parsed ${segments.size} segments from API response")
             
         } catch (e: Exception) {
             Log.e(TAG, "Error parsing segments", e)
@@ -564,12 +574,22 @@ class SpeedLimitProvider(private val context: Context) {
         var bestMatch: RoadSegment? = null
         var bestDistance = Double.MAX_VALUE
         
+        // Log all candidates for debugging
+        val candidates = mutableListOf<String>()
+        
         for (segment in cachedSegments) {
             val distance = distanceToSegment(lat, lon, segment.geometry)
-            if (distance < bestDistance && distance <= SEGMENT_MATCH_DISTANCE) {
-                bestDistance = distance
-                bestMatch = segment
+            if (distance <= SEGMENT_MATCH_DISTANCE) {
+                candidates.add("${segment.name ?: "unnamed"}(${segment.ref ?: "no ref"}) way:${segment.wayId} @ ${distance.toInt()}m")
+                if (distance < bestDistance) {
+                    bestDistance = distance
+                    bestMatch = segment
+                }
             }
+        }
+        
+        if (candidates.isNotEmpty()) {
+            Log.d(TAG, "Segment candidates within ${SEGMENT_MATCH_DISTANCE.toInt()}m: ${candidates.joinToString(", ")}")
         }
         
         // Update debug tracking info
@@ -580,6 +600,7 @@ class SpeedLimitProvider(private val context: Context) {
             lastFoundRoadRef = bestMatch.ref
             lastFoundHighwayType = bestMatch.highwayType
             lastRoadDistance = bestDistance
+            Log.d(TAG, "BEST MATCH: ${bestMatch.name ?: "unnamed"} (${bestMatch.ref ?: "no ref"}) way:${bestMatch.wayId} @ ${bestDistance.toInt()}m")
         }
         
         return bestMatch
