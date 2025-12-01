@@ -475,35 +475,32 @@ class MainActivity : AppCompatActivity() {
         
         // Note: Speed value validation not needed - UI only offers pre-defined valid limits
         
-        // 6. Check if we have a valid way ID - if not, try to find one with validation
-        if (currentWayId <= 0) {
-            // Launch coroutine to find and validate the nearest road
-            CoroutineScope(Dispatchers.Main).launch {
-                val roadResult = speedLimitProvider.findNearestRoad(currentLatitude, currentLongitude)
-                
-                if (roadResult == null) {
-                    rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_NO_WAY,
-                        "No road detected at location", getString(R.string.voice_rejected_no_road))
-                    return@launch
-                }
-                
-                // Check if this road type is appropriate for speed limits
-                if (!roadResult.isValidForSpeedLimit) {
-                    val roadTypeName = roadResult.highwayType.replace("_", " ")
-                    rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_INVALID_WAY,
-                        "Not a road ($roadTypeName)", getString(R.string.voice_rejected_not_road))
-                    return@launch
-                }
-                
-                // All good - submit
-                currentWayId = roadResult.wayId
-                submitSpeedLimitSilently(limit, unit, button)
+        // 6. ALWAYS do a fresh road lookup for contributions
+        // The cached currentWayId may be stale if the user has moved to a different road
+        // Accuracy is critical for OSM contributions, so we always verify
+        CoroutineScope(Dispatchers.Main).launch {
+            val roadResult = speedLimitProvider.findNearestRoad(currentLatitude, currentLongitude)
+            
+            if (roadResult == null) {
+                rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_NO_WAY,
+                    "No road detected at location", getString(R.string.voice_rejected_no_road))
+                return@launch
             }
-            return
+            
+            // Check if this road type is appropriate for speed limits
+            if (!roadResult.isValidForSpeedLimit) {
+                val roadTypeName = roadResult.highwayType.replace("_", " ")
+                rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_INVALID_WAY,
+                    "Not a road ($roadTypeName)", getString(R.string.voice_rejected_not_road))
+                return@launch
+            }
+            
+            // Update currentWayId with the fresh lookup result
+            currentWayId = roadResult.wayId
+            
+            // === ALL CHECKS PASSED - SUBMIT SILENTLY ===
+            submitSpeedLimitSilently(limit, unit, button)
         }
-        
-        // === ALL CHECKS PASSED - SUBMIT SILENTLY ===
-        submitSpeedLimitSilently(limit, unit, button)
     }
     
     /**

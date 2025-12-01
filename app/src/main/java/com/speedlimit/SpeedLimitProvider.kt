@@ -786,24 +786,15 @@ class SpeedLimitProvider(private val context: Context) {
      * This queries ANY road, not just ones with maxspeed tags.
      * Returns detailed info including highway type for validation.
      * 
+     * IMPORTANT: This always does a fresh lookup to ensure we get the correct road.
+     * Contributions are infrequent, so the API cost is acceptable for accuracy.
+     * 
      * @return NearestRoadResult with way ID and validation info, or null if none found
      */
     suspend fun findNearestRoad(lat: Double, lon: Double): NearestRoadResult? = withContext(Dispatchers.IO) {
-        // First check if we're close to the last found location
-        val lastLoc = lastFoundWayLocation
-        val lastWay = lastFoundWayId
-        val lastType = lastFoundHighwayType
-        if (lastLoc != null && lastWay != null && lastType != null) {
-            val dist = calculateDistance(lat, lon, lastLoc.lat, lastLoc.lon)
-            if (dist < 50) {  // Within 50m of last lookup
-                Log.d(TAG, "Using cached road: $lastWay ($lastType, ${dist.toInt()}m from last lookup)")
-                return@withContext NearestRoadResult(
-                    wayId = lastWay,
-                    highwayType = lastType,
-                    isValidForSpeedLimit = isValidHighwayForSpeedLimit(lastType)
-                )
-            }
-        }
+        // ALWAYS do a fresh lookup for contributions to ensure accuracy
+        // The user may have moved to a different road since the last lookup
+        // (Previously we cached within 50m, but this caused wrong road selection at intersections)
         
         // Query for ANY highway (road) near this location WITH GEOMETRY
         // We need geometry to calculate which road the user is actually on
