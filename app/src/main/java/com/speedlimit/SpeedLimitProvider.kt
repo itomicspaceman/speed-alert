@@ -805,11 +805,12 @@ class SpeedLimitProvider(private val context: Context) {
             }
         }
         
-        // Query for ANY highway (road) near this location with tags
+        // Query for ANY highway (road) near this location WITH GEOMETRY
+        // We need geometry to calculate which road the user is actually on
         val query = """
             [out:json][timeout:10];
             way(around:30,$lat,$lon)["highway"];
-            out tags;
+            out body geom;
         """.trimIndent()
         
         Log.d(TAG, "Finding nearest road for contribution at $lat, $lon")
@@ -838,7 +839,10 @@ class SpeedLimitProvider(private val context: Context) {
                 return@withContext null
             }
             
-            // Find the first valid road (prefer roads that can have speed limits)
+            // Find the CLOSEST road by perpendicular distance to the road geometry
+            var closestRoad: NearestRoadResult? = null
+            var closestDistance = Double.MAX_VALUE
+            
             for (i in 0 until elements.length()) {
                 val element = elements.getJSONObject(i)
                 val wayId = element.getLong("id")
@@ -846,17 +850,33 @@ class SpeedLimitProvider(private val context: Context) {
                 val highwayType = tags.optString("highway", "")
                 val name = tags.optString("name", null)
                 
-                if (highwayType.isNotEmpty()) {
-                    val isValid = isValidHighwayForSpeedLimit(highwayType)
-                    
-                    // Cache this for nearby future lookups
-                    lastFoundWayId = wayId
-                    lastFoundWayLocation = LatLon(lat, lon)
-                    lastFoundHighwayType = highwayType
-                    
-                    Log.d(TAG, "Found road: way $wayId ($highwayType${if (name != null) ", $name" else ""}) - valid for speed limit: $isValid")
-                    
-                    return@withContext NearestRoadResult(
+                if (highwayType.isEmpty()) continue
+                
+                // Parse geometry to calculate distance
+                val geometry = element.optJSONArray("geometry")
+                if (geometry == null || geometry.length() < 2) {
+                    Log.w(TAG, "Way $wayId has no geometry, skipping")
+                    continue
+                }
+                
+                // Build geometry list
+                val geomList = mutableListOf<LatLon>()
+                for (j in 0 until geometry.length()) {
+                    val point = geometry.getJSONObject(j)
+                    geomList.add(LatLon(point.getDouble("lat"), point.getDouble("lon")))
+                }
+                
+                // Calculate perpendicular distance to this road
+                val distance = distanceToSegment(lat, lon, geomList)
+                
+                Log.d(TAG, "Road candidate: way $wayId ($highwayType${if (name != null) ", $name" else ""}) - distance: ${distance.toInt()}m")
+                
+                // Only consider valid road types for speed limits
+                val isValid = isValidHighwayForSpeedLimit(highwayType)
+                
+                if (distance < closestDistance && isValid) {
+                    closestDistance = distance
+                    closestRoad = NearestRoadResult(
                         wayId = wayId,
                         highwayType = highwayType,
                         name = name,
@@ -865,7 +885,18 @@ class SpeedLimitProvider(private val context: Context) {
                 }
             }
             
-            return@withContext null
+            if (closestRoad != null) {
+                // Cache this for nearby future lookups
+                lastFoundWayId = closestRoad.wayId
+                lastFoundWayLocation = LatLon(lat, lon)
+                lastFoundHighwayType = closestRoad.highwayType
+                
+                Log.i(TAG, "Selected CLOSEST road: way ${closestRoad.wayId} (${closestRoad.highwayType}${if (closestRoad.name != null) ", ${closestRoad.name}" else ""}) at ${closestDistance.toInt()}m")
+            } else {
+                Log.w(TAG, "No valid roads found at location")
+            }
+            
+            return@withContext closestRoad
             
         } catch (e: Exception) {
             Log.e(TAG, "Error finding road", e)
