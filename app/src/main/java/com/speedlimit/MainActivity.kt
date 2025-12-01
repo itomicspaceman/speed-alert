@@ -884,11 +884,11 @@ class MainActivity : AppCompatActivity() {
         // Update unit label
         binding.currentSpeedUnit.text = SpeedUnitHelper.getUnitLabel(countryCode)
         
-        // Show/hide unknown limit indicator
+        // Show/hide searching indicator
         if (speedLimitMph <= 0) {
-            binding.unknownLimitIndicator.visibility = View.VISIBLE
+            binding.searchingIndicator.visibility = View.VISIBLE
         } else {
-            binding.unknownLimitIndicator.visibility = View.GONE
+            binding.searchingIndicator.visibility = View.GONE
         }
         
         // Highlight matching speed limit button
@@ -943,7 +943,7 @@ class MainActivity : AppCompatActivity() {
         binding.currentSpeedText.text = "0"
         binding.currentSpeedText.setTextColor(Color.WHITE)
         speedLimitButtons.forEach { it.setTextColor(Color.WHITE) }
-        binding.unknownLimitIndicator.visibility = View.GONE
+        binding.searchingIndicator.visibility = View.GONE
     }
 }
 

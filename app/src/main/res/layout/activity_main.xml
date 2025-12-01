@@ -48,7 +48,7 @@
         android:orientation="vertical"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/speedLimitGridContainer"
+        app:layout_constraintBottom_toTopOf="@+id/searchingIndicator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_bias="0.4">
@@ -74,50 +74,38 @@
 
     </LinearLayout>
 
-    <!-- Speed Limit Grid with "?" Badge -->
-    <FrameLayout
-        android:id="@+id/speedLimitGridContainer"
+    <!-- Searching indicator - shows when no speed limit detected -->
+    <TextView
+        android:id="@+id/searchingIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/searching_speed_limit"
+        android:textColor="#888888"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/speedLimitContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Speed Limit Grid -->
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/speedLimitContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="32dp"
+        app:flexWrap="wrap"
+        app:justifyContent="center"
+        app:alignItems="center"
         app:layout_constraintBottom_toTopOf="@+id/attributionText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
-        <!-- Speed Limit Selection (FlexboxLayout for dynamic items) -->
-        <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/speedLimitContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:flexWrap="wrap"
-            app:justifyContent="center"
-            app:alignItems="center">
-            
-            <!-- Speed limit buttons will be added dynamically -->
-            
-        </com.google.android.flexbox.FlexboxLayout>
-
-        <!-- Small "?" Badge - shows in top-right corner when no limit detected -->
-        <TextView
-            android:id="@+id/unknownLimitIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:text="?"
-            android:textColor="#FFAA00"
-            android:textSize="24sp"
-            android:fontFamily="sans-serif-medium"
-            android:background="@drawable/badge_unknown_limit"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:visibility="gone"
-            android:elevation="4dp" />
-
-    </FrameLayout>
+        
+        <!-- Speed limit buttons will be added dynamically -->
+        
+    </com.google.android.flexbox.FlexboxLayout>
 
     <!-- OSM Attribution (legally required) -->
     <TextView

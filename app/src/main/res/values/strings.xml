@@ -21,6 +21,9 @@
     <string name="disclaimer_accept">I Understand &amp; Accept</string>
     <string name="disclaimer_reject">Decline</string>
     
+    <!-- Speed Limit Status -->
+    <string name="searching_speed_limit">Searching for nearest speed limit…</string>
+    
     <!-- Floating Mode -->
     <string name="floating_mode">Floating Mode</string>
     <string name="floating_mode_hint">Double-tap to return to app</string>
