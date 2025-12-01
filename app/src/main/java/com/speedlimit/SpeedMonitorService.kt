@@ -39,6 +39,9 @@ class SpeedMonitorService : Service() {
         const val EXTRA_LATITUDE = "latitude"
         const val EXTRA_LONGITUDE = "longitude"
         const val EXTRA_ACCURACY = "accuracy"
+        const val EXTRA_ROAD_NAME = "road_name"
+        const val EXTRA_HIGHWAY_TYPE = "highway_type"
+        const val EXTRA_ROAD_DISTANCE = "road_distance"
         
         // Speed threshold before checking limits (country-aware)
         const val SPEED_CHECK_THRESHOLD_MPH = 20f      // For mph countries
@@ -380,6 +383,10 @@ class SpeedMonitorService : Service() {
                                        lat: Double = 0.0, lon: Double = 0.0, accuracy: Float = Float.MAX_VALUE) {
         val countryCode = speedLimitProvider.currentCountryCode
         val wayId = speedLimitProvider.currentWayId
+        val roadName = speedLimitProvider.currentRoadName
+        val highwayType = speedLimitProvider.currentHighwayType
+        val roadDistance = speedLimitProvider.currentRoadDistance
+        
         val intent = Intent(ACTION_SPEED_UPDATE).apply {
             putExtra(EXTRA_SPEED, speedMph)
             putExtra(EXTRA_SPEED_LIMIT, speedLimit)
@@ -389,6 +396,9 @@ class SpeedMonitorService : Service() {
             putExtra(EXTRA_LATITUDE, lat)
             putExtra(EXTRA_LONGITUDE, lon)
             putExtra(EXTRA_ACCURACY, accuracy)
+            putExtra(EXTRA_ROAD_NAME, roadName ?: "")
+            putExtra(EXTRA_HIGHWAY_TYPE, highwayType ?: "")
+            putExtra(EXTRA_ROAD_DISTANCE, roadDistance)
             setPackage(packageName)
         }
         sendBroadcast(intent)

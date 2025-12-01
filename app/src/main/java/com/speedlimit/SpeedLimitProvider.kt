@@ -80,6 +80,8 @@ class SpeedLimitProvider(private val context: Context) {
         val wayId: Long,
         val speedLimitMph: Int,
         val geometry: List<LatLon>,  // List of coordinates defining the road
+        val name: String? = null,    // Road name for debug display
+        val highwayType: String? = null, // Highway type (residential, primary, etc.)
         val timestamp: Long = System.currentTimeMillis()
     )
     
@@ -171,10 +173,24 @@ class SpeedLimitProvider(private val context: Context) {
     val currentWayId: Long
         get() = currentSegment?.wayId ?: lastFoundWayId ?: -1L
     
+    // Current road name (for debug display)
+    val currentRoadName: String?
+        get() = currentSegment?.name ?: lastFoundRoadName
+    
+    // Current highway type (for debug display)
+    val currentHighwayType: String?
+        get() = currentSegment?.highwayType ?: lastFoundHighwayType
+    
+    // Distance to current road in meters (for debug display)
+    val currentRoadDistance: Double
+        get() = lastRoadDistance
+    
     // Last found way ID from any query (including contribution lookups)
     private var lastFoundWayId: Long? = null
     private var lastFoundWayLocation: LatLon? = null
     private var lastFoundHighwayType: String? = null
+    private var lastFoundRoadName: String? = null
+    private var lastRoadDistance: Double = -1.0
     
     /**
      * Highway types that are appropriate for speed limits.
@@ -430,11 +446,15 @@ class SpeedLimitProvider(private val context: Context) {
                 val wayId = element.optLong("id", -1)
                 if (wayId == -1L) continue
                 
-                // Get speed limit
+                // Get tags
                 val tags = element.optJSONObject("tags") ?: continue
                 val maxspeed = tags.optString("maxspeed", "")
                 val speedLimitMph = SpeedUnitHelper.parseSpeedLimitToMph(maxspeed, currentCountryCode)
                     ?: continue
+                
+                // Get road name and type for debug display
+                val roadName = tags.optString("name", null)
+                val highwayType = tags.optString("highway", null)
                 
                 // Get geometry (list of coordinates)
                 val geometry = mutableListOf<LatLon>()
@@ -453,7 +473,9 @@ class SpeedLimitProvider(private val context: Context) {
                     segments.add(RoadSegment(
                         wayId = wayId,
                         speedLimitMph = speedLimitMph,
-                        geometry = geometry
+                        geometry = geometry,
+                        name = roadName,
+                        highwayType = highwayType
                     ))
                 }
             }
@@ -492,6 +514,7 @@ class SpeedLimitProvider(private val context: Context) {
     
     /**
      * Find which cached road segment the current position is on.
+     * Also updates debug tracking info (road name, distance).
      */
     private fun findMatchingSegment(lat: Double, lon: Double): RoadSegment? {
         var bestMatch: RoadSegment? = null
@@ -503,6 +526,15 @@ class SpeedLimitProvider(private val context: Context) {
                 bestDistance = distance
                 bestMatch = segment
             }
+        }
+        
+        // Update debug tracking info
+        if (bestMatch != null) {
+            lastFoundWayId = bestMatch.wayId
+            lastFoundWayLocation = LatLon(lat, lon)
+            lastFoundRoadName = bestMatch.name
+            lastFoundHighwayType = bestMatch.highwayType
+            lastRoadDistance = bestDistance
         }
         
         return bestMatch
@@ -906,6 +938,8 @@ class SpeedLimitProvider(private val context: Context) {
                 lastFoundWayId = closestRoad.wayId
                 lastFoundWayLocation = LatLon(lat, lon)
                 lastFoundHighwayType = closestRoad.highwayType
+                lastFoundRoadName = closestRoad.name
+                lastRoadDistance = closestDistance
                 
                 Log.i(TAG, "Selected CLOSEST road: way ${closestRoad.wayId} (${closestRoad.highwayType}${if (closestRoad.name != null) ", ${closestRoad.name}" else ""}) at ${closestDistance.toInt()}m")
             } else {

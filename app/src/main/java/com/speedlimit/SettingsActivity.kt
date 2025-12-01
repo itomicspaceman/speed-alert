@@ -93,6 +93,18 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        
+        // Debug Mode Toggle
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        binding.debugModeSwitch.isChecked = prefs.getBoolean("debug_mode", false)
+        
+        binding.debugModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("debug_mode", isChecked).apply()
+        }
+        
+        binding.debugModeRow.setOnClickListener {
+            binding.debugModeSwitch.toggle()
+        }
     }
 
     private fun loadSettings() {

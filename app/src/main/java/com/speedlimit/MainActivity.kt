@@ -89,6 +89,9 @@ class MainActivity : AppCompatActivity() {
                 val latitude = it.getDoubleExtra(SpeedMonitorService.EXTRA_LATITUDE, 0.0)
                 val longitude = it.getDoubleExtra(SpeedMonitorService.EXTRA_LONGITUDE, 0.0)
                 val accuracy = it.getFloatExtra(SpeedMonitorService.EXTRA_ACCURACY, Float.MAX_VALUE)
+                val roadName = it.getStringExtra(SpeedMonitorService.EXTRA_ROAD_NAME) ?: ""
+                val highwayType = it.getStringExtra(SpeedMonitorService.EXTRA_HIGHWAY_TYPE) ?: ""
+                val roadDistance = it.getDoubleExtra(SpeedMonitorService.EXTRA_ROAD_DISTANCE, -1.0)
                 
                 // Store way ID for crowdsourcing
                 if (wayId > 0) {
@@ -99,6 +102,9 @@ class MainActivity : AppCompatActivity() {
                 currentLatitude = latitude
                 currentLongitude = longitude
                 currentGpsAccuracy = accuracy
+                
+                // Update debug info banner
+                updateDebugInfo(wayId, roadName, highwayType, roadDistance)
                 
                 // Store currently detected limit for "same limit" check
                 currentDetectedLimit = speedLimitMph
@@ -961,6 +967,38 @@ class MainActivity : AppCompatActivity() {
         binding.currentSpeedText.setTextColor(Color.WHITE)
         speedLimitButtons.forEach { it.setTextColor(Color.WHITE) }
         binding.searchingIndicator.visibility = View.GONE
+    }
+    
+    /**
+     * Update the debug info banner with current road information.
+     * Only visible when debug mode is enabled in settings.
+     */
+    private fun updateDebugInfo(wayId: Long, roadName: String, highwayType: String, distance: Double) {
+        // Check if debug mode is enabled
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val debugEnabled = prefs.getBoolean("debug_mode", false)
+        
+        if (!debugEnabled) {
+            binding.debugInfoBanner.visibility = View.GONE
+            return
+        }
+        
+        binding.debugInfoBanner.visibility = View.VISIBLE
+        
+        // Road name
+        val displayName = if (roadName.isNotEmpty()) {
+            "📍 $roadName"
+        } else if (highwayType.isNotEmpty()) {
+            "📍 ${highwayType.replace("_", " ").replaceFirstChar { it.uppercase() }}"
+        } else {
+            "📍 Unknown Road"
+        }
+        binding.debugRoadName.text = displayName
+        
+        // Way ID and distance
+        val wayText = if (wayId > 0) "Way: $wayId" else "Way: —"
+        val distText = if (distance >= 0) "${distance.toInt()}m" else "—"
+        binding.debugWayInfo.text = "$wayText • Distance: $distText"
     }
 }
 

@@ -107,6 +107,42 @@
         
     </com.google.android.flexbox.FlexboxLayout>
 
+    <!-- Debug Info Banner (toggle in Settings) -->
+    <LinearLayout
+        android:id="@+id/debugInfoBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1A1A1A"
+        android:padding="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/attributionText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/debugRoadName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📍 Unknown Road"
+            android:textColor="#AAAAAA"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/debugWayInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Way: — • Distance: —"
+            android:textColor="#666666"
+            android:textSize="10sp"
+            android:fontFamily="monospace" />
+
+    </LinearLayout>
+
     <!-- OSM Attribution (legally required) -->
     <TextView
         android:id="@+id/attributionText"

@@ -146,5 +146,9 @@
     <string name="tour_settings_title">⚙️ Settings</string>
     <string name="tour_settings_description">Voice announcements, OSM account, and more</string>
     <string name="settings_show_tour">Show Tour Again</string>
+    
+    <!-- Debug Mode -->
+    <string name="settings_debug_mode">Debug Mode</string>
+    <string name="settings_debug_mode_desc">Show road name and way ID on main screen</string>
 </resources>
 
