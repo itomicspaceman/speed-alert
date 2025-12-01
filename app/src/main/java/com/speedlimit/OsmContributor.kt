@@ -355,8 +355,9 @@ class OsmContributor(private val context: Context) {
         // The maxspeed tag format depends on the unit
         val maxspeedValue = if (unit == "mph") "$speedLimit mph" else "$speedLimit"
         
-        // This is a simplified approach - in production, we'd use proper XML parsing
-        // For now, we're demonstrating the concept
+        Log.d(TAG, "Updating way $wayId with maxspeed=$maxspeedValue")
+        Log.d(TAG, "Original way XML:\n$currentWayXml")
+        
         val modifiedXml = addOrUpdateTag(currentWayXml, "maxspeed", maxspeedValue, changesetId)
         
         val request = Request.Builder()
@@ -368,7 +369,15 @@ class OsmContributor(private val context: Context) {
         
         val response = httpClient.newCall(request).execute()
         
-        return response.isSuccessful
+        if (response.isSuccessful) {
+            Log.i(TAG, "Successfully updated way $wayId with maxspeed=$maxspeedValue")
+            return true
+        } else {
+            val errorBody = response.body?.string() ?: "No error body"
+            Log.e(TAG, "Failed to update way $wayId: HTTP ${response.code}")
+            Log.e(TAG, "Error response: $errorBody")
+            return false
+        }
     }
 
     /**
@@ -386,26 +395,40 @@ class OsmContributor(private val context: Context) {
 
     /**
      * Add or update a tag in the way XML.
+     * 
+     * OSM API requires:
+     * 1. The changeset attribute to be set to the current changeset ID
+     * 2. The version attribute to remain unchanged (OSM checks it for conflicts)
+     * 3. All existing nd (node) references to be preserved
+     * 4. All existing tags to be preserved (except the one we're updating)
      */
     private fun addOrUpdateTag(wayXml: String, tagKey: String, tagValue: String, changesetId: Long): String {
-        // Add changeset attribute and update/add the tag
-        // This is simplified - production code would use proper XML parsing
-        
         var modified = wayXml
         
-        // Update changeset attribute
-        modified = modified.replace(Regex("""changeset="[^"]*""""), """changeset="$changesetId"""")
+        // Update changeset attribute in the <way> element
+        // The way element looks like: <way id="123" visible="true" version="5" changeset="old" ...>
+        modified = if (modified.contains("changeset=")) {
+            modified.replace(Regex("""changeset="[^"]*""""), """changeset="$changesetId"""")
+        } else {
+            // Add changeset attribute if not present (shouldn't happen, but be safe)
+            modified.replace(Regex("""<way\s+id="([^"]+)""""), """<way id="$1" changeset="$changesetId"""")
+        }
         
-        // Check if tag exists
-        val tagPattern = Regex("""<tag k="$tagKey" v="[^"]*"/>""")
+        // Check if tag exists and update/add it
+        val tagPattern = Regex("""<tag\s+k="$tagKey"\s+v="[^"]*"\s*/>""")
         val newTag = """<tag k="$tagKey" v="$tagValue"/>"""
         
         modified = if (tagPattern.containsMatchIn(modified)) {
+            // Update existing tag
+            Log.d(TAG, "Updating existing $tagKey tag to: $tagValue")
             modified.replace(tagPattern, newTag)
         } else {
             // Add new tag before closing </way>
-            modified.replace("</way>", "$newTag\n  </way>")
+            Log.d(TAG, "Adding new $tagKey tag: $tagValue")
+            modified.replace("</way>", "  $newTag\n  </way>")
         }
+        
+        Log.d(TAG, "Modified XML for way update:\n$modified")
         
         return modified
     }

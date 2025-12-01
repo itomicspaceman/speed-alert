@@ -54,7 +54,8 @@ class SpeedLimitProvider(private val context: Context) {
         const val MAX_CACHED_SEGMENTS = 100         // Limit memory usage
         
         // User submission cache - instant gratification before Overpass syncs
-        const val USER_SUBMISSION_TTL_MS = 300_000L // 5 minutes - then defer to OSM
+        // Overpass API can take 5-60+ minutes to sync, so we use 30 minutes
+        const val USER_SUBMISSION_TTL_MS = 1_800_000L // 30 minutes - then defer to OSM
         
         // Rate limit handling
         const val INITIAL_BACKOFF_MS = 30_000L
