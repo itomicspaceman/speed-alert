@@ -49,6 +49,9 @@ class SpeedLimitProvider(private val context: Context) {
         // Segment matching tolerance
         const val SEGMENT_MATCH_DISTANCE = 30.0     // Must be within 30m of a road segment
         
+        // Periodic refresh to detect road changes
+        const val CACHE_REFRESH_INTERVAL_MS = 15_000L  // Force refresh every 15 seconds
+        
         // Cache expiry
         const val CACHE_MAX_AGE_MS = 300_000L       // 5 minutes (longer since we cache more)
         const val MAX_CACHED_SEGMENTS = 100         // Limit memory usage
@@ -198,6 +201,7 @@ class SpeedLimitProvider(private val context: Context) {
     private var lastFoundRoadRef: String? = null
     private var lastRoadDistance: Double = -1.0
     private var lastRoadLookupTime: Long = 0L
+    private var lastCacheRefreshTime: Long = 0L  // For periodic cache refresh
     
     // Minimum interval between road lookups (for display purposes)
     private val MIN_ROAD_LOOKUP_INTERVAL_MS = 10_000L // 10 seconds
@@ -257,9 +261,13 @@ class SpeedLimitProvider(private val context: Context) {
             return@withContext findMatchingSegment(lat, lon)?.speedLimitMph
         }
         
+        // Check if we need a periodic cache refresh to detect road changes
+        val now = System.currentTimeMillis()
+        val needsPeriodicRefresh = (now - lastCacheRefreshTime) > CACHE_REFRESH_INTERVAL_MS
+        
         // Try to match current position to cached segments
         val matchedSegment = findMatchingSegment(lat, lon)
-        if (matchedSegment != null) {
+        if (matchedSegment != null && !needsPeriodicRefresh) {
             currentSegment = matchedSegment
             segmentMatchesThisSession++
             
@@ -282,6 +290,11 @@ class SpeedLimitProvider(private val context: Context) {
             return@withContext matchedSegment.speedLimitMph
         }
         
+        // Log why we're querying
+        if (needsPeriodicRefresh) {
+            Log.d(TAG, "Periodic cache refresh triggered (${(now - lastCacheRefreshTime) / 1000}s since last)")
+        }
+        
         // No cached segment matches - need to query
         Log.d(TAG, "No segment match, querying API...")
         
@@ -295,6 +308,7 @@ class SpeedLimitProvider(private val context: Context) {
             
             consecutiveErrors = 0
             clearRateLimitIfExpired()
+            lastCacheRefreshTime = System.currentTimeMillis()
             
             // Find matching segment from fresh data
             val newMatch = findMatchingSegment(lat, lon)
