@@ -81,8 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/toggleButton"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/attributionText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -118,20 +118,6 @@
             android:elevation="4dp" />
 
     </FrameLayout>
-
-    <!-- Start/Stop Button - 135dp (reduced from 180dp) -->
-    <ImageButton
-        android:id="@+id/toggleButton"
-        android:layout_width="135dp"
-        android:layout_height="135dp"
-        android:src="@drawable/ic_play"
-        android:scaleType="fitCenter"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/attributionText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/start_monitoring" />
 
     <!-- OSM Attribution (legally required) -->
     <TextView

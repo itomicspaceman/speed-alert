@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
     private var isMonitoring = false
     private var isFlashing = false
     private var flashAnimator: ValueAnimator? = null
-    private var pendingFloatingMode = false  // Flag to launch floating mode after monitoring starts
 
     // Dynamically created speed limit buttons
     private val speedLimitButtons = mutableListOf<TextView>()
@@ -201,7 +200,6 @@ class MainActivity : AppCompatActivity() {
      */
     fun startAppTour() {
         tourManager.startTour(
-            toggleButton = binding.toggleButton,
             speedLimitContainer = binding.speedLimitContainer,
             floatingButton = binding.floatingModeButton,
             settingsButton = binding.settingsButton
@@ -286,6 +284,13 @@ class MainActivity : AppCompatActivity() {
         } else {
             registerReceiver(speedUpdateReceiver, filter)
         }
+        
+        // Auto-start monitoring if not already running (like Waze/Google Maps)
+        if (!isMonitoring && !SpeedMonitorService.isRunning) {
+            checkPermissionsAndStart()
+        } else {
+            isMonitoring = SpeedMonitorService.isRunning
+        }
     }
 
     override fun onPause() {
@@ -300,22 +305,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        binding.toggleButton.setOnClickListener {
-            if (isMonitoring) {
-                stopSpeedMonitoring()
-            } else {
-                checkPermissionsAndStart()
-            }
-        }
-        
+        // Floating mode button - monitoring auto-starts, so just check overlay permission
         binding.floatingModeButton.setOnClickListener {
-            if (isMonitoring) {
-                checkOverlayPermissionAndStartFloating()
-            } else {
-                // Start monitoring first, then go to floating mode
-                pendingFloatingMode = true
-                checkPermissionsAndStart()
-            }
+            checkOverlayPermissionAndStartFloating()
         }
         
         binding.settingsButton.setOnClickListener {
@@ -753,7 +745,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkIfServiceRunning() {
         isMonitoring = SpeedMonitorService.isRunning
-        updateButtonIcon()
     }
 
     private fun checkPermissionsAndStart() {
@@ -865,13 +856,6 @@ class MainActivity : AppCompatActivity() {
         val serviceIntent = Intent(this, SpeedMonitorService::class.java)
         ContextCompat.startForegroundService(this, serviceIntent)
         isMonitoring = true
-        updateButtonIcon()
-        
-        // If user tapped floating button, proceed to floating mode now
-        if (pendingFloatingMode) {
-            pendingFloatingMode = false
-            checkOverlayPermissionAndStartFloating()
-        }
     }
 
     private fun stopSpeedMonitoring() {
@@ -880,12 +864,6 @@ class MainActivity : AppCompatActivity() {
         isMonitoring = false
         stopFlashing()
         resetSpeedDisplay()
-        updateButtonIcon()
-    }
-
-    private fun updateButtonIcon() {
-        val icon = if (isMonitoring) R.drawable.ic_stop else R.drawable.ic_play
-        binding.toggleButton.setImageResource(icon)
     }
 
     private fun updateSpeedDisplay(speedMph: Float, speedLimitMph: Int, isOverLimit: Boolean, countryCode: String) {

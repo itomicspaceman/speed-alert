@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.View
-import androidx.core.content.ContextCompat
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 
@@ -45,47 +44,20 @@ class TourManager(private val activity: Activity) {
     /**
      * Start the tour sequence.
      * 
-     * @param toggleButton The play/stop button
      * @param speedLimitContainer The speed limit grid container
      * @param floatingButton The floating overlay button
      * @param settingsButton The settings button
      * @param onTourComplete Called when tour finishes
      */
     fun startTour(
-        toggleButton: View,
         speedLimitContainer: View,
         floatingButton: View,
         settingsButton: View,
         onTourComplete: () -> Unit = {}
     ) {
-        val primaryColor = ContextCompat.getColor(activity, R.color.info_blue)
-        val textColor = android.graphics.Color.WHITE
-        val dimColor = android.graphics.Color.parseColor("#99000000")
-
         TapTargetSequence(activity)
             .targets(
-                // Step 1: Start/Stop button
-                TapTarget.forView(
-                    toggleButton,
-                    activity.getString(R.string.tour_start_title),
-                    activity.getString(R.string.tour_start_description)
-                )
-                    .outerCircleColor(R.color.info_blue)
-                    .outerCircleAlpha(0.96f)
-                    .targetCircleColor(android.R.color.white)
-                    .titleTextSize(24)
-                    .titleTextColor(android.R.color.white)
-                    .descriptionTextSize(16)
-                    .descriptionTextColor(android.R.color.white)
-                    .textTypeface(android.graphics.Typeface.SANS_SERIF)
-                    .dimColor(android.R.color.black)
-                    .drawShadow(true)
-                    .cancelable(true)
-                    .tintTarget(false)
-                    .transparentTarget(false)
-                    .targetRadius(60),
-
-                // Step 2: Speed limit grid
+                // Step 1: Speed limit grid
                 TapTarget.forView(
                     speedLimitContainer,
                     activity.getString(R.string.tour_limits_title),
@@ -105,7 +77,7 @@ class TourManager(private val activity: Activity) {
                     .transparentTarget(true)
                     .targetRadius(120),
 
-                // Step 3: Floating mode button
+                // Step 2: Floating mode button
                 TapTarget.forView(
                     floatingButton,
                     activity.getString(R.string.tour_floating_title),
@@ -125,7 +97,7 @@ class TourManager(private val activity: Activity) {
                     .transparentTarget(false)
                     .targetRadius(50),
 
-                // Step 4: Settings button
+                // Step 3: Settings button
                 TapTarget.forView(
                     settingsButton,
                     activity.getString(R.string.tour_settings_title),
