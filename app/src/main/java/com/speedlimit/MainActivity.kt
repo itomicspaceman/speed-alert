@@ -370,11 +370,9 @@ class MainActivity : AppCompatActivity() {
     /**
      * Creates a styled TextView button for a speed limit value.
      * 
-     * Layout strategy for international flexibility:
-     * - FlexboxLayout handles wrapping naturally based on content width
-     * - 2-digit numbers (mph): typically fit 3 per row
-     * - 3-digit numbers (km/h like 100, 120): naturally take more space, may fit 2-3 per row
-     * - Moderate padding expands touch target without forcing layout changes
+     * Layout strategy for responsive grid:
+     * - Portrait: 2 columns x 3 rows (flexBasisPercent ~40% forces 2 per row)
+     * - Landscape: All items in 1-2 rows (wider screen fits more)
      * - Works for 5-7 speed limits across different countries
      */
     private fun createSpeedLimitButton(limit: Int): TextView {
@@ -388,22 +386,22 @@ class MainActivity : AppCompatActivity() {
             // Height: generous for easy tapping
             val height = dpToPx(95)
             
-            // Margins: visual spacing between buttons (small = less dead space)
-            val marginH = dpToPx(8)
-            val marginV = dpToPx(6)
+            // Margins: visual spacing between buttons
+            val marginH = dpToPx(12)
+            val marginV = dpToPx(8)
             
             layoutParams = FlexboxLayout.LayoutParams(
                 FlexboxLayout.LayoutParams.WRAP_CONTENT,
                 height
             ).apply {
                 setMargins(marginH, marginV, marginH, marginV)
-                // No minWidth - let content determine width naturally
-                // This allows 3-digit numbers to be wider than 2-digit
+                // flexBasisPercent: each button takes ~40% of container width
+                // Portrait (~360dp): 2 buttons × 40% + margins = ~100% → 2 columns
+                // Landscape (~700dp): more room, flexbox fits more per row
+                flexBasisPercent = 0.38f
             }
             
             // Padding: expands touch target (clickable area)
-            // Horizontal: generous for easier side tapping
-            // Vertical: moderate, height already generous
             setPadding(dpToPx(14), dpToPx(6), dpToPx(14), dpToPx(6))
             
             // Make it clickable with visual feedback
