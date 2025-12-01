@@ -129,8 +129,8 @@
     
     <!-- Voice Feedback for Contributions -->
     <string name="voice_thank_you">Thank you</string>
-    <string name="voice_rejected_wait_time">Too soon. Wait a moment.</string>
-    <string name="voice_rejected_wait_distance">Too close to last submission.</string>
+    <string name="voice_rejected_wait_time">Wait %d seconds.</string>
+    <string name="voice_rejected_wait_distance">Move %d meters first.</string>
     <string name="voice_rejected_gps">GPS signal too weak.</string>
     <string name="voice_rejected_no_location">No GPS location.</string>
     <string name="voice_rejected_no_road">No road detected here.</string>

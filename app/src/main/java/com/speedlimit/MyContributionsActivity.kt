@@ -176,8 +176,11 @@ class MyContributionsActivity : AppCompatActivity() {
                     }
                 }
 
-                // Location/Way ID
-                if (attempt.wayName != null) {
+                // Location/Way ID - show road name and way ID
+                if (attempt.wayName != null && attempt.wayId > 0) {
+                    locationText.visibility = View.VISIBLE
+                    locationText.text = "${attempt.wayName} (${attempt.wayId})"
+                } else if (attempt.wayName != null) {
                     locationText.visibility = View.VISIBLE
                     locationText.text = attempt.wayName
                 } else if (attempt.wayId > 0) {

@@ -66,6 +66,9 @@ class MainActivity : AppCompatActivity() {
     // Current way ID for crowdsourcing (received from SpeedMonitorService)
     private var currentWayId: Long = -1L
     
+    // Current road name for logging (received from SpeedMonitorService)
+    private var currentRoadName: String? = null
+    
     // Currently detected speed limit (for "same limit" check)
     private var currentDetectedLimit: Int = -1
     
@@ -93,10 +96,11 @@ class MainActivity : AppCompatActivity() {
                 val highwayType = it.getStringExtra(SpeedMonitorService.EXTRA_HIGHWAY_TYPE) ?: ""
                 val roadDistance = it.getDoubleExtra(SpeedMonitorService.EXTRA_ROAD_DISTANCE, -1.0)
                 
-                // Store way ID for crowdsourcing
+                // Store way ID and road name for crowdsourcing
                 if (wayId > 0) {
                     currentWayId = wayId
                 }
+                currentRoadName = roadName.ifEmpty { null }
                 
                 // Store current location for validation
                 currentLatitude = latitude
@@ -449,11 +453,15 @@ class MainActivity : AppCompatActivity() {
         // 3. Check rate limiting (time + distance)
         val rateLimitReason = contributionLog.canSubmit(currentLatitude, currentLongitude)
         if (rateLimitReason != null) {
-            // Use appropriate voice message based on reason type
+            // Parse the actual value from the reason and create a specific voice message
             val voiceMessage = if (rateLimitReason.contains("Wait")) {
-                getString(R.string.voice_rejected_wait_time)
+                // Extract seconds from "Wait Xs before next submission"
+                val seconds = rateLimitReason.replace(Regex("[^0-9]"), "").toIntOrNull() ?: 0
+                getString(R.string.voice_rejected_wait_time, seconds)
             } else {
-                getString(R.string.voice_rejected_wait_distance)
+                // Extract meters from "Move Xm before next submission"
+                val meters = rateLimitReason.replace(Regex("[^0-9]"), "").toIntOrNull() ?: 0
+                getString(R.string.voice_rejected_wait_distance, meters)
             }
             rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_RATE_LIMITED, 
                 rateLimitReason, voiceMessage)
@@ -589,14 +597,14 @@ class MainActivity : AppCompatActivity() {
     /**
      * Log a contribution attempt to local storage.
      */
-    private fun logAttempt(limit: Int, unit: String, status: ContributionLog.Status, reason: String?) {
+    private fun logAttempt(limit: Int, unit: String, status: ContributionLog.Status, reason: String?, roadName: String? = currentRoadName) {
         contributionLog.logAttempt(
             ContributionLog.Attempt(
                 timestamp = System.currentTimeMillis(),
                 latitude = currentLatitude,
                 longitude = currentLongitude,
                 wayId = currentWayId,
-                wayName = null, // Could be fetched from OSM if needed
+                wayName = roadName,
                 speedLimit = limit,
                 unit = unit,
                 status = status,
