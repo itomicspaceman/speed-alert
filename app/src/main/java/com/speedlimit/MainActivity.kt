@@ -379,12 +379,12 @@ class MainActivity : AppCompatActivity() {
         val button = TextView(this).apply {
             text = limit.toString()
             setTextColor(Color.WHITE)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 72f)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 80f)
             typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
             gravity = Gravity.CENTER
             
             // Height: generous for easy tapping
-            val height = dpToPx(95)
+            val height = dpToPx(100)
             
             // Margins: visual spacing between buttons
             val marginH = dpToPx(12)
