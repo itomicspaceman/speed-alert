@@ -443,8 +443,14 @@ class MainActivity : AppCompatActivity() {
         // 3. Check rate limiting (time + distance)
         val rateLimitReason = contributionLog.canSubmit(currentLatitude, currentLongitude)
         if (rateLimitReason != null) {
+            // Use appropriate voice message based on reason type
+            val voiceMessage = if (rateLimitReason.contains("Wait")) {
+                getString(R.string.voice_rejected_wait_time)
+            } else {
+                getString(R.string.voice_rejected_wait_distance)
+            }
             rejectContribution(button, limit, unit, ContributionLog.Status.FAILED_RATE_LIMITED, 
-                rateLimitReason, getString(R.string.voice_rejected_wait))
+                rateLimitReason, voiceMessage)
             return
         }
         
