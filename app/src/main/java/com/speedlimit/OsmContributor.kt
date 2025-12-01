@@ -417,5 +417,69 @@ class OsmContributor(private val context: Context) {
         prefs.edit().clear().apply()
         Log.d(TAG, "Logged out from OSM")
     }
+
+    /**
+     * Data class for a changeset from OSM.
+     */
+    data class OsmChangeset(
+        val id: Long,
+        val createdAt: String,
+        val closedAt: String?,
+        val changesCount: Int,
+        val comment: String?
+    )
+
+    /**
+     * Fetch the user's changesets from OSM that were created by Speed/Limit app.
+     * Returns list of changesets, newest first.
+     */
+    suspend fun fetchUserChangesets(limit: Int = 20): List<OsmChangeset> = withContext(Dispatchers.IO) {
+        val username = getUsername() ?: return@withContext emptyList()
+        
+        try {
+            // OSM API: Get changesets by user, filtered by our app
+            val url = "$OSM_API_URL/changesets.json?display_name=$username&limit=$limit"
+            
+            val request = Request.Builder()
+                .url(url)
+                .build()
+            
+            val response = httpClient.newCall(request).execute()
+            
+            if (!response.isSuccessful) {
+                Log.e(TAG, "Failed to fetch changesets: ${response.code}")
+                return@withContext emptyList()
+            }
+            
+            val json = JSONObject(response.body?.string() ?: "{}")
+            val changesetsArray = json.optJSONArray("changesets") ?: return@withContext emptyList()
+            
+            val result = mutableListOf<OsmChangeset>()
+            
+            for (i in 0 until changesetsArray.length()) {
+                val cs = changesetsArray.getJSONObject(i)
+                val tags = cs.optJSONObject("tags")
+                val createdBy = tags?.optString("created_by", "") ?: ""
+                
+                // Only include changesets from our app
+                if (createdBy.contains("Speed/Limit", ignoreCase = true)) {
+                    result.add(OsmChangeset(
+                        id = cs.getLong("id"),
+                        createdAt = cs.optString("created_at", ""),
+                        closedAt = cs.optString("closed_at", null),
+                        changesCount = cs.optInt("changes_count", 0),
+                        comment = tags?.optString("comment", null)
+                    ))
+                }
+            }
+            
+            Log.d(TAG, "Fetched ${result.size} Speed/Limit changesets from OSM")
+            return@withContext result
+            
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching changesets", e)
+            return@withContext emptyList()
+        }
+    }
 }
 
