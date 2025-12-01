@@ -612,7 +612,7 @@ class MainActivity : AppCompatActivity() {
                 // Record submission for instant gratification (5 min before deferring to OSM)
                 val limitMph = if (SpeedUnitHelper.usesMph(currentCountryCode)) limit 
                                else SpeedUnitHelper.kmhToMph(limit)
-                speedLimitProvider.recordUserSubmission(currentWayId, limitMph)
+                speedLimitProvider.recordUserSubmission(currentWayId, limitMph, currentLatitude, currentLongitude)
                 
                 // Voice "Thank you!" - brief and non-distracting
                 voiceAnnouncer.speakFeedback(getString(R.string.voice_thank_you))

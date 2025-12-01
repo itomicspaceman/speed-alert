@@ -87,13 +87,31 @@ class SpeedLimitProvider(private val context: Context) {
     /**
      * User-submitted speed limit with expiry.
      * Provides instant gratification for 5 minutes before deferring to OSM.
+     * Includes location so we can match even if road isn't in cache.
      */
     data class UserSubmission(
         val wayId: Long,
         val speedLimitMph: Int,
+        val latitude: Double,
+        val longitude: Double,
         val timestamp: Long = System.currentTimeMillis()
     ) {
         fun isExpired(): Boolean = System.currentTimeMillis() - timestamp > USER_SUBMISSION_TTL_MS
+        
+        /**
+         * Check if a location is close enough to this submission (within 50m).
+         */
+        fun isNearby(lat: Double, lon: Double): Boolean {
+            val R = 6371000.0 // Earth's radius in meters
+            val dLat = Math.toRadians(lat - latitude)
+            val dLon = Math.toRadians(lon - longitude)
+            val a = kotlin.math.sin(dLat / 2) * kotlin.math.sin(dLat / 2) +
+                    kotlin.math.cos(Math.toRadians(latitude)) * kotlin.math.cos(Math.toRadians(lat)) *
+                    kotlin.math.sin(dLon / 2) * kotlin.math.sin(dLon / 2)
+            val c = 2 * kotlin.math.atan2(kotlin.math.sqrt(a), kotlin.math.sqrt(1 - a))
+            val distance = R * c
+            return distance <= 50.0  // Within 50 meters
+        }
     }
     
     /**
@@ -202,6 +220,14 @@ class SpeedLimitProvider(private val context: Context) {
         // Detect country
         currentCountryCode = SpeedUnitHelper.detectCountry(context, lat, lon)
         
+        // FIRST: Check for nearby user submission (instant gratification)
+        // This takes priority over everything - user's submission should show immediately
+        val nearbyUserLimit = findNearbyUserSubmission(lat, lon)
+        if (nearbyUserLimit != null) {
+            Log.d(TAG, "Using NEARBY USER SUBMISSION: $nearbyUserLimit mph")
+            return@withContext nearbyUserLimit
+        }
+        
         // Check rate limit
         if (isInBackoffPeriod()) {
             Log.w(TAG, "In backoff period, using cached data")
@@ -221,7 +247,7 @@ class SpeedLimitProvider(private val context: Context) {
                 queryCorridorAsync(lat, lon, bearing.toDouble())
             }
             
-            // Check for user submission override (instant gratification)
+            // Check for user submission override by wayId (instant gratification)
             val userLimit = getUserSubmittedLimit(matchedSegment.wayId)
             if (userLimit != null) {
                 Log.d(TAG, "Using USER SUBMITTED limit: $userLimit mph (way: ${matchedSegment.wayId})")
@@ -250,6 +276,15 @@ class SpeedLimitProvider(private val context: Context) {
             // Find matching segment from fresh data
             val newMatch = findMatchingSegment(lat, lon)
             currentSegment = newMatch
+            
+            // Check for user submission on the newly matched segment
+            if (newMatch != null) {
+                val userLimit = getUserSubmittedLimit(newMatch.wayId)
+                if (userLimit != null) {
+                    Log.d(TAG, "Using USER SUBMITTED limit after query: $userLimit mph (way: ${newMatch.wayId})")
+                    return@withContext userLimit
+                }
+            }
             
             return@withContext newMatch?.speedLimitMph
             
@@ -660,13 +695,15 @@ class SpeedLimitProvider(private val context: Context) {
      * 
      * @param wayId The OSM way ID
      * @param speedLimitMph The speed limit in mph
+     * @param lat Latitude where submission was made
+     * @param lon Longitude where submission was made
      */
-    fun recordUserSubmission(wayId: Long, speedLimitMph: Int) {
+    fun recordUserSubmission(wayId: Long, speedLimitMph: Int, lat: Double, lon: Double) {
         // Clean up expired submissions first
         cleanupExpiredSubmissions()
         
-        userSubmissions[wayId] = UserSubmission(wayId, speedLimitMph)
-        Log.d(TAG, "Recorded user submission: $speedLimitMph mph for way $wayId (valid for 5 min)")
+        userSubmissions[wayId] = UserSubmission(wayId, speedLimitMph, lat, lon)
+        Log.d(TAG, "Recorded user submission: $speedLimitMph mph for way $wayId at ($lat, $lon) (valid for 5 min)")
     }
     
     /**
@@ -684,6 +721,26 @@ class SpeedLimitProvider(private val context: Context) {
         }
         
         return submission.speedLimitMph
+    }
+    
+    /**
+     * Find a user submission that's nearby the given location.
+     * This allows instant gratification even when the road isn't in cache
+     * (e.g., when user added a speed limit to a road that had no maxspeed tag).
+     * 
+     * @return Speed limit in mph, or null if no nearby submission exists
+     */
+    private fun findNearbyUserSubmission(lat: Double, lon: Double): Int? {
+        // Clean up expired first
+        cleanupExpiredSubmissions()
+        
+        // Find any submission within 50m of current location
+        for (submission in userSubmissions.values) {
+            if (!submission.isExpired() && submission.isNearby(lat, lon)) {
+                return submission.speedLimitMph
+            }
+        }
+        return null
     }
     
     /**
