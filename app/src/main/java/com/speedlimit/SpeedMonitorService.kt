@@ -53,6 +53,9 @@ class SpeedMonitorService : Service() {
         // Conversion factor: m/s to mph
         const val MS_TO_MPH = 2.23694f
         
+        // Minimum movement before re-processing location (battery optimization)
+        const val MIN_MOVEMENT_METERS = 5f
+        
         var isRunning = false
             private set
     }
@@ -67,6 +70,10 @@ class SpeedMonitorService : Service() {
     
     // Track last known speed limit for change detection
     private var lastKnownSpeedLimit: Int = -1
+    
+    // Track last processed location (battery optimization - skip if barely moved)
+    private var lastProcessedLocation: Location? = null
+    private var lastSpeedLimitResult: Int = -1
     
     private var lastAlertTime = 0L
     private val alertCooldownMs = 5000L // 5 seconds between alerts
@@ -271,6 +278,15 @@ class SpeedMonitorService : Service() {
         
         Log.d(TAG, "Current speed: $speedMph mph, bearing: $bearing° at ${location.latitude}, ${location.longitude}")
         
+        // Battery optimization: skip processing if barely moved (< 5m)
+        val lastLoc = lastProcessedLocation
+        if (lastLoc != null && location.distanceTo(lastLoc) < MIN_MOVEMENT_METERS) {
+            // Reuse last speed limit result, just update speed display
+            broadcastSpeedUpdate(speedMph, lastSpeedLimitResult, false, location.latitude, location.longitude, location.accuracy)
+            updateNotification(speedMph.toInt(), if (lastSpeedLimitResult > 0) lastSpeedLimitResult else null)
+            return
+        }
+        
         // Get country-aware threshold (lower for km/h countries to catch 20 km/h zones)
         val countryCode = speedLimitProvider.currentCountryCode
         val threshold = if (SpeedUnitHelper.usesMph(countryCode)) {
@@ -281,6 +297,7 @@ class SpeedMonitorService : Service() {
         
         // Only check speed limits if above threshold
         if (speedMph >= threshold) {
+            lastProcessedLocation = location
             checkSpeedLimit(location.latitude, location.longitude, speedMph, bearing, location.accuracy)
         } else {
             // Below threshold, just update display
@@ -339,6 +356,9 @@ class SpeedMonitorService : Service() {
                         }
                     }
                 }
+                
+                // Cache the result for battery optimization
+                lastSpeedLimitResult = speedLimitMph ?: -1
                 
                 // Broadcast update to UI (including location for crowdsourcing validation)
                 broadcastSpeedUpdate(currentSpeedMph, speedLimitMph ?: -1, isOverLimit, lat, lon, accuracy)
