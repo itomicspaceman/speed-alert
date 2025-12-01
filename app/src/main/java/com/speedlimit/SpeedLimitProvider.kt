@@ -280,7 +280,28 @@ class SpeedLimitProvider(private val context: Context) {
                 return@withContext newMatch.speedLimitMph
             }
             
-            // No segment found in OSM - check for nearby user submission as fallback
+            // No segment with maxspeed found - try to identify the road anyway
+            // This helps with accurate way ID tracking for contributions
+            // Only do this if we've moved significantly from last lookup (to avoid excessive API calls)
+            val lastLoc = lastFoundWayLocation
+            val shouldLookupRoad = lastLoc == null || 
+                calculateDistance(lat, lon, lastLoc.lat, lastLoc.lon) > 100 // 100m threshold
+            
+            if (shouldLookupRoad) {
+                try {
+                    val roadResult = findNearestRoadSync(lat, lon)
+                    if (roadResult != null) {
+                        lastFoundWayId = roadResult.wayId
+                        lastFoundWayLocation = LatLon(lat, lon)
+                        lastFoundHighwayType = roadResult.highwayType
+                        Log.d(TAG, "On road without maxspeed: way ${roadResult.wayId} (${roadResult.highwayType})")
+                    }
+                } catch (e: Exception) {
+                    Log.w(TAG, "Road lookup failed: ${e.message}")
+                }
+            }
+            
+            // Check for nearby user submission as fallback
             // This handles roads that don't have maxspeed tags in OSM yet
             val nearbyUserLimit = findNearbyUserSubmission(lat, lon)
             if (nearbyUserLimit != null) {
@@ -792,10 +813,14 @@ class SpeedLimitProvider(private val context: Context) {
      * @return NearestRoadResult with way ID and validation info, or null if none found
      */
     suspend fun findNearestRoad(lat: Double, lon: Double): NearestRoadResult? = withContext(Dispatchers.IO) {
-        // ALWAYS do a fresh lookup for contributions to ensure accuracy
-        // The user may have moved to a different road since the last lookup
-        // (Previously we cached within 50m, but this caused wrong road selection at intersections)
-        
+        findNearestRoadSync(lat, lon)
+    }
+    
+    /**
+     * Synchronous version of findNearestRoad for use within existing IO context.
+     * Must be called from a background thread (not main thread).
+     */
+    private fun findNearestRoadSync(lat: Double, lon: Double): NearestRoadResult? {
         // Query for ANY highway (road) near this location WITH GEOMETRY
         // We need geometry to calculate which road the user is actually on
         val query = """
@@ -804,7 +829,7 @@ class SpeedLimitProvider(private val context: Context) {
             out body geom;
         """.trimIndent()
         
-        Log.d(TAG, "Finding nearest road for contribution at $lat, $lon")
+        Log.d(TAG, "Finding nearest road at $lat, $lon")
         
         try {
             val url = "$OVERPASS_API_URL?data=${java.net.URLEncoder.encode(query, "UTF-8")}"
@@ -818,16 +843,16 @@ class SpeedLimitProvider(private val context: Context) {
             
             if (!response.isSuccessful) {
                 Log.e(TAG, "Road lookup failed: ${response.code}")
-                return@withContext null
+                return null
             }
 
-            val responseBody = response.body?.string() ?: return@withContext null
+            val responseBody = response.body?.string() ?: return null
             val json = JSONObject(responseBody)
             val elements = json.optJSONArray("elements")
             
             if (elements == null || elements.length() == 0) {
                 Log.w(TAG, "No roads found at location")
-                return@withContext null
+                return null
             }
             
             // Find the CLOSEST road by perpendicular distance to the road geometry
@@ -877,7 +902,7 @@ class SpeedLimitProvider(private val context: Context) {
             }
             
             if (closestRoad != null) {
-                // Cache this for nearby future lookups
+                // Update tracking for display purposes
                 lastFoundWayId = closestRoad.wayId
                 lastFoundWayLocation = LatLon(lat, lon)
                 lastFoundHighwayType = closestRoad.highwayType
@@ -887,11 +912,11 @@ class SpeedLimitProvider(private val context: Context) {
                 Log.w(TAG, "No valid roads found at location")
             }
             
-            return@withContext closestRoad
+            return closestRoad
             
         } catch (e: Exception) {
             Log.e(TAG, "Error finding road", e)
-            return@withContext null
+            return null
         }
     }
     
