@@ -220,14 +220,6 @@ class SpeedLimitProvider(private val context: Context) {
         // Detect country
         currentCountryCode = SpeedUnitHelper.detectCountry(context, lat, lon)
         
-        // FIRST: Check for nearby user submission (instant gratification)
-        // This takes priority over everything - user's submission should show immediately
-        val nearbyUserLimit = findNearbyUserSubmission(lat, lon)
-        if (nearbyUserLimit != null) {
-            Log.d(TAG, "Using NEARBY USER SUBMISSION: $nearbyUserLimit mph")
-            return@withContext nearbyUserLimit
-        }
-        
         // Check rate limit
         if (isInBackoffPeriod()) {
             Log.w(TAG, "In backoff period, using cached data")
@@ -284,9 +276,18 @@ class SpeedLimitProvider(private val context: Context) {
                     Log.d(TAG, "Using USER SUBMITTED limit after query: $userLimit mph (way: ${newMatch.wayId})")
                     return@withContext userLimit
                 }
+                return@withContext newMatch.speedLimitMph
             }
             
-            return@withContext newMatch?.speedLimitMph
+            // No segment found in OSM - check for nearby user submission as fallback
+            // This handles roads that don't have maxspeed tags in OSM yet
+            val nearbyUserLimit = findNearbyUserSubmission(lat, lon)
+            if (nearbyUserLimit != null) {
+                Log.d(TAG, "Using NEARBY USER SUBMISSION (no OSM data): $nearbyUserLimit mph")
+                return@withContext nearbyUserLimit
+            }
+            
+            return@withContext null
             
         } catch (e: RateLimitException) {
             handleRateLimit(e.responseCode)
@@ -725,8 +726,10 @@ class SpeedLimitProvider(private val context: Context) {
     
     /**
      * Find a user submission that's nearby the given location.
-     * This allows instant gratification even when the road isn't in cache
-     * (e.g., when user added a speed limit to a road that had no maxspeed tag).
+     * This is a FALLBACK for roads that don't have maxspeed tags in OSM yet.
+     * 
+     * The primary method is getUserSubmittedLimit(wayId) which matches by way ID.
+     * This location-based method is only used when OSM has no data for the road.
      * 
      * @return Speed limit in mph, or null if no nearby submission exists
      */
@@ -735,8 +738,10 @@ class SpeedLimitProvider(private val context: Context) {
         cleanupExpiredSubmissions()
         
         // Find any submission within 50m of current location
+        // Since we only use this when OSM has no data, we trust the user's submission
         for (submission in userSubmissions.values) {
             if (!submission.isExpired() && submission.isNearby(lat, lon)) {
+                Log.d(TAG, "Found nearby user submission for way ${submission.wayId}: ${submission.speedLimitMph} mph")
                 return submission.speedLimitMph
             }
         }
