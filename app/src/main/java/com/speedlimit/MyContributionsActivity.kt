@@ -11,26 +11,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.speedlimit.databinding.ActivityMyContributionsBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * Shows the user's contribution history.
- * Two sections:
- * 1. OSM Contributions - fetched from OpenStreetMap API
- * 2. Submission Log - local log including failed attempts
+ * Unified view showing all submission attempts (successes and failures).
  */
 class MyContributionsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyContributionsBinding
     private lateinit var contributionLog: ContributionLog
     private lateinit var osmContributor: OsmContributor
-    private lateinit var localAdapter: LocalContributionAdapter
-    private lateinit var osmAdapter: OsmContributionAdapter
+    private lateinit var adapter: SubmissionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +34,7 @@ class MyContributionsActivity : AppCompatActivity() {
         osmContributor = OsmContributor(this)
 
         setupUI()
-        loadLocalContributions()
-        loadOsmContributions()
+        loadSubmissions()
     }
 
     private fun setupUI() {
@@ -50,7 +42,7 @@ class MyContributionsActivity : AppCompatActivity() {
             finish()
         }
 
-        // View on OSM link
+        // View on OSM link (only shown if logged in)
         binding.viewOnOsmLink.setOnClickListener {
             val username = osmContributor.getUsername()
             if (username != null) {
@@ -59,23 +51,26 @@ class MyContributionsActivity : AppCompatActivity() {
             }
         }
 
-        // Setup RecyclerViews
-        localAdapter = LocalContributionAdapter()
-        binding.contributionsList.layoutManager = LinearLayoutManager(this)
-        binding.contributionsList.adapter = localAdapter
+        // Show OSM link if logged in
+        if (osmContributor.isLoggedIn()) {
+            binding.viewOnOsmLink.visibility = View.VISIBLE
+        }
 
-        osmAdapter = OsmContributionAdapter()
-        binding.osmContributionsList.layoutManager = LinearLayoutManager(this)
-        binding.osmContributionsList.adapter = osmAdapter
+        // Setup RecyclerView
+        adapter = SubmissionAdapter()
+        binding.contributionsList.layoutManager = LinearLayoutManager(this)
+        binding.contributionsList.adapter = adapter
     }
 
-    private fun loadLocalContributions() {
+    private fun loadSubmissions() {
         val attempts = contributionLog.getAttempts()
         
         // Update summary
         val totalCount = attempts.size
+        val successCount = contributionLog.getSuccessCount()
         val failedCount = contributionLog.getFailedCount()
-        binding.summaryText.text = getString(R.string.contributions_total, totalCount, failedCount)
+        
+        binding.summaryText.text = getString(R.string.contributions_summary, totalCount, successCount, failedCount)
 
         // Show empty state or list
         if (attempts.isEmpty()) {
@@ -84,104 +79,14 @@ class MyContributionsActivity : AppCompatActivity() {
         } else {
             binding.emptyState.visibility = View.GONE
             binding.contributionsList.visibility = View.VISIBLE
-            localAdapter.setItems(attempts)
-        }
-    }
-
-    private fun loadOsmContributions() {
-        if (!osmContributor.isLoggedIn()) {
-            binding.osmCountText.visibility = View.GONE
-            binding.notConnectedText.visibility = View.VISIBLE
-            binding.viewOnOsmLink.visibility = View.GONE
-            binding.osmContributionsList.visibility = View.GONE
-            return
-        }
-
-        // Show loading state
-        binding.osmCountText.text = getString(R.string.contributions_loading)
-        binding.notConnectedText.visibility = View.GONE
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val changesets = osmContributor.fetchUserChangesets()
-            
-            if (changesets.isEmpty()) {
-                binding.osmCountText.text = getString(R.string.contributions_osm_count, 0)
-            } else {
-                binding.osmCountText.text = if (changesets.size == 1) {
-                    getString(R.string.contributions_osm_count_one)
-                } else {
-                    getString(R.string.contributions_osm_count, changesets.size)
-                }
-                osmAdapter.setItems(changesets)
-                binding.osmContributionsList.visibility = View.VISIBLE
-            }
-            
-            binding.viewOnOsmLink.visibility = View.VISIBLE
+            adapter.setItems(attempts)
         }
     }
 
     /**
-     * RecyclerView adapter for OSM changesets.
+     * RecyclerView adapter for submission attempts.
      */
-    inner class OsmContributionAdapter : RecyclerView.Adapter<OsmContributionAdapter.ViewHolder>() {
-        
-        private var items: List<OsmContributor.OsmChangeset> = emptyList()
-        private val dateParser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
-        }
-        private val displayFormat = SimpleDateFormat("MMM d, h:mm a", Locale.getDefault())
-
-        fun setItems(newItems: List<OsmContributor.OsmChangeset>) {
-            items = newItems
-            notifyDataSetChanged()
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_osm_changeset, parent, false)
-            return ViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(items[position])
-        }
-
-        override fun getItemCount(): Int = items.size
-
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private val statusIcon: TextView = itemView.findViewById(R.id.statusIcon)
-            private val changesetText: TextView = itemView.findViewById(R.id.changesetText)
-            private val timeText: TextView = itemView.findViewById(R.id.timeText)
-
-            fun bind(changeset: OsmContributor.OsmChangeset) {
-                statusIcon.text = "✅"
-                changesetText.text = "#${changeset.id}"
-                
-                // Parse and format the date
-                try {
-                    val date = dateParser.parse(changeset.createdAt)
-                    if (date != null) {
-                        timeText.text = displayFormat.format(date)
-                    } else {
-                        timeText.text = changeset.createdAt
-                    }
-                } catch (e: Exception) {
-                    timeText.text = changeset.createdAt
-                }
-
-                // Click to open on OSM
-                itemView.setOnClickListener {
-                    val url = "https://www.openstreetmap.org/changeset/${changeset.id}"
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                }
-            }
-        }
-    }
-
-    /**
-     * RecyclerView adapter for local contribution attempts.
-     */
-    inner class LocalContributionAdapter : RecyclerView.Adapter<LocalContributionAdapter.ViewHolder>() {
+    inner class SubmissionAdapter : RecyclerView.Adapter<SubmissionAdapter.ViewHolder>() {
         
         private var items: List<ContributionLog.Attempt> = emptyList()
         private val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
@@ -226,7 +131,7 @@ class MyContributionsActivity : AppCompatActivity() {
                     }
                     ContributionLog.Status.SKIPPED_SAME_LIMIT -> {
                         statusIcon.text = "⏭️"
-                        statusText.text = "• Skipped"
+                        statusText.text = "• ${getString(R.string.contribution_skipped)}"
                         statusText.setTextColor(0xFF888888.toInt())
                         failureReasonText.visibility = View.GONE
                     }

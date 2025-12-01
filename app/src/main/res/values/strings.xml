@@ -94,17 +94,13 @@
     
     <!-- My Contributions Screen -->
     <string name="contributions_title">My Contributions</string>
-    <string name="contributions_osm_title">From OpenStreetMap</string>
-    <string name="contributions_osm_count">%d contributions</string>
-    <string name="contributions_osm_count_one">1 contribution</string>
-    <string name="contributions_loading">Loading…</string>
-    <string name="contributions_not_connected">Connect to OpenStreetMap to see your contributions</string>
     <string name="contributions_log_title">Submission Log</string>
     <string name="contributions_empty">No submissions yet.\nTap a speed limit while driving to share it!</string>
-    <string name="contributions_total">%d attempts (%d failed)</string>
+    <string name="contributions_summary">%1$d attempts • %2$d shared • %3$d failed</string>
     <string name="contributions_view_osm">View all on OpenStreetMap →</string>
     <string name="contribution_success">Shared</string>
     <string name="contribution_failed">Failed</string>
+    <string name="contribution_skipped">Skipped</string>
     
     <!-- OSM Settings Screen -->
     <string name="osm_settings_connected_as">Connected as %s</string>
