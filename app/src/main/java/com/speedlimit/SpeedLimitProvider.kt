@@ -81,6 +81,7 @@ class SpeedLimitProvider(private val context: Context) {
         val speedLimitMph: Int,
         val geometry: List<LatLon>,  // List of coordinates defining the road
         val name: String? = null,    // Road name for debug display
+        val ref: String? = null,     // Road code like "B3082", "A31", "M27"
         val highwayType: String? = null, // Highway type (residential, primary, etc.)
         val timestamp: Long = System.currentTimeMillis()
     )
@@ -177,6 +178,10 @@ class SpeedLimitProvider(private val context: Context) {
     val currentRoadName: String?
         get() = currentSegment?.name ?: lastFoundRoadName
     
+    // Current road code/ref e.g. "B3082" (for debug display)
+    val currentRoadRef: String?
+        get() = currentSegment?.ref ?: lastFoundRoadRef
+    
     // Current highway type (for debug display)
     val currentHighwayType: String?
         get() = currentSegment?.highwayType ?: lastFoundHighwayType
@@ -190,7 +195,15 @@ class SpeedLimitProvider(private val context: Context) {
     private var lastFoundWayLocation: LatLon? = null
     private var lastFoundHighwayType: String? = null
     private var lastFoundRoadName: String? = null
+    private var lastFoundRoadRef: String? = null
     private var lastRoadDistance: Double = -1.0
+    private var lastRoadLookupTime: Long = 0L
+    
+    // Minimum interval between road lookups (for display purposes)
+    private val MIN_ROAD_LOOKUP_INTERVAL_MS = 10_000L // 10 seconds
+    
+    // Maximum distance before forcing a road re-lookup
+    private val MAX_DISTANCE_BEFORE_ROAD_RELOOKUP_M = 30.0 // 30 meters (was 100m)
     
     /**
      * Highway types that are appropriate for speed limits.
@@ -226,6 +239,7 @@ class SpeedLimitProvider(private val context: Context) {
         val wayId: Long,
         val highwayType: String,
         val name: String? = null,
+        val ref: String? = null,  // Road code like "B3082", "A31", "M27"
         val isValidForSpeedLimit: Boolean
     )
 
@@ -297,20 +311,34 @@ class SpeedLimitProvider(private val context: Context) {
             }
             
             // No segment with maxspeed found - try to identify the road anyway
-            // This helps with accurate way ID tracking for contributions
-            // Only do this if we've moved significantly from last lookup (to avoid excessive API calls)
+            // This helps with accurate way ID tracking for contributions AND debug display
+            // Trigger lookup if:
+            // 1. We've moved more than 30m from last lookup, OR
+            // 2. It's been more than 10 seconds since last lookup
             val lastLoc = lastFoundWayLocation
+            val now = System.currentTimeMillis()
+            val timeSinceLastLookup = now - lastRoadLookupTime
+            val distanceFromLastLookup = if (lastLoc != null) {
+                calculateDistance(lat, lon, lastLoc.lat, lastLoc.lon)
+            } else {
+                Double.MAX_VALUE
+            }
+            
             val shouldLookupRoad = lastLoc == null || 
-                calculateDistance(lat, lon, lastLoc.lat, lastLoc.lon) > 100 // 100m threshold
+                distanceFromLastLookup > MAX_DISTANCE_BEFORE_ROAD_RELOOKUP_M ||
+                timeSinceLastLookup > MIN_ROAD_LOOKUP_INTERVAL_MS
             
             if (shouldLookupRoad) {
                 try {
                     val roadResult = findNearestRoadSync(lat, lon)
+                    lastRoadLookupTime = now
                     if (roadResult != null) {
                         lastFoundWayId = roadResult.wayId
                         lastFoundWayLocation = LatLon(lat, lon)
                         lastFoundHighwayType = roadResult.highwayType
-                        Log.d(TAG, "On road without maxspeed: way ${roadResult.wayId} (${roadResult.highwayType})")
+                        lastFoundRoadName = roadResult.name
+                        lastFoundRoadRef = roadResult.ref
+                        Log.d(TAG, "Road lookup: way ${roadResult.wayId} (${roadResult.highwayType}, ${roadResult.name ?: "unnamed"}, ${roadResult.ref ?: "no ref"})")
                     }
                 } catch (e: Exception) {
                     Log.w(TAG, "Road lookup failed: ${e.message}")
@@ -452,8 +480,9 @@ class SpeedLimitProvider(private val context: Context) {
                 val speedLimitMph = SpeedUnitHelper.parseSpeedLimitToMph(maxspeed, currentCountryCode)
                     ?: continue
                 
-                // Get road name and type for debug display
+                // Get road name, ref (code), and type for debug display
                 val roadName = tags.optString("name", null)
+                val roadRef = tags.optString("ref", null)  // Road code like "B3082"
                 val highwayType = tags.optString("highway", null)
                 
                 // Get geometry (list of coordinates)
@@ -475,6 +504,7 @@ class SpeedLimitProvider(private val context: Context) {
                         speedLimitMph = speedLimitMph,
                         geometry = geometry,
                         name = roadName,
+                        ref = roadRef,
                         highwayType = highwayType
                     ))
                 }
@@ -533,6 +563,7 @@ class SpeedLimitProvider(private val context: Context) {
             lastFoundWayId = bestMatch.wayId
             lastFoundWayLocation = LatLon(lat, lon)
             lastFoundRoadName = bestMatch.name
+            lastFoundRoadRef = bestMatch.ref
             lastFoundHighwayType = bestMatch.highwayType
             lastRoadDistance = bestDistance
         }
@@ -897,6 +928,7 @@ class SpeedLimitProvider(private val context: Context) {
                 val tags = element.optJSONObject("tags") ?: continue
                 val highwayType = tags.optString("highway", "")
                 val name = tags.optString("name", null)
+                val ref = tags.optString("ref", null)  // Road code like "B3082"
                 
                 if (highwayType.isEmpty()) continue
                 
@@ -917,7 +949,7 @@ class SpeedLimitProvider(private val context: Context) {
                 // Calculate perpendicular distance to this road
                 val distance = distanceToSegment(lat, lon, geomList)
                 
-                Log.d(TAG, "Road candidate: way $wayId ($highwayType${if (name != null) ", $name" else ""}) - distance: ${distance.toInt()}m")
+                Log.d(TAG, "Road candidate: way $wayId ($highwayType${if (name != null) ", $name" else ""}${if (ref != null) " [$ref]" else ""}) - distance: ${distance.toInt()}m")
                 
                 // Only consider valid road types for speed limits
                 val isValid = isValidHighwayForSpeedLimit(highwayType)
@@ -928,6 +960,7 @@ class SpeedLimitProvider(private val context: Context) {
                         wayId = wayId,
                         highwayType = highwayType,
                         name = name,
+                        ref = ref,
                         isValidForSpeedLimit = isValid
                     )
                 }
@@ -939,9 +972,11 @@ class SpeedLimitProvider(private val context: Context) {
                 lastFoundWayLocation = LatLon(lat, lon)
                 lastFoundHighwayType = closestRoad.highwayType
                 lastFoundRoadName = closestRoad.name
+                lastFoundRoadRef = closestRoad.ref
                 lastRoadDistance = closestDistance
+                lastRoadLookupTime = System.currentTimeMillis()
                 
-                Log.i(TAG, "Selected CLOSEST road: way ${closestRoad.wayId} (${closestRoad.highwayType}${if (closestRoad.name != null) ", ${closestRoad.name}" else ""}) at ${closestDistance.toInt()}m")
+                Log.i(TAG, "Selected CLOSEST road: way ${closestRoad.wayId} (${closestRoad.highwayType}${if (closestRoad.name != null) ", ${closestRoad.name}" else ""}${if (closestRoad.ref != null) " [${closestRoad.ref}]" else ""}) at ${closestDistance.toInt()}m")
             } else {
                 Log.w(TAG, "No valid roads found at location")
             }

@@ -40,6 +40,7 @@ class SpeedMonitorService : Service() {
         const val EXTRA_LONGITUDE = "longitude"
         const val EXTRA_ACCURACY = "accuracy"
         const val EXTRA_ROAD_NAME = "road_name"
+        const val EXTRA_ROAD_REF = "road_ref"  // Road code like "B3082"
         const val EXTRA_HIGHWAY_TYPE = "highway_type"
         const val EXTRA_ROAD_DISTANCE = "road_distance"
         
@@ -384,6 +385,7 @@ class SpeedMonitorService : Service() {
         val countryCode = speedLimitProvider.currentCountryCode
         val wayId = speedLimitProvider.currentWayId
         val roadName = speedLimitProvider.currentRoadName
+        val roadRef = speedLimitProvider.currentRoadRef
         val highwayType = speedLimitProvider.currentHighwayType
         val roadDistance = speedLimitProvider.currentRoadDistance
         
@@ -397,6 +399,7 @@ class SpeedMonitorService : Service() {
             putExtra(EXTRA_LONGITUDE, lon)
             putExtra(EXTRA_ACCURACY, accuracy)
             putExtra(EXTRA_ROAD_NAME, roadName ?: "")
+            putExtra(EXTRA_ROAD_REF, roadRef ?: "")
             putExtra(EXTRA_HIGHWAY_TYPE, highwayType ?: "")
             putExtra(EXTRA_ROAD_DISTANCE, roadDistance)
             setPackage(packageName)

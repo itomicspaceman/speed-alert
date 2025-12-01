@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity() {
                 val longitude = it.getDoubleExtra(SpeedMonitorService.EXTRA_LONGITUDE, 0.0)
                 val accuracy = it.getFloatExtra(SpeedMonitorService.EXTRA_ACCURACY, Float.MAX_VALUE)
                 val roadName = it.getStringExtra(SpeedMonitorService.EXTRA_ROAD_NAME) ?: ""
+                val roadRef = it.getStringExtra(SpeedMonitorService.EXTRA_ROAD_REF) ?: ""
                 val highwayType = it.getStringExtra(SpeedMonitorService.EXTRA_HIGHWAY_TYPE) ?: ""
                 val roadDistance = it.getDoubleExtra(SpeedMonitorService.EXTRA_ROAD_DISTANCE, -1.0)
                 
@@ -108,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                 currentGpsAccuracy = accuracy
                 
                 // Update debug info banner
-                updateDebugInfo(wayId, roadName, highwayType, roadDistance)
+                updateDebugInfo(wayId, roadName, roadRef, highwayType, roadDistance)
                 
                 // Store currently detected limit for "same limit" check
                 currentDetectedLimit = speedLimitMph
@@ -981,7 +982,7 @@ class MainActivity : AppCompatActivity() {
      * Update the debug info banner with current road information.
      * Only visible when debug mode is enabled in settings.
      */
-    private fun updateDebugInfo(wayId: Long, roadName: String, highwayType: String, distance: Double) {
+    private fun updateDebugInfo(wayId: Long, roadName: String, roadRef: String, highwayType: String, distance: Double) {
         // Check if debug mode is enabled
         val prefs = getSharedPreferences("settings", MODE_PRIVATE)
         val debugEnabled = prefs.getBoolean("debug_mode", false)
@@ -993,13 +994,27 @@ class MainActivity : AppCompatActivity() {
         
         binding.debugInfoBanner.visibility = View.VISIBLE
         
-        // Road name
-        val displayName = if (roadName.isNotEmpty()) {
-            "📍 $roadName"
-        } else if (highwayType.isNotEmpty()) {
-            "📍 ${highwayType.replace("_", " ").replaceFirstChar { it.uppercase() }}"
-        } else {
-            "📍 Unknown Road"
+        // Road name with road code (ref) if available
+        // e.g. "📍 Rowlands Hill (B3082)" or "📍 Rowlands Hill" or "📍 B3082" or "📍 residential"
+        val displayName = buildString {
+            append("📍 ")
+            when {
+                roadName.isNotEmpty() && roadRef.isNotEmpty() -> {
+                    append("$roadName ($roadRef)")
+                }
+                roadName.isNotEmpty() -> {
+                    append(roadName)
+                }
+                roadRef.isNotEmpty() -> {
+                    append(roadRef)
+                }
+                highwayType.isNotEmpty() -> {
+                    append(highwayType.replace("_", " ").replaceFirstChar { it.uppercase() })
+                }
+                else -> {
+                    append("Unknown Road")
+                }
+            }
         }
         binding.debugRoadName.text = displayName
         
