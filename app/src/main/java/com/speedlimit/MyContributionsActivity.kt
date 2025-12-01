@@ -11,12 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.speedlimit.databinding.ActivityMyContributionsBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * Shows the user's contribution history.
- * Unified view showing all submission attempts (successes and failures).
+ * - OSM count at top (authoritative number from OpenStreetMap)
+ * - Submission Log below (local attempts with success/failure details)
  */
 class MyContributionsActivity : AppCompatActivity() {
 
@@ -34,6 +38,7 @@ class MyContributionsActivity : AppCompatActivity() {
         osmContributor = OsmContributor(this)
 
         setupUI()
+        loadOsmCount()
         loadSubmissions()
     }
 
@@ -42,7 +47,7 @@ class MyContributionsActivity : AppCompatActivity() {
             finish()
         }
 
-        // View on OSM link (only shown if logged in)
+        // View on OSM link
         binding.viewOnOsmLink.setOnClickListener {
             val username = osmContributor.getUsername()
             if (username != null) {
@@ -51,15 +56,36 @@ class MyContributionsActivity : AppCompatActivity() {
             }
         }
 
-        // Show OSM link if logged in
-        if (osmContributor.isLoggedIn()) {
-            binding.viewOnOsmLink.visibility = View.VISIBLE
-        }
-
         // Setup RecyclerView
         adapter = SubmissionAdapter()
         binding.contributionsList.layoutManager = LinearLayoutManager(this)
         binding.contributionsList.adapter = adapter
+    }
+
+    private fun loadOsmCount() {
+        if (!osmContributor.isLoggedIn()) {
+            // Not logged in - hide OSM section
+            binding.osmCountSection.visibility = View.GONE
+            binding.divider.visibility = View.GONE
+            return
+        }
+
+        // Show section with loading state
+        binding.osmCountSection.visibility = View.VISIBLE
+        binding.divider.visibility = View.VISIBLE
+        binding.osmCountText.text = getString(R.string.contributions_loading)
+
+        // Fetch from OSM API
+        CoroutineScope(Dispatchers.Main).launch {
+            val changesets = osmContributor.fetchUserChangesets(limit = 100)
+            val count = changesets.size
+            
+            binding.osmCountText.text = if (count == 1) {
+                getString(R.string.contributions_osm_count_one)
+            } else {
+                getString(R.string.contributions_osm_count, count)
+            }
+        }
     }
 
     private fun loadSubmissions() {

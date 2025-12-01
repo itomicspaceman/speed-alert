@@ -31,13 +31,54 @@
 
     </LinearLayout>
 
-    <!-- ========== UNIFIED SUBMISSION LOG ========== -->
+    <!-- ========== OSM CONTRIBUTIONS COUNT (authoritative) ========== -->
+    <LinearLayout
+        android:id="@+id/osmCountSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/osmCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/contributions_osm_count"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- View on OSM link -->
+        <TextView
+            android:id="@+id/viewOnOsmLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/contributions_view_osm"
+            android:textColor="@color/info_blue"
+            android:textSize="14sp"
+            android:paddingVertical="8dp" />
+
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333"
+        android:layout_marginHorizontal="24dp"
+        android:visibility="gone" />
+
+    <!-- ========== SUBMISSION LOG (local attempts) ========== -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="24dp"
-        android:paddingTop="8dp">
+        android:paddingTop="16dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,17 +97,6 @@
             android:textColor="#888888"
             android:textSize="14sp"
             android:layout_marginBottom="8dp" />
-
-        <!-- View on OSM link (shown if logged in) -->
-        <TextView
-            android:id="@+id/viewOnOsmLink"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/contributions_view_osm"
-            android:textColor="@color/info_blue"
-            android:textSize="14sp"
-            android:paddingVertical="8dp"
-            android:visibility="gone" />
 
     </LinearLayout>
 

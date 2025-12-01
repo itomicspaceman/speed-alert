@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.speedlimit.databinding.ActivitySettingsBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Settings screen with two sections:
@@ -97,11 +100,31 @@ class SettingsActivity : AppCompatActivity() {
         if (osmContributor.isLoggedIn()) {
             val username = osmContributor.getUsername() ?: "Unknown"
             binding.osmStatusText.text = getString(R.string.settings_osm_connected, username)
+            
+            // Fetch OSM contribution count
+            loadOsmContributionCount()
         } else {
             binding.osmStatusText.text = getString(R.string.settings_osm_not_connected)
+            // Show local count only when not connected
+            showLocalCount()
         }
+    }
+
+    private fun loadOsmContributionCount() {
+        // Show loading state
+        binding.contributionCountText.text = "..."
         
-        // Contribution count (from local log)
+        CoroutineScope(Dispatchers.Main).launch {
+            val changesets = osmContributor.fetchUserChangesets(limit = 100)
+            val osmCount = changesets.size
+            
+            // Show OSM count (authoritative)
+            binding.contributionCountText.text = getString(R.string.settings_contributions_osm, osmCount)
+        }
+    }
+
+    private fun showLocalCount() {
+        // When not connected to OSM, show local success/fail counts
         val successCount = contributionLog.getSuccessCount()
         val failedCount = contributionLog.getFailedCount()
         binding.contributionCountText.text = if (failedCount > 0) {
@@ -119,4 +142,3 @@ class SettingsActivity : AppCompatActivity() {
             .show()
     }
 }
-
